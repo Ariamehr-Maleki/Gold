@@ -1,27 +1,31 @@
 {
     "header": {
-        "product": "Fresh Apples",
-        "hs_code": "080810",
-        "target_market": "United Kingdom",
+        "product_name": "All Products",
+        "hs_code": "TOTAL",
         "your_country": "South Africa",
+        "target_market": "Germany",
+        "target_market_id": "276",
         "date": "November 2025"
     },
-    "country_profile": {
-        "capital_city": "manual input required",
-        "population": "manual input required",
-        "gdp_per_capita": "manual input required",
-        "currency": "manual input required",
-        "languages": "manual input required",
-        "country_profile_link": "manual input required"
+    "market_size": {
+        "target_market_imports_from_world_usd": 1425209578000,
+        "target_market_imports_from_your_country_usd": 11325096000,
+        "your_country_share_in_target_market_imports_pct (calculated)": 0.79
     },
-    "market_size": {},
-    "market_growth": {},
-    "competition": {},
-    "market_access": {
-        "tariffs_and_agreements": "manual input required from macmap.org",
-        "non_tariff_measures": "manual input required from macmap.org",
-        "potential_ntms": "manual input required from epingalert.org"
-    },
-    "business_partners": "manual input required from TradeMap's company section",
-    "other_promising_markets": "manual input required from exportpotential.intracen.org"
+    "competition": {
+        "top_3_suppliers": [
+            {
+                "name": "China",
+                "market_share_pct (calculated)": 11.87
+            },
+            {
+                "name": "Netherlands",
+                "market_share_pct (calculated)": 6.98
+            },
+            {
+                "name": "United States of America",
+                "market_share_pct (calculated)": 6.76
+            }
+        ]
+    }
 }
