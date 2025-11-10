@@ -1,0 +1,45 @@
+{
+    "header": {
+        "product_name": "All Products",
+        "hs_code": "TOTAL",
+        "your_country": "South Africa",
+        "target_market": "Germany",
+        "target_market_id": "276",
+        "date": "November 2025"
+    },
+    "market_size": {
+        "target_market_imports_from_world_usd": 1425209578000
+    },
+    "market_growth": {
+        "target_market_growth_last_year_pct": -0.56,
+        "target_market_growth_cagr_pct": 4.99
+    },
+    "your_country_performance": {
+        "target_market_imports_from_your_country_usd": 11325096000,
+        "your_country_share_in_target_market_imports_pct": 0.79,
+        "your_country_growth_cagr_pct": 3.93
+    },
+    "competition": {
+        "top_3_suppliers": [
+            {
+                "name": "China",
+                "market_share_pct": 11.87
+            },
+            {
+                "name": "Netherlands",
+                "market_share_pct": 6.98
+            },
+            {
+                "name": "United States of America",
+                "market_share_pct": 6.76
+            }
+        ],
+        "gaining_suppliers_top_10": [
+            "China",
+            "United States of America",
+            "Poland",
+            "Czech Republic",
+            "Belgium"
+        ]
+    }
+}
