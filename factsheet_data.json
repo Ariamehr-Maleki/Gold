@@ -1,0 +1,27 @@
+{
+    "header": {
+        "product": "Fresh Apples",
+        "hs_code": "080810",
+        "target_market": "United Kingdom",
+        "your_country": "South Africa",
+        "date": "November 2025"
+    },
+    "country_profile": {
+        "capital_city": "manual input required",
+        "population": "manual input required",
+        "gdp_per_capita": "manual input required",
+        "currency": "manual input required",
+        "languages": "manual input required",
+        "country_profile_link": "manual input required"
+    },
+    "market_size": {},
+    "market_growth": {},
+    "competition": {},
+    "market_access": {
+        "tariffs_and_agreements": "manual input required from macmap.org",
+        "non_tariff_measures": "manual input required from macmap.org",
+        "potential_ntms": "manual input required from epingalert.org"
+    },
+    "business_partners": "manual input required from TradeMap's company section",
+    "other_promising_markets": "manual input required from exportpotential.intracen.org"
+}

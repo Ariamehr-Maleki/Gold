@@ -1,9 +1,14 @@
+# Core libraries
 selenium==4.15.2
 beautifulsoup4==4.12.2
-numpy==1.23.5
+
+# Scientific stack (Updated for Python 3.12 and compatibility)
+numpy==1.26.0
 scipy==1.11.3
-pandas==1.5.3
+pandas>=2.1.0   # Update required for Python 3.12 / Numpy 1.26.0 compatibility
 matplotlib==3.7.2
+
+# Flask dependencies (Updated to resolve installation errors)
 Flask==2.2.5
-Flask-Compress==1.14.0
-Flask-Cors==3.1.0
+Flask-Compress
+Flask-Cors>=6.0.1   # Fixes "No matching distribution" error and ensures Python 3.12 support

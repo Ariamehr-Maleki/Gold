@@ -36,9 +36,9 @@ options = [[3, 10, 10], [4], [5], [1, 5, 12, 10]]  # Options for selecting diffe
 s = spider.TradeSpider()
 
 try:
-    s.setDriver()  # Set up the web driver for automation
+    s.set_driver()  # Set up the web driver for automation
     s.login(ac, pw)  # Log in using the provided credentials
-    s.setTimePage()  # Set up the time page for data collection
+    s.set_time_page()  # Set up the time page for data collection
 
     # Initialize product index
     p = 0
@@ -46,15 +46,15 @@ try:
     # Loop through products and scrape data
     for index, o in enumerate(options):
         for n in o:
-            s.selectProducts(n)  # Select the product based on the options provided
+            s.select_products(n)  # Select the product based on the options provided
 
         # Loop through records and indicators to scrape data
         for r in Records:
             for i in Indicators:
 
                 # Set records and indicators in the scraper
-                s.setRecords(r)
-                s.setIndicators(i)
+                s.set_records(r)
+                s.set_indicators(i)
                 s.save(pdir + str(p))  # Save the scraped data as a pickle file
 
                 # Load and parse the saved data
