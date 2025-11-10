@@ -6,7 +6,7 @@ import os
 import math
 from spider_core import logging
 
-# This function remains the same as the previous version
+# This function is the base parser for the "value" file
 def _parse_timeseries_txt(file_path, config):
     logging.info(f"Parsing Time Series data from TXT file: {os.path.basename(file_path)}")
     try:
@@ -97,22 +97,101 @@ def _parse_timeseries_txt(file_path, config):
         logging.error(f"Failed parsing timeseries file: {e}")
         return {}
 
-# *** NEW PARSING FUNCTION for World Importers List ***
-def _parse_world_importers_txt(file_path, config):
+
+# *** THIS IS THE MISSING HELPER FUNCTION ***
+def _merge_supplementary_data(base_data, file_path, data_type='quantity'):
+    logging.info(f"Merging '{data_type}' data from {os.path.basename(file_path)}")
+    try:
+        df = pd.read_csv(file_path, sep='\t', header=0, encoding='utf-8-sig', dtype=str).fillna('0')
+        df.columns = [c.strip().strip('"') for c in df.columns]
+
+        partner_col = df.columns[0]
+        latest_year = base_data.get('latest_year')
+        if not latest_year:
+            logging.warning("Cannot merge data without a latest_year in base_data.")
+            return
+
+        target_col_name = next((c for c in df.columns if str(latest_year) in c), None)
+        if not target_col_name:
+            logging.error(f"Could not find a data column for year {latest_year} in {file_path}")
+            return
+            
+        df[target_col_name] = pd.to_numeric(df[target_col_name].str.replace(',', ''), errors='coerce').fillna(0)
+
+        suppliers_map = {s['name'].lower(): s for s in base_data['suppliers_full_list']}
+        
+        for _, row in df.iterrows():
+            partner_name = str(row[partner_col]).strip()
+            if partner_name.lower() in suppliers_map:
+                target_partner = suppliers_map[partner_name.lower()]
+                value = row[target_col_name]
+                
+                if data_type == 'quantity':
+                    target_partner['quantity_latest'] = int(value)
+                elif data_type == 'unit_value':
+                    target_partner['unit_value_latest'] = float(value)
+    
+    except Exception as e:
+        logging.error(f"Failed to merge supplementary data from {file_path}. Error: {e}")
+
+
+# *** MASTER PARSING FUNCTION for merging all three views ***
+def parse_full_timeseries(value_file, quantity_file, unit_value_file, config):
+    logging.info("--- Starting full timeseries parsing and merging from 3 files ---")
+
+    if not value_file or not os.path.exists(value_file):
+        logging.error(f"Value file not found or path is invalid: {value_file}. Aborting parse.")
+        return {}
+    
+    final_data = _parse_timeseries_txt(value_file, config)
+    if not final_data or 'suppliers_full_list' not in final_data:
+        logging.error("Parsing the primary value file failed. Cannot proceed with merge.")
+        return {}
+
+    if quantity_file and os.path.exists(quantity_file):
+        _merge_supplementary_data(final_data, quantity_file, data_type='quantity')
+    else:
+        logging.warning(f"Quantity file not found: {quantity_file}. Skipping quantity merge.")
+
+    if unit_value_file and os.path.exists(unit_value_file):
+        _merge_supplementary_data(final_data, unit_value_file, data_type='unit_value')
+    else:
+        logging.warning(f"Unit Value file not found: {unit_value_file}. Skipping unit value merge.")
+
+    for supplier in final_data.get('suppliers_full_list', []):
+        value = supplier.get('value_usd')
+        quantity = supplier.get('quantity_latest')
+        
+        if supplier.get('unit_value_latest') is None and value and quantity and quantity > 0:
+            supplier['unit_value_latest'] = round((value * 1000) / quantity, 2)
+    
+    logging.info("Successfully merged all timeseries data.")
+    return final_data
+
+
+# *** PARSING FUNCTION for World Importers List ***
+def parse_world_importers_txt(file_path, config):
     logging.info(f"Parsing World Importers data from TXT file: {os.path.basename(file_path)}")
     try:
         df = pd.read_csv(file_path, sep='\t', header=0, encoding='utf-8-sig', dtype=str).fillna('0')
         df.columns = [c.strip().strip('"') for c in df.columns]
         
         importers_col = df.columns[0]
-        value_col = next((c for c in df.columns if 'value' in c.lower() and '2024' in c), df.columns[1])
+        value_col = next((c for c in df.columns if 'value' in c.lower() and re.search(r'\d{4}', c)), df.columns[1])
         cagr_col = next((c for c in df.columns if 'annual growth' in c.lower()), None)
         
         df[value_col] = pd.to_numeric(df[value_col].str.replace(',', ''), errors='coerce').fillna(0)
         if cagr_col:
             df[cagr_col] = pd.to_numeric(df[cagr_col].str.replace(',', ''), errors='coerce').fillna(0)
 
-        world_row = df[df[importers_col].str.lower() == 'world'].iloc[0]
+        world_df = df[df[importers_col].str.lower() == 'world']
+        
+        if world_df.empty:
+            logging.error("Could not find the 'World' row in the downloaded file. Cannot parse world importers data.")
+            return {}
+        
+        world_row = world_df.iloc[0]
+
         world_total_imports = world_row[value_col]
         world_import_cagr = world_row.get(cagr_col, 0.0)
 
@@ -123,16 +202,18 @@ def _parse_world_importers_txt(file_path, config):
         target_market_rank = int(target_market_row.iloc[0]['rank']) if not target_market_row.empty else 'Not found'
 
         return {
-            "world_total_imports_usd": world_total_imports,
-            "world_imports_growth_cagr_pct": world_import_cagr,
-            "target_market_world_rank": target_market_rank
+            "world_total_imports_usd": int(world_total_imports),
+            "world_imports_growth_cagr_pct": float(world_import_cagr),
+            "target_market_world_rank": int(target_market_rank) if isinstance(target_market_rank, (int, float)) else target_market_rank
         }
+        
     except Exception as e:
-        logging.error(f"Could not parse world importers file. Error: {e}")
+        logging.error(f"Could not parse world importers file. Error: {e}", exc_info=True)
         return {}
 
-# This function remains unchanged
-def _parse_company_txt(file_path):
+
+# *** PARSING FUNCTION for Company List ***
+def parse_company_txt(file_path):
     logging.info(f"Parsing Company data from TXT file: {os.path.basename(file_path)}")
     try:
         df = pd.read_csv(file_path, sep='\t', header=0, encoding='utf-8-sig', dtype=str).fillna('')

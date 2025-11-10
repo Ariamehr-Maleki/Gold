@@ -118,8 +118,10 @@ class TradeSpider(object):
     def login(self, ac, pw):
         url = "https://www.trademap.org/Country_SelProduct_TS.aspx"
         if not self.goto(url): return False
-        time.sleep(random.uniform(5.0, 8.0))
+        
+        time.sleep(random.uniform(3.0, 5.0))
         if not self._safe_click(By.ID, 'ctl00_MenuControl_marmenu_login'): return False
+        
         time.sleep(random.uniform(2, 4))
         try:
             self.wait.until(EC.presence_of_element_located((By.ID, 'Username')))
@@ -129,13 +131,45 @@ class TradeSpider(object):
         except Exception as e:
             logging.error(f"Error during login input: {e}")
             return False
+            
         try:
-            WebDriverWait(self.driver, 30).until(EC.any_of(EC.url_contains("Country_SelProduct_TS.aspx"), EC.url_contains("stCaptcha.aspx")))
+            logging.info("Login submitted. Waiting for redirect...")
+            
+            WebDriverWait(self.driver, 30).until(EC.any_of(
+                EC.url_contains("Country_SelProduct_TS.aspx"), 
+                EC.url_contains("stCaptcha.aspx")
+            ))
+
             if "stCaptcha.aspx" in self.driver.current_url:
                 print("ACTION REQUIRED: Please solve the CAPTCHA in the browser window.")
-                WebDriverWait(self.driver, 300).until_not(EC.url_contains("stCaptcha.aspx"))
-            logging.info("Login successful!")
+                # Wait for EITHER the original page OR the Index homepage after CAPTCHA
+                WebDriverWait(self.driver, 300).until(EC.any_of(
+                    EC.url_contains("Country_SelProduct_TS.aspx"),
+                    EC.url_contains("Index.aspx")
+                ))
+            
+            logging.info("URL confirmed. Now waiting for page to be fully interactive...")
+
+            WebDriverWait(self.driver, 15).until(
+                lambda d: d.execute_script('return document.readyState') == 'complete'
+            )
+            logging.info("Browser reports document is 'complete'.")
+
+            # --- THE FINAL FIX ---
+            # Wait for a landmark element from EITHER the product page OR the homepage.
+            logging.info("Waiting for a landmark element from either the main dashboard or the homepage...")
+            self.wait.until(EC.any_of(
+                EC.presence_of_element_located((By.ID, "ctl00_PageContent_Panel1")), # Landmark for Country_SelProduct_TS.aspx
+                EC.presence_of_element_located((By.ID, "selectionMenu"))             # Landmark for Index.aspx
+            ))
+            logging.info("Landmark element found.")
+            
+            time.sleep(1)
+
+            logging.info("Login successful and page is confirmed to be loaded!")
             return True
+
         except TimeoutException:
-            logging.error("Failed to redirect after login or CAPTCHA timed out.")
+            logging.error("Verification failed. The script timed out waiting for the page after login.")
+            self._save_snapshot("post_login_verification_failed")
             return False

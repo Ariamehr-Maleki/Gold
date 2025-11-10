@@ -11,10 +11,22 @@ import glob
 
 
 class DataDownloader(TradeSpider):
-    def navigate_to_timeseries_page(self, product_code, country_id, trade_flow='I'):
-        logging.info(f"Navigating to Time Series page for product {product_code} (Flow: {trade_flow})")
+    # MODIFIED: Added 'view' parameter to dynamically change the URL
+    def navigate_to_timeseries_page(self, product_code, country_id, trade_flow='I', view='value'):
+        logging.info(f"Navigating to Time Series page for product {product_code} (Flow: {trade_flow}, View: {view})")
         trade_flow_code = '1' if trade_flow == 'I' else '2'
-        url = f"https://www.trademap.org/Country_SelProductCountry_TS.aspx?nvpm=1|{country_id}||||{product_code}|||2|1|1|{trade_flow_code}|2|1|2|1|1|1"
+        
+        # Maps user-friendly view names to TradeMap's URL codes
+        view_codes = {
+            'value': '1',
+            'quantity': '2',
+            'unit_value': '3'
+        }
+        view_code = view_codes.get(view.lower(), '1') # Default to 'value'
+
+        # The last parameter in the nvpm string is the view code
+        url = f"https://www.trademap.org/Country_SelProductCountry_TS.aspx?nvpm=1|{country_id}||||{product_code}|||2|1|1|{trade_flow_code}|2|1|2|{view_code}|1|1"
+        
         if not self.goto(url): return False
         time.sleep(3)
         return True
@@ -27,13 +39,19 @@ class DataDownloader(TradeSpider):
         time.sleep(3)
         return True
 
-    def _download_file(self, expected_keywords: list | None = None, max_attempts: int = 3, click_xpath: str = "//input[@type='image' and @title='Text file']"):
-        logging.info(f"Cleaning old text files from '{self.download_dir}'...")
-        for f in glob.glob(os.path.join(self.download_dir, "*.txt*")):
-            try:
-                os.remove(f)
-            except Exception:
-                pass
+    # MODIFIED: Added 'rename_to' parameter to rename downloaded file and prevent overwriting
+# MODIFIED: Added a 'clean_dir' parameter to control the cleaning behavior
+    def _download_file(self, expected_keywords: list | None = None, max_attempts: int = 3, click_xpath: str = "//input[@type='image' and @title='Text file']", rename_to: str | None = None, clean_dir: bool = True):
+        # --- FIX APPLIED HERE ---
+        # The cleaning logic is now conditional
+        if clean_dir:
+            logging.info(f"Cleaning old text files from '{self.download_dir}'...")
+            for f in glob.glob(os.path.join(self.download_dir, "*.txt*")):
+                try:
+                    os.remove(f)
+                except Exception:
+                    pass
+        # --- END OF FIX ---
 
         attempt = 0
         while attempt < max_attempts:
@@ -63,6 +81,21 @@ class DataDownloader(TradeSpider):
             if not downloaded_file_path:
                 logging.error("Download timed out. No .txt file was found.")
                 continue
+            
+            # --- RENAMING LOGIC ---
+            if downloaded_file_path and rename_to:
+                try:
+                    new_path = os.path.join(self.download_dir, rename_to)
+                    # --- FIX #2 APPLIED HERE ---
+                    # Use os.replace for a more robust (atomic) file renaming operation
+                    os.replace(downloaded_file_path, new_path)
+                    logging.info(f"Successfully renamed downloaded file to '{rename_to}'")
+                    downloaded_file_path = new_path
+                except OSError as e:
+                    logging.error(f"Failed to rename file to '{rename_to}': {e}")
+                    # If rename fails, we should not proceed as it may corrupt the flow
+                    return None
+            # --- END LOGIC ---
 
             if not expected_keywords:
                 return downloaded_file_path
