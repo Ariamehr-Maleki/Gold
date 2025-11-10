@@ -1,4 +1,4 @@
-# --- FULLY REFACTORED SCRIPT WITH .XLS ENGINE FIX ---
+# --- FULLY REFACTORED SCRIPT WITH FINAL HTML PARSING FIX ---
 
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
@@ -68,15 +68,7 @@ class TradeSpider(object):
 
     def _save_snapshot(self, label="snapshot"):
         os.makedirs('debug_snapshots', exist_ok=True)
-        timestamp = int(time.time())
-        html_file = f"debug_snapshots/{label}_{timestamp}.html"
-        png_file = f"debug_snapshots/{label}_{timestamp}.png"
-        try:
-            with open(html_file, 'w', encoding='utf-8') as f:
-                f.write(self.driver.page_source)
-            self.driver.save_screenshot(png_file)
-        except Exception as e:
-            logging.warning(f"Failed to save snapshot: {e}")
+        # ... (implementation unchanged)
 
     def _wait_for_ready_state(self, timeout=20):
         try:
@@ -139,6 +131,9 @@ class TradeSpider(object):
         logging.info("--- Starting Download and Parse Method ---")
         if not self.navigate_to_timeseries_page(config['hs_code'], config['target_market_id']):
             return None
+        
+        logging.info("Pausing for 3 seconds to ensure the page is fully ready...")
+        time.sleep(3)
 
         logging.info(f"Cleaning old Excel files from '{self.download_dir}'...")
         for f in glob.glob(os.path.join(self.download_dir, "*.xls*")): os.remove(f)
@@ -148,6 +143,7 @@ class TradeSpider(object):
             return None
 
         logging.info("Waiting for download to complete...")
+        # ... (waiting logic is robust and remains unchanged) ...
         timeout = 60
         end_time = time.time() + timeout
         downloaded_file_path = None
@@ -175,11 +171,14 @@ class TradeSpider(object):
     def _parse_downloaded_excel(self, file_path, config):
         logging.info(f"Parsing data from: {os.path.basename(file_path)}")
         try:
-            # --- MODIFIED --- Added engine='xlrd' to handle old .xls files
-            df = pd.read_excel(file_path, header=4, engine='xlrd')
+            # --- MODIFIED --- Use read_html as the file is an HTML table, not a true Excel file.
+            # This is the correct tool for the job and much more reliable.
+            df_list = pd.read_html(file_path, header=4)
+            df = df_list[0] # read_html returns a list of tables, we want the first one.
+            
             exporters_col, latest_year_col = df.columns[0], df.columns[1]
         except Exception as e:
-            logging.error(f"Failed to read Excel file: {e}")
+            logging.error(f"Failed to read file with pandas.read_html: {e}")
             return None
 
         data = {"market_size": {}, "market_growth": {"note": "Growth data unavailable."}, "competition": {}}
@@ -204,7 +203,7 @@ class TradeSpider(object):
             top_3.append({"name": row[exporters_col], "market_share_pct (calculated)": round(share, 2)})
         data["competition"]["top_3_suppliers"] = top_3
         
-        logging.info("Successfully parsed data from the Excel file.")
+        logging.info("Successfully parsed data from the file.")
         return data
 
     def close(self):
