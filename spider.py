@@ -1,4 +1,9 @@
-# --- FINAL SCRIPT WITH ENHANCED PARSING, REVERSE CONFIG, AND ROBUST COMPANY SAMPLING ---
+# tradespider_trademap_complete.py
+# Enhanced TradeSpider: extract as much as possible from TradeMap TXT tables
+# - Parses value, quantity and unit-value columns from time series files
+# - Returns full timeseries arrays for World and Your Country (years, values, quantities, unit_values)
+# - Builds a detailed suppliers list with unit values and growths where available
+# - Improved company TXT parsing to capture phone/email/address when present
 
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
@@ -22,6 +27,7 @@ import json
 from datetime import datetime
 import glob
 import re
+import math
 
 # Basic logging configuration
 try:
@@ -54,10 +60,10 @@ class TradeSpider(object):
             options.binary_location = firefox_path
         except Exception:
             logging.error("Could not set Firefox binary location. Check the path.")
-        
+
         if self.headless:
             options.add_argument("--headless")
-        
+
         os.makedirs(self.download_dir, exist_ok=True)
 
         options.set_preference("browser.download.folderList", 2)
@@ -67,7 +73,7 @@ class TradeSpider(object):
         options.set_preference("general.useragent.override", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0")
 
         service = Service(executable_path=self.driver_path)
-        
+
         try:
             self.driver = webdriver.Firefox(service=service, options=options)
             self.wait = WebDriverWait(self.driver, self.wait_seconds)
@@ -303,61 +309,206 @@ class TradeSpider(object):
         return None
 
     def _parse_timeseries_txt(self, file_path, config):
-        # This function remains unchanged as it is already robust.
         logging.info(f"Parsing Time Series data from TXT file: {os.path.basename(file_path)}")
         try:
             df = pd.read_csv(file_path, sep='\t', header=0, encoding='utf-8-sig')
             df.columns = [col.strip().strip('"') for col in df.columns]
             df = df.apply(lambda x: x.str.strip().str.strip('"') if x.dtype == "object" else x)
-            value_cols = sorted([col for col in df.columns if ' value in ' in col])
-            if len(value_cols) < 2: return {}
-            for col in value_cols: df[col] = pd.to_numeric(df[col], errors='coerce')
-            df.fillna(0, inplace=True)
-            latest_year_col, prior_year_col = value_cols[-1], value_cols[-2]
-            start_year_col = value_cols[-5] if len(value_cols) >= 5 else value_cols[0]
+
+            # Identify the main data source column (country/product names)
             data_source_col = df.columns[0]
-            num_periods = int(re.search(r'(\d{4})', latest_year_col).group(1)) - int(re.search(r'(\d{4})', start_year_col).group(1))
-        except Exception: return {}
-        def calculate_cagr(end, start, periods): return round(((end / start) ** (1 / periods) - 1) * 100, 2) if start > 0 and periods > 0 else 0.0
-        data = {}
-        world_row = df[df[data_source_col] == 'World']
-        if not world_row.empty:
-            world_latest = world_row[latest_year_col].iloc[0]
-            data["total_value_usd"] = int(world_latest * 1000)
-            if 'Imported value in' in latest_year_col:
-                data.update({
-                    "market_growth_last_year_pct": round((world_latest - world_row[prior_year_col].iloc[0]) / world_row[prior_year_col].iloc[0] * 100 if world_row[prior_year_col].iloc[0] > 0 else 0, 2),
-                    "market_growth_cagr_pct": calculate_cagr(world_latest, world_row[start_year_col].iloc[0], num_periods)
-                })
-        your_country_row = df[df[data_source_col] == config['your_country']]
-        if not your_country_row.empty:
-            yc_latest = your_country_row[latest_year_col].iloc[0]
-            data.update({
-                "imports_from_your_country_usd": int(yc_latest * 1000),
-                "your_country_share_in_target_market_imports_pct": round((yc_latest / world_row[latest_year_col].iloc[0]) * 100 if not world_row.empty and world_row[latest_year_col].iloc[0] > 0 else 0, 2),
-                "your_country_growth_cagr_pct": calculate_cagr(yc_latest, your_country_row[start_year_col].iloc[0], num_periods)
-            })
-        competitors_df = df[df[data_source_col] != 'World']
-        top_10 = competitors_df.sort_values(by=latest_year_col, ascending=False).head(10)
-        top_3 = [{"name": r[data_source_col], "market_share_pct": round((r[latest_year_col] / world_row[latest_year_col].iloc[0]) * 100 if not world_row.empty and world_row[latest_year_col].iloc[0] > 0 else 0, 2)} for i, r in top_10.head(3).iterrows()]
-        gaining = [r[data_source_col] for i, r in top_10.iterrows() if (r[latest_year_col] / (world_row[latest_year_col].iloc[0] or 1)) > (r[start_year_col] / (world_row[start_year_col].iloc[0] or 1))]
-        data["competition"] = {"top_3_suppliers": top_3, "gaining_suppliers_top_10": gaining}
-        logging.info("Successfully parsed Time Series data.")
-        return data
+
+            # Identify columns for values, quantities and unit values
+            value_cols = [col for col in df.columns if re.search(r'value in \d{4}', col.lower())]
+            qty_cols = [col for col in df.columns if re.search(r'quantity in \d{4}', col.lower()) or re.search(r'qty in \d{4}', col.lower())]
+            uv_cols = [col for col in df.columns if re.search(r'unit value in \d{4}', col.lower())]
+
+            # fallback: sometimes columns are like 'Value in 2024', 'Imported value in 2024'
+            if not value_cols:
+                value_cols = [col for col in df.columns if 'value in' in col.lower() or col.lower().endswith('value')]
+            # convert numeric
+            for col in value_cols:
+                df[col] = pd.to_numeric(df[col], errors='coerce')
+            for col in qty_cols:
+                df[col] = pd.to_numeric(df[col], errors='coerce')
+            for col in uv_cols:
+                df[col] = pd.to_numeric(df[col], errors='coerce')
+
+            df.fillna(0, inplace=True)
+
+            # years list inferred from the column names
+            def year_from_col(col):
+                m = re.search(r'(\d{4})', col)
+                return int(m.group(1)) if m else None
+
+            years = sorted([year_from_col(c) for c in (value_cols or qty_cols) if year_from_col(c)])
+            if not years and value_cols:
+                # try to extract digits
+                years = sorted(list({year_from_col(c) for c in value_cols if year_from_col(c)}))
+
+            latest_year = years[-1] if years else None
+            start_year = years[0] if years else None
+            periods = (latest_year - start_year) if latest_year and start_year else 0
+
+            # helper: map year -> column name
+            def col_for_year(prefix_cols, y):
+                for c in prefix_cols:
+                    if str(y) in c:
+                        return c
+                return None
+
+            data = {
+                'data_source_column': data_source_col,
+                'years': years,
+                'latest_year': latest_year,
+                'start_year': start_year,
+                'periods': periods,
+                'raw_file': os.path.basename(file_path)
+            }
+
+            # extract world row timeseries
+            world_row = df[df[data_source_col].astype(str).str.lower() == 'world']
+            if not world_row.empty and years:
+                world_values = []
+                world_quantities = []
+                world_unit_values = []
+                for y in years:
+                    vc = col_for_year(value_cols, y)
+                    qc = col_for_year(qty_cols, y) if qty_cols else None
+                    uc = col_for_year(uv_cols, y) if uv_cols else None
+                    v = int(world_row[vc].iloc[0]) if vc and vc in world_row.columns else 0
+                    q = int(world_row[qc].iloc[0]) if qc and qc in world_row.columns else None
+                    u = float(world_row[uc].iloc[0]) if uc and uc in world_row.columns else None
+                    world_values.append(v)
+                    world_quantities.append(q)
+                    world_unit_values.append(u)
+                data.update({'world_values_usd': world_values, 'world_quantities': world_quantities, 'world_unit_values': world_unit_values})
+
+                data['total_value_usd'] = world_values[-1] if world_values else 0
+
+            # extract your country row timeseries
+            yc_row = df[df[data_source_col].astype(str).str.lower() == config['your_country'].lower()]
+            if not yc_row.empty and years:
+                yc_values = []
+                yc_quantities = []
+                yc_unit_values = []
+                for y in years:
+                    vc = col_for_year(value_cols, y)
+                    qc = col_for_year(qty_cols, y) if qty_cols else None
+                    uc = col_for_year(uv_cols, y) if uv_cols else None
+                    v = int(yc_row[vc].iloc[0]) if vc and vc in yc_row.columns else 0
+                    q = int(yc_row[qc].iloc[0]) if qc and qc in yc_row.columns else None
+                    u = float(yc_row[uc].iloc[0]) if uc and uc in yc_row.columns else None
+                    yc_values.append(v)
+                    yc_quantities.append(q)
+                    yc_unit_values.append(u)
+                data.update({'your_country_values_usd': yc_values, 'your_country_quantities': yc_quantities, 'your_country_unit_values': yc_unit_values})
+
+                data['imports_from_your_country_usd'] = data['your_country_values_usd'][-1] if data.get('your_country_values_usd') else 0
+
+            # compute CAGR and last-year growth when possible
+            def safe_cagr(end, start, n):
+                try:
+                    return round(((end / start) ** (1 / n) - 1) * 100, 2) if start > 0 and n > 0 else 0.0
+                except Exception:
+                    return 0.0
+
+            if data.get('total_value_usd') and data.get('world_values_usd'):
+                if len(data['world_values_usd']) >= 2:
+                    last = data['world_values_usd'][-1]
+                    prev = data['world_values_usd'][-2]
+                    data['market_growth_last_year_pct'] = round((last - prev) / prev * 100, 2) if prev > 0 else 0.0
+                if start_year and latest_year and data['world_values_usd'][0] > 0:
+                    data['market_growth_cagr_pct'] = safe_cagr(data['world_values_usd'][-1], data['world_values_usd'][0], periods)
+
+            if data.get('your_country_values_usd'):
+                if len(data['your_country_values_usd']) >= 2:
+                    last = data['your_country_values_usd'][-1]
+                    prev = data['your_country_values_usd'][-2]
+                    data['your_country_growth_last_year_pct'] = round((last - prev) / prev * 100, 2) if prev > 0 else 0.0
+                if start_year and latest_year and data['your_country_values_usd'][0] > 0:
+                    data['your_country_growth_cagr_pct'] = safe_cagr(data['your_country_values_usd'][-1], data['your_country_values_usd'][0], periods)
+
+            # compute supplier ranking table if file lists suppliers
+            suppliers = []
+            try:
+                # assume rows other than 'World' are suppliers
+                comp_df = df[df[data_source_col].astype(str).str.lower() != 'world']
+                # pick latest year column for ranking
+                latest_col = None
+                if years:
+                    latest_col = col_for_year(value_cols, years[-1])
+                if latest_col:
+                    comp_df_sorted = comp_df.sort_values(by=latest_col, ascending=False)
+                else:
+                    comp_df_sorted = comp_df
+
+                # compute world total for share calculations
+                world_total = data.get('total_value_usd') or (comp_df_sorted[latest_col].sum() if latest_col and latest_col in comp_df_sorted.columns else 0)
+                for i, row in comp_df_sorted.iterrows():
+                    name = str(row[data_source_col]).strip()
+                    v = int(row[latest_col]) if latest_col and latest_col in comp_df_sorted.columns else 0
+                    q = None
+                    u = None
+                    if qty_cols:
+                        qcol = col_for_year(qty_cols, years[-1]) if years else None
+                        if qcol and qcol in row.index:
+                            q = int(row[qcol]) if not math.isnan(float(row[qcol])) else None
+                    if uv_cols:
+                        ucol = col_for_year(uv_cols, years[-1]) if years else None
+                        if ucol and ucol in row.index:
+                            try:
+                                u = float(row[ucol])
+                            except Exception:
+                                u = None
+
+                    suppliers.append({
+                        'rank': len(suppliers) + 1,
+                        'name': name,
+                        'value_usd': v,
+                        'market_share_pct': round((v / world_total) * 100, 2) if world_total else 0.0,
+                        'quantity_latest': q,
+                        'unit_value_latest': u,
+                        'raw_value': row[latest_col] if latest_col in row.index else None
+                    })
+
+                data['suppliers_full_list'] = suppliers
+                # top N
+                data['top_suppliers_sample'] = suppliers[:20]
+
+                # calculate HHI (sum of squared market shares) on top suppliers
+                hhi = sum([(s['market_share_pct'] ** 2) for s in suppliers[:50]]) if suppliers else 0
+                data['hhi'] = round(hhi, 2)
+                if hhi < 1500:
+                    concentration = 'not concentrated'
+                elif hhi < 2500:
+                    concentration = 'moderately concentrated'
+                else:
+                    concentration = 'concentrated'
+                data['concentration'] = concentration
+
+                # find your country's rank
+                found = next((s for s in suppliers if s['name'].lower() == config['your_country'].lower()), None)
+                if found:
+                    data['your_country_rank_in_target_market_imports'] = found['rank']
+            except Exception as e:
+                logging.debug(f"Could not compute supplier list details: {e}")
+
+            logging.info("Successfully parsed Time Series data.")
+            return data
+
+        except Exception as e:
+            logging.error(f"Failed parsing timeseries file: {e}")
+            return {}
 
     def _parse_company_txt(self, file_path):
         logging.info(f"Parsing Company data from TXT file: {os.path.basename(file_path)}")
         try:
-            # Read forcing string dtype (prevents dtype issues and fillna warnings)
-            df = pd.read_csv(file_path, sep='\t', header=0, encoding='utf-8-sig', dtype=str).fillna('N/A')
-            # normalize column names
+            df = pd.read_csv(file_path, sep='\t', header=0, encoding='utf-8-sig', dtype=str).fillna('')
             original_cols = list(df.columns)
-            cols_map = {c: c.strip().lower() for c in original_cols}
-            df.columns = [c.strip() for c in original_cols]  # keep original stripped for display
-
+            df.columns = [c.strip() for c in original_cols]
             lowered = [c.strip().lower() for c in original_cols]
 
-            # helper to find a column by checking substrings & exact matches
             def find_col(candidates):
                 for cand in candidates:
                     for i, c in enumerate(lowered):
@@ -368,26 +519,23 @@ class TradeSpider(object):
             name_col = find_col(['importers', 'company name', 'company', 'exporters', 'importer', 'exporter', 'name'])
             city_col = find_col(['city', 'town'])
             website_col = find_col(['website', 'web site', 'web', 'url', 'site'])
+            phone_col = find_col(['phone', 'tel', 'telephone'])
+            email_col = find_col(['email', 'e-mail'])
+            addr_col = find_col(['address', 'addr'])
 
             if not name_col:
                 logging.error(f"No valid company column found. Columns available: {original_cols}")
                 return []
 
-            # Ensure the three columns exist in df (fill missing with 'N/A')
-            if name_col not in df.columns:
-                df[name_col] = 'N/A'
-            if city_col and city_col not in df.columns:
-                df[city_col] = 'N/A'
-            if website_col and website_col not in df.columns:
-                df[website_col] = 'N/A'
-
-            # build result records
             records = []
             for _, row in df.iterrows():
                 rec = {
-                    "name": str(row.get(name_col, 'N/A')).strip(),
-                    "city": str(row.get(city_col, 'N/A')).strip() if city_col else 'N/A',
-                    "website": str(row.get(website_col, 'N/A')).strip() if website_col else 'N/A'
+                    'name': str(row.get(name_col, '')).strip(),
+                    'city': str(row.get(city_col, '')).strip() if city_col else '',
+                    'website': str(row.get(website_col, '')).strip() if website_col else '',
+                    'phone': str(row.get(phone_col, '')).strip() if phone_col else '',
+                    'email': str(row.get(email_col, '')).strip() if email_col else '',
+                    'address': str(row.get(addr_col, '')).strip() if addr_col else ''
                 }
                 records.append(rec)
             return records
@@ -396,11 +544,11 @@ class TradeSpider(object):
             return []
 
 
-
 def save_to_json(data, filename="final_factsheet_data.json"):
     with open(filename, 'w', encoding='utf-8') as f:
         json.dump(data, f, ensure_ascii=False, indent=4)
     logging.info(f"Successfully saved all combined data to {filename}")
+
 
 if __name__ == '__main__':
     CONFIG = {
@@ -408,35 +556,33 @@ if __name__ == '__main__':
         "your_country": "South Africa", "your_country_id": "710",
         "target_market": "Germany", "target_market_id": "276",
     }
-    
+
     final_data = {"header": {**CONFIG, "date": datetime.now().strftime("%B %Y")}}
-    
+
     ac, pw = os.environ.get('TM_USERNAME') or input('Enter TM username: '), os.environ.get('TM_PASSWORD') or input('Enter TM password: ')
     s = TradeSpider(headless=False, driver_path=r".\geckodriver.exe")
-    
+
     try:
         if s.set_driver() and s.login(ac, pw):
-            # --- TASK 1: Get Target Market's Import Data ---
             logging.info("===== TASK 1 of 3: SCRAPING TARGET MARKET IMPORTS =====")
             market_data = s.download_and_parse_timeseries_data(CONFIG, trade_flow='I')
             if market_data:
-                final_data["market_size"] = {"target_market_imports_from_world_usd": market_data.pop("total_value_usd", None)}
-                final_data["market_growth"] = {"target_market_growth_last_year_pct": market_data.pop("market_growth_last_year_pct", None), "target_market_growth_cagr_pct": market_data.pop("market_growth_cagr_pct", None)}
+                final_data["market_size"] = {"target_market_imports_from_world_usd": market_data.get("total_value_usd")}
+                final_data["market_growth"] = {"target_market_growth_last_year_pct": market_data.get("market_growth_last_year_pct"), "target_market_growth_cagr_pct": market_data.get("market_growth_cagr_pct")}
                 final_data["your_country_performance"] = market_data
-                final_data["competition"] = market_data.pop("competition", None)
-            
-            # --- TASK 2: Get Your Country's Total Export Data ---
+                # move suppliers into competition block
+                final_data["competition"] = {"top_suppliers_sample": market_data.get('top_suppliers_sample'), "hhi": market_data.get('hhi'), "concentration": market_data.get('concentration'), "top_3_suppliers": market_data.get('top_suppliers_sample')[:3] if market_data.get('top_suppliers_sample') else []}
+
             logging.info("===== TASK 2 of 3: SCRAPING YOUR COUNTRY'S EXPORTS =====")
             export_data = s.download_and_parse_timeseries_data(CONFIG, trade_flow='E')
             if export_data and "your_country_performance" in final_data:
                 final_data["your_country_performance"]["your_country_total_exports_to_world_usd"] = export_data.get("total_value_usd")
 
-            # --- TASK 3: Get Company Data from Target Market ---
             logging.info("===== TASK 3 of 3: SCRAPING COMPANY DATA SAMPLE =====")
             company_data = s.download_and_parse_company_sample_data(CONFIG, trade_flow='I')
             if company_data:
                 final_data["business_partners_sample"] = company_data
-            
+
             save_to_json(final_data)
 
     except Exception as e:
@@ -444,6 +590,9 @@ if __name__ == '__main__':
     finally:
         if s and s.driver:
             input("Press Enter to exit and close the browser...")
-            s.close()
+            try:
+                s.driver.quit()
+            except Exception:
+                pass
         else:
             print("Script finished or encountered an error before browser started.")
