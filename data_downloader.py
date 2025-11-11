@@ -1,4 +1,4 @@
-# data_downloader.py (Final Version with Robust JavaScript Click)
+# data_downloader.py (Corrected with Robust File Identification)
 
 from spider_core import TradeSpider, logging
 from selenium.webdriver.support import expected_conditions as EC
@@ -9,6 +9,7 @@ import time
 import random
 import os
 import glob
+import re
 
 class DataDownloader(TradeSpider):
 
@@ -72,6 +73,10 @@ class DataDownloader(TradeSpider):
         return False
 
     def navigate_to_companies_page(self, config, trade_flow='I'):
+        """
+        Navigate to the Companies page. If TradeMap redirects to a clarification page
+        with a product-list table, click the *first* product link robustly using multiple strategies.
+        """
         country_id = config['target_market_id']
         product_code = config['hs_code']
         logging.info(f"Navigating to Companies page for product {product_code}, country {country_id}")
@@ -80,97 +85,134 @@ class DataDownloader(TradeSpider):
         
         logging.info(f"Navigating directly to COMPANIES URL: {url}")
         self.driver.get(url)
-        
-        time.sleep(3)
+        time.sleep(2.5 + random.random()*1.5)
         
         if "CorrespondingProductsCompanies.aspx" in self.driver.current_url:
-            logging.warning("Redirected to product clarification page. This is expected. Handling redirect...")
+            logging.warning("Redirected to product clarification page. Handling redirect...")
             try:
-                clarification_table = (By.ID, "ctl00_PageContent_MyGridView1")
-                logging.info("Waiting for the product clarification table to appear...")
-                self.wait.until(EC.visibility_of_element_located(clarification_table))
-                logging.info("Clarification table found.")
+                self.wait.until(EC.visibility_of_element_located((By.ID, "ctl00_PageContent_MyGridView1")))
+                logging.info("Clarification table visible.")
 
-                # --- START OF FIX ---
-                # The original click method can fail on JavaScript links.
-                # We will now use a direct JavaScript execution which is more reliable.
-                logging.info("Attempting to click the first product link using a direct JavaScript call...")
-                first_product_link_locator = (By.XPATH, "//table[@id='ctl00_PageContent_MyGridView1']//a[1]")
+                first_link_xpath = "//table[@id='ctl00_PageContent_MyGridView1']//tr[2]//a"
                 
-                # 1. Wait for the element to be present and find it
-                link_element = self.wait.until(EC.presence_of_element_located(first_product_link_locator))
+                if self._safe_click(By.XPATH, first_link_xpath):
+                     logging.info("Clicked first product link via _safe_click.")
+                else:
+                    logging.warning("Safe click failed, trying JS click as fallback...")
+                    try:
+                        first_el = self.driver.find_element(By.XPATH, first_link_xpath)
+                        self.driver.execute_script("arguments[0].click();", first_el)
+                        logging.info("Executed JavaScript click on first product link.")
+                    except Exception as e:
+                        logging.error(f"All click strategies failed for the first product link. Error: {e}")
+                        self._save_snapshot("company_all_clicks_failed")
+                        return False
                 
-                # 2. Execute the click via JavaScript
-                self.driver.execute_script("arguments[0].click();", link_element)
-                logging.info("JavaScript click executed successfully.")
-                # --- END OF FIX ---
-                
-                self.wait.until(EC.url_contains("CompaniesList.aspx"))
+                logging.info("Click attempted. Waiting for final CompaniesList.aspx to load...")
+                WebDriverWait = self.wait.__class__
+                WebDriverWait(self.driver, 15).until(EC.url_contains("CompaniesList.aspx"))
                 logging.info("Successfully handled redirect and landed on the final companies list page.")
                 return True
+
             except Exception as e:
-                logging.error(f"Failed to handle the company page redirect after landing on it. Error: {e}")
+                logging.error(f"Failed to handle the company page redirect. Error: {e}")
                 self._save_snapshot("company_redirect_handler_failed")
                 return False
-        
+
         elif "CompaniesList.aspx" in self.driver.current_url:
             logging.info("Successfully landed on the companies list page directly.")
             return True
-            
         else:
             logging.error(f"Navigation to companies page failed. Ended up on an unknown page: {self.driver.current_url}")
             self._save_snapshot("company_navigation_unknown_failure")
             return False
 
+    # --- FIX APPLIED HERE ---
     def _download_file(self, rename_to: str | None = None, clean_dir: bool = True):
+        """
+        Atomically downloads a file by tracking the directory state.
+        FIX: It now records existing files *before* download and waits for a *new* one to appear.
+        This prevents race conditions when downloading multiple files to the same directory.
+        """
         if clean_dir:
-            logging.info(f"Cleaning old text files from '{self.download_dir}'...")
-            for f in glob.glob(os.path.join(self.download_dir, "*.txt*")):
-                try: os.remove(f)
-                except Exception: pass
+            logging.info(f"Preparing for single download. Cleaning old text/part files from '{self.download_dir}'...")
+            # Clean both .txt and browser temporary files (.part)
+            for f in glob.glob(os.path.join(self.download_dir, "*.txt*")) + glob.glob(os.path.join(self.download_dir, "*.part")):
+                try:
+                    os.remove(f)
+                    logging.debug(f"Removed old file: {f}")
+                except OSError as e:
+                    logging.warning(f"Could not remove old file {f}: {e}")
         
+        # --- FIX: Get the set of files in the directory BEFORE starting the download ---
         existing_files = set(glob.glob(os.path.join(self.download_dir, "*.txt")))
-        max_attempts = 4
+        
         click_xpath = "//input[@type='image' and @title='Text file']"
-        attempt = 0
-        while attempt < max_attempts:
-            attempt += 1
-            logging.info(f"Download attempt {attempt}/{max_attempts} for '{rename_to or 'file'}'...")
-            if not self._safe_click(By.XPATH, click_xpath):
-                logging.error(f"Failed to click download button for '{rename_to}'.")
-                continue 
-            
-            timeout = 60
-            end_time = time.time() + timeout
-            downloaded_file_path = None
-            
+        
+        logging.info(f"Attempting download for '{rename_to or 'file'}'...")
+        if not self._safe_click(By.XPATH, click_xpath):
+            logging.error(f"Failed to click download button for '{rename_to}'.")
+            return None
+        
+        timeout = 60
+        end_time = time.time() + timeout
+        downloaded_file_path = None
+        
+        try:
+            # Wait for a NEW file to appear
             while time.time() < end_time:
-                new_files = set(glob.glob(os.path.join(self.download_dir, "*.txt"))) - existing_files
+                # --- FIX: Find a file that is not in the 'existing_files' set ---
+                current_files = set(glob.glob(os.path.join(self.download_dir, "*.txt")))
+                new_files = current_files - existing_files
+                
                 if new_files:
-                    latest_file = new_files.pop()
-                    time.sleep(1.5) 
-                    try:
-                        if os.path.getsize(latest_file) > 0:
-                            downloaded_file_path = latest_file
-                            logging.info(f"NEW file download confirmed: {os.path.basename(downloaded_file_path)}")
-                            break 
-                    except Exception as e:
-                        logging.debug(f"Error checking file size (file may be locked): {e}")
+                    # We found our new file
+                    downloaded_file_path = new_files.pop()
+                    logging.info(f"New file detected: {os.path.basename(downloaded_file_path)}")
+                    break
                 time.sleep(0.5)
 
-            if downloaded_file_path:
-                if rename_to:
-                    try:
-                        new_path = os.path.join(self.download_dir, rename_to)
-                        os.replace(downloaded_file_path, new_path) 
-                        logging.info(f"Successfully renamed downloaded file to '{rename_to}'")
-                        return new_path
-                    except OSError as e:
-                        logging.error(f"Failed to rename file to '{rename_to}': {e}")
-                        return None
-                return downloaded_file_path
+            if not downloaded_file_path:
+                logging.error("Download timed out. No new .txt file appeared.")
+                self._save_snapshot("download_timeout_no_new_file")
+                return None
+
+            # Wait for the file size to stabilize, indicating download completion
+            last_size = -1
+            stable_checks = 3 
+            stable_count = 0
+            while time.time() < end_time and stable_count < stable_checks:
+                try:
+                    current_size = os.path.getsize(downloaded_file_path)
+                    if current_size == last_size and current_size > 0:
+                        stable_count += 1
+                    else:
+                        stable_count = 0 
+                    last_size = current_size
+                    logging.debug(f"Checking file size: {current_size} bytes. Stable count: {stable_count}/{stable_checks}")
+                except OSError:
+                    logging.debug("File is locked, waiting...")
+                    stable_count = 0
+                time.sleep(0.7)
+
+            if stable_count < stable_checks:
+                logging.error(f"Download timed out. File '{os.path.basename(downloaded_file_path)}' did not stabilize.")
+                self._save_snapshot("download_unstable_file")
+                return None
+
+            logging.info(f"File download confirmed and stabilized at {last_size} bytes.")
             
-            logging.warning(f"Download attempt {attempt} timed out. No new .txt file was found.")
+            # Now that the file is stable, rename it
+            if rename_to:
+                new_path = os.path.join(self.download_dir, rename_to)
+                # Use os.replace for an atomic rename operation
+                os.replace(downloaded_file_path, new_path)
+                logging.info(f"Successfully renamed downloaded file to '{rename_to}'")
+                return new_path
             
-        logging.error(f"All download attempts failed for '{rename_to}'.")
-        return None
+            return downloaded_file_path
+
+        except Exception as e:
+            logging.error(f"An exception occurred during the download process for '{rename_to}': {e}", exc_info=True)
+            self._save_snapshot("download_exception")
+            return None

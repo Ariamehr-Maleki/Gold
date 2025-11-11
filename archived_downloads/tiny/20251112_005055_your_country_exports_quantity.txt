@@ -1,0 +1,17 @@
+﻿Importers	2020-Exported quantity, Units	2021-Exported quantity, Units	2022-Exported quantity, Units	2023-Exported quantity, Units	2024-Exported quantity, Units	
+"World"	17067	22436	64629	31555	20997	
+"Zimbabwe"	2056	1013	4286	355	4328	
+"Namibia"	2199	3406	2469	2410	4136	
+"Botswana"	2224	4833	2753	2515	2182	
+"Zambia"	4572	2867	1805	2378	1725	
+"Eswatini"	1221	1503	2441	1547	1365	
+"Lesotho"	487	1157	35710	1424	942	
+"Mozambique"	435	554	513	1281	867	
+"Angola"	72	231	1324	325	699	
+"United Kingdom"	299	227	348	241	647	
+"Malawi"	171	405	10052	25	563	
+"Congo, Democratic Republic of the"	159	820	367	822	523	
+"Uganda"	138	15	9	19	463	
+"Germany"	413	1287	181	6732	426	
+"China"	3	6	3	965	420	
+"Seychelles"	248	4

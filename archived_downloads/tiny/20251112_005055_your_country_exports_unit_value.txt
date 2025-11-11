@@ -1,0 +1,16 @@
+﻿Importers	2020-Exported unit value, US Dollar/Units	2021-Exported unit value, US Dollar/Units	2022-Exported unit value, US Dollar/Units	2023-Exported unit value, US Dollar/Units	2024-Exported unit value, US Dollar/Units	Exported value in 2024, US Dollar thousand	Exported quantity in 2024, Units	
+"World"	227	274	82	233	528	11088	20997	
+"United States of America"	231	3333	4736	193	28159	3548	126	
+"Botswana"	227	208	259	577	542	1182	2182	
+"Namibia"	297	264	328	309	237	981	4136	
+"Canada"	2000	1000	4000	3800	36700	734	20	
+"Lesotho"	101	83	5.46	103	758	714	942	
+"Zambia"	115	309	481	306	395	682	1725	
+"France"	219	200	333	538	45636	502	11	
+"Mozambique"	786	655	686	269	448	388	867	
+"Eswatini"	135	154	120	204	231	315	1365	
+"Congo, Democratic Republic of the"	1384	439	997	482	556	291	523	
+"Madagascar"	1477	456	107	134	15375	246	16	
+"Zimbabwe"	154	402	44	493	57	245	4328	
+"Angola"	3500	234	147	535	336	235	699	
+"Côte d'Ivoire"	250	190	73	1083	25

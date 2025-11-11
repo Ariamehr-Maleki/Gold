@@ -1,0 +1,17 @@
+﻿Exporters	2020-Imported quantity, Tons	2021-Imported quantity, Tons	2022-Imported quantity, Tons	2023-Imported quantity, Tons	2024-Imported quantity, Tons	
+"World"	40259	45054	40423	31661	30376	
+"China"	9336	15613	12836	8761	8994	
+"Switzerland"	3982	4432	4734	4703	4425	
+"Italy"	4398	4182	3427	3300	3608	
+"Thailand"	1456	1726	1755	1989	2610	
+"Viet Nam"	984	904	981	1430	1043	
+"Czech Republic"	1007	1063	981	880	881	
+"Serbia"	610	530	676	814	823	
+"Slovakia"	1257	1160	1086	806	756	
+"Netherlands"	7694	5723	5990	1606	719	
+"Romania"	765	1293	1030	1128	699	
+"India"	953	997	647	546	658	
+"France"	849	821	833	748	655	
+"Philippines"	424	533	377	451	585	
+"Poland"	991	847	845	379	471	
+"Hungary"	1048	1157	926	

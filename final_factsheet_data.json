@@ -1,14 +1,18 @@
 {
     "header": {
-        "product_name": "Electric motors of an output not exceeding 37.5 W",
-        "hs_code": "850110",
-        "your_country": "South Africa",
-        "your_country_id": "710",
-        "target_market": "Germany",
-        "target_market_id": "276",
+        "product_name": "Laptops and automatic data processing machines",
+        "hs_code": "847130",
+        "your_country": "China",
+        "your_country_id": "156",
+        "target_market": "United States of America",
+        "target_market_id": "842",
         "date": "November 2025"
     },
     "world_market_overview": {
+        "world_total_imports_usd": 16289143,
+        "target_market_world_rank": 4
+    },
+    "target_market_analysis": {
         "years": [
             2020,
             2021,
@@ -19,3515 +23,580 @@
         "latest_year": 2024,
         "start_year": 2020,
         "periods": 4,
-        "raw_file": "world_value.txt",
-        "world_values_usd": [
-            13392528,
-            16731148,
-            16838224,
-            15827372,
-            16289143
-        ],
-        "world_quantities": [
-            null,
-            null,
-            null,
-            null,
-            null
-        ],
-        "world_unit_values": [
-            null,
-            null,
-            null,
-            null,
-            null
-        ],
-        "total_value_usd": 16289143,
-        "market_growth_last_year_pct": 2.92,
-        "market_growth_cagr_pct": 5.02,
-        "suppliers_full_list": [
-            {
-                "rank": 1,
-                "name": "United States of America",
-                "value_usd": 2279235,
-                "market_share_pct": 13.99,
-                "quantity_latest": 323981100,
-                "unit_value_latest": 7.04,
-                "growth_cagr_pct": 3.97,
-                "growth_last_year_pct": 0.38
-            },
-            {
-                "rank": 2,
-                "name": "Korea, Republic of",
-                "value_usd": 1823791,
-                "market_share_pct": 11.2,
-                "quantity_latest": 27112,
-                "unit_value_latest": 67269.0,
-                "growth_cagr_pct": 18.19,
-                "growth_last_year_pct": 3.85
-            },
-            {
-                "rank": 3,
-                "name": "China",
-                "value_usd": 1258876,
-                "market_share_pct": 7.73,
-                "quantity_latest": 35502,
-                "unit_value_latest": 35459.0,
-                "growth_cagr_pct": -2.82,
-                "growth_last_year_pct": -2.46
-            },
-            {
-                "rank": 4,
-                "name": "Germany",
-                "value_usd": 1173800,
-                "market_share_pct": 7.21,
-                "quantity_latest": 30376,
-                "unit_value_latest": 38643.0,
-                "growth_cagr_pct": -0.68,
-                "growth_last_year_pct": -3.35
-            },
-            {
-                "rank": 5,
-                "name": "Mexico",
-                "value_usd": 893275,
-                "market_share_pct": 5.48,
-                "quantity_latest": 22014,
-                "unit_value_latest": 40578.0,
-                "growth_cagr_pct": 12.07,
-                "growth_last_year_pct": 12.47
-            },
-            {
-                "rank": 6,
-                "name": "Hong Kong, China",
-                "value_usd": 645412,
-                "market_share_pct": 3.96,
-                "quantity_latest": 418898654,
-                "unit_value_latest": 1.54,
-                "growth_cagr_pct": -4.62,
-                "growth_last_year_pct": 52.27
-            },
-            {
-                "rank": 7,
-                "name": "Japan",
-                "value_usd": 583235,
-                "market_share_pct": 3.58,
-                "quantity_latest": 25949,
-                "unit_value_latest": 22476.0,
-                "growth_cagr_pct": 2.7,
-                "growth_last_year_pct": -3.18
-            },
-            {
-                "rank": 8,
-                "name": "Thailand",
-                "value_usd": 579837,
-                "market_share_pct": 3.56,
-                "quantity_latest": 255877155,
-                "unit_value_latest": 2.27,
-                "growth_cagr_pct": 8.35,
-                "growth_last_year_pct": 14.34
-            },
-            {
-                "rank": 9,
-                "name": "Czech Republic",
-                "value_usd": 493243,
-                "market_share_pct": 3.03,
-                "quantity_latest": 30655,
-                "unit_value_latest": 16090.0,
-                "growth_cagr_pct": 2.66,
-                "growth_last_year_pct": -3.58
-            },
-            {
-                "rank": 10,
-                "name": "India",
-                "value_usd": 380307,
-                "market_share_pct": 2.33,
-                "quantity_latest": 251330620,
-                "unit_value_latest": 1.51,
-                "growth_cagr_pct": 21.26,
-                "growth_last_year_pct": 16.0
-            },
-            {
-                "rank": 11,
-                "name": "Viet Nam",
-                "value_usd": 369211,
-                "market_share_pct": 2.27,
-                "quantity_latest": 9185,
-                "unit_value_latest": 40197.0,
-                "growth_cagr_pct": 14.29,
-                "growth_last_year_pct": 19.2
-            },
-            {
-                "rank": 12,
-                "name": "France",
-                "value_usd": 348237,
-                "market_share_pct": 2.14,
-                "quantity_latest": 12220,
-                "unit_value_latest": 28497.0,
-                "growth_cagr_pct": 5.03,
-                "growth_last_year_pct": -2.97
-            },
-            {
-                "rank": 13,
-                "name": "Netherlands",
-                "value_usd": 337935,
-                "market_share_pct": 2.07,
-                "quantity_latest": 13152,
-                "unit_value_latest": 25695.0,
-                "growth_cagr_pct": 22.52,
-                "growth_last_year_pct": 1.56
-            },
-            {
-                "rank": 14,
-                "name": "Italy",
-                "value_usd": 336572,
-                "market_share_pct": 2.07,
-                "quantity_latest": 20207,
-                "unit_value_latest": 16656.0,
-                "growth_cagr_pct": 8.21,
-                "growth_last_year_pct": -1.29
-            },
-            {
-                "rank": 15,
-                "name": "Poland",
-                "value_usd": 328051,
-                "market_share_pct": 2.01,
-                "quantity_latest": 16207,
-                "unit_value_latest": 20241.0,
-                "growth_cagr_pct": 7.82,
-                "growth_last_year_pct": 12.12
-            },
-            {
-                "rank": 16,
-                "name": "Canada",
-                "value_usd": 322645,
-                "market_share_pct": 1.98,
-                "quantity_latest": 30113561,
-                "unit_value_latest": 11.0,
-                "growth_cagr_pct": 4.12,
-                "growth_last_year_pct": -12.92
-            },
-            {
-                "rank": 17,
-                "name": "United Kingdom",
-                "value_usd": 286666,
-                "market_share_pct": 1.76,
-                "quantity_latest": 8585,
-                "unit_value_latest": 33391.0,
-                "growth_cagr_pct": 6.09,
-                "growth_last_year_pct": -11.15
-            },
-            {
-                "rank": 18,
-                "name": "Austria",
-                "value_usd": 257950,
-                "market_share_pct": 1.58,
-                "quantity_latest": 7899,
-                "unit_value_latest": 32656.0,
-                "growth_cagr_pct": 4.56,
-                "growth_last_year_pct": -7.88
-            },
-            {
-                "rank": 19,
-                "name": "Spain",
-                "value_usd": 236320,
-                "market_share_pct": 1.45,
-                "quantity_latest": 13930,
-                "unit_value_latest": 16965.0,
-                "growth_cagr_pct": 6.2,
-                "growth_last_year_pct": 9.38
-            },
-            {
-                "rank": 20,
-                "name": "Hungary",
-                "value_usd": 233951,
-                "market_share_pct": 1.44,
-                "quantity_latest": 10802,
-                "unit_value_latest": 21658.0,
-                "growth_cagr_pct": -0.11,
-                "growth_last_year_pct": -5.35
-            },
-            {
-                "rank": 21,
-                "name": "Slovakia",
-                "value_usd": 229947,
-                "market_share_pct": 1.41,
-                "quantity_latest": 9906,
-                "unit_value_latest": 23213.0,
-                "growth_cagr_pct": 11.16,
-                "growth_last_year_pct": -14.55
-            },
-            {
-                "rank": 22,
-                "name": "Brazil",
-                "value_usd": 223600,
-                "market_share_pct": 1.37,
-                "quantity_latest": 20761,
-                "unit_value_latest": 10770.0,
-                "growth_cagr_pct": 10.1,
-                "growth_last_year_pct": 30.02
-            },
-            {
-                "rank": 23,
-                "name": "Türkiye",
-                "value_usd": 220832,
-                "market_share_pct": 1.36,
-                "quantity_latest": 16299,
-                "unit_value_latest": 13548.0,
-                "growth_cagr_pct": 2.69,
-                "growth_last_year_pct": -11.18
-            },
-            {
-                "rank": 24,
-                "name": "Philippines",
-                "value_usd": 207008,
-                "market_share_pct": 1.27,
-                "quantity_latest": 18606,
-                "unit_value_latest": 11126.0,
-                "growth_cagr_pct": 39.26,
-                "growth_last_year_pct": 69.33
-            },
-            {
-                "rank": 25,
-                "name": "Malaysia",
-                "value_usd": 190108,
-                "market_share_pct": 1.17,
-                "quantity_latest": 49940013,
-                "unit_value_latest": 3.81,
-                "growth_cagr_pct": -3.2,
-                "growth_last_year_pct": -6.18
-            },
-            {
-                "rank": 26,
-                "name": "Switzerland",
-                "value_usd": 159019,
-                "market_share_pct": 0.98,
-                "quantity_latest": 3163,
-                "unit_value_latest": 50275.0,
-                "growth_cagr_pct": -2.48,
-                "growth_last_year_pct": -5.03
-            },
-            {
-                "rank": 27,
-                "name": "Singapore",
-                "value_usd": 157499,
-                "market_share_pct": 0.97,
-                "quantity_latest": 76455826,
-                "unit_value_latest": 2.06,
-                "growth_cagr_pct": 3.32,
-                "growth_last_year_pct": 15.08
-            },
-            {
-                "rank": 28,
-                "name": "Taipei, Chinese",
-                "value_usd": 156619,
-                "market_share_pct": 0.96,
-                "quantity_latest": 7177,
-                "unit_value_latest": 21822.0,
-                "growth_cagr_pct": -4.27,
-                "growth_last_year_pct": -1.81
-            },
-            {
-                "rank": 29,
-                "name": "Romania",
-                "value_usd": 133231,
-                "market_share_pct": 0.82,
-                "quantity_latest": 5041,
-                "unit_value_latest": 26429.0,
-                "growth_cagr_pct": -1.37,
-                "growth_last_year_pct": -3.69
-            },
-            {
-                "rank": 30,
-                "name": "Indonesia",
-                "value_usd": 106206,
-                "market_share_pct": 0.65,
-                "quantity_latest": 15890,
-                "unit_value_latest": 6684.0,
-                "growth_cagr_pct": 5.27,
-                "growth_last_year_pct": 11.72
-            },
-            {
-                "rank": 31,
-                "name": "Australia",
-                "value_usd": 99915,
-                "market_share_pct": 0.61,
-                "quantity_latest": 3120856,
-                "unit_value_latest": 32.0,
-                "growth_cagr_pct": 9.29,
-                "growth_last_year_pct": -21.63
-            },
-            {
-                "rank": 32,
-                "name": "Portugal",
-                "value_usd": 85758,
-                "market_share_pct": 0.53,
-                "quantity_latest": 2630,
-                "unit_value_latest": 32608.0,
-                "growth_cagr_pct": 9.16,
-                "growth_last_year_pct": -0.97
-            },
-            {
-                "rank": 33,
-                "name": "Sweden",
-                "value_usd": 83214,
-                "market_share_pct": 0.51,
-                "quantity_latest": 2522,
-                "unit_value_latest": 32995.0,
-                "growth_cagr_pct": 4.81,
-                "growth_last_year_pct": 1.74
-            },
-            {
-                "rank": 34,
-                "name": "Denmark",
-                "value_usd": 80793,
-                "market_share_pct": 0.5,
-                "quantity_latest": 1648,
-                "unit_value_latest": 49031.0,
-                "growth_cagr_pct": -2.79,
-                "growth_last_year_pct": 4.96
-            },
-            {
-                "rank": 35,
-                "name": "Belgium",
-                "value_usd": 73815,
-                "market_share_pct": 0.45,
-                "quantity_latest": 1522,
-                "unit_value_latest": 48499.0,
-                "growth_cagr_pct": 10.04,
-                "growth_last_year_pct": 18.02
-            },
-            {
-                "rank": 36,
-                "name": "United Arab Emirates",
-                "value_usd": 72438,
-                "market_share_pct": 0.44,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": 13.93,
-                "growth_last_year_pct": 27.84
-            },
-            {
-                "rank": 37,
-                "name": "Russian Federation",
-                "value_usd": 65204,
-                "market_share_pct": 0.4,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": -15.89,
-                "growth_last_year_pct": 5.82
-            },
-            {
-                "rank": 38,
-                "name": "Israel",
-                "value_usd": 55447,
-                "market_share_pct": 0.34,
-                "quantity_latest": 1366,
-                "unit_value_latest": 40591.0,
-                "growth_cagr_pct": 5.09,
-                "growth_last_year_pct": 14.71
-            },
-            {
-                "rank": 39,
-                "name": "Ireland",
-                "value_usd": 46108,
-                "market_share_pct": 0.28,
-                "quantity_latest": 2440,
-                "unit_value_latest": 18897.0,
-                "growth_cagr_pct": 13.97,
-                "growth_last_year_pct": 5.74
-            },
-            {
-                "rank": 40,
-                "name": "Ukraine",
-                "value_usd": 35058,
-                "market_share_pct": 0.22,
-                "quantity_latest": 1734,
-                "unit_value_latest": 20218.0,
-                "growth_cagr_pct": 20.07,
-                "growth_last_year_pct": 39.04
-            },
-            {
-                "rank": 41,
-                "name": "Argentina",
-                "value_usd": 33736,
-                "market_share_pct": 0.21,
-                "quantity_latest": 3357,
-                "unit_value_latest": 10049.0,
-                "growth_cagr_pct": 2.23,
-                "growth_last_year_pct": -29.63
-            },
-            {
-                "rank": 42,
-                "name": "Uzbekistan",
-                "value_usd": 32790,
-                "market_share_pct": 0.2,
-                "quantity_latest": 808,
-                "unit_value_latest": 40582.0,
-                "growth_cagr_pct": 26.84,
-                "growth_last_year_pct": 23.78
-            },
-            {
-                "rank": 43,
-                "name": "Finland",
-                "value_usd": 31056,
-                "market_share_pct": 0.19,
-                "quantity_latest": 420,
-                "unit_value_latest": 73943.0,
-                "growth_cagr_pct": -0.33,
-                "growth_last_year_pct": 5.15
-            },
-            {
-                "rank": 44,
-                "name": "Norway",
-                "value_usd": 30616,
-                "market_share_pct": 0.19,
-                "quantity_latest": 430,
-                "unit_value_latest": 71200.0,
-                "growth_cagr_pct": 13.91,
-                "growth_last_year_pct": 2.6
-            },
-            {
-                "rank": 45,
-                "name": "Egypt",
-                "value_usd": 30065,
-                "market_share_pct": 0.18,
-                "quantity_latest": 741,
-                "unit_value_latest": 40574.0,
-                "growth_cagr_pct": 6.1,
-                "growth_last_year_pct": 16.45
-            },
-            {
-                "rank": 46,
-                "name": "South Africa",
-                "value_usd": 27897,
-                "market_share_pct": 0.17,
-                "quantity_latest": 88538750,
-                "unit_value_latest": 0.32,
-                "growth_cagr_pct": 16.75,
-                "growth_last_year_pct": 6.95
-            },
-            {
-                "rank": 47,
-                "name": "Slovenia",
-                "value_usd": 22839,
-                "market_share_pct": 0.14,
-                "quantity_latest": 677,
-                "unit_value_latest": 33736.0,
-                "growth_cagr_pct": -4.79,
-                "growth_last_year_pct": -11.88
-            },
-            {
-                "rank": 48,
-                "name": "Iran, Islamic Republic of",
-                "value_usd": 22057,
-                "market_share_pct": 0.14,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": -8.16,
-                "growth_last_year_pct": -63.86
-            },
-            {
-                "rank": 49,
-                "name": "Serbia",
-                "value_usd": 21870,
-                "market_share_pct": 0.13,
-                "quantity_latest": 895,
-                "unit_value_latest": 24436.0,
-                "growth_cagr_pct": -25.67,
-                "growth_last_year_pct": 45.49
-            },
-            {
-                "rank": 50,
-                "name": "Macedonia, North",
-                "value_usd": 20491,
-                "market_share_pct": 0.13,
-                "quantity_latest": 973,
-                "unit_value_latest": 21060.0,
-                "growth_cagr_pct": 73.2,
-                "growth_last_year_pct": 20.34
-            },
-            {
-                "rank": 51,
-                "name": "Saudi Arabia",
-                "value_usd": 18709,
-                "market_share_pct": 0.11,
-                "quantity_latest": 797,
-                "unit_value_latest": 23474.0,
-                "growth_cagr_pct": 9.56,
-                "growth_last_year_pct": -22.47
-            },
-            {
-                "rank": 52,
-                "name": "Morocco",
-                "value_usd": 17687,
-                "market_share_pct": 0.11,
-                "quantity_latest": 1438,
-                "unit_value_latest": 12300.0,
-                "growth_cagr_pct": 29.24,
-                "growth_last_year_pct": 9.97
-            },
-            {
-                "rank": 53,
-                "name": "Lithuania",
-                "value_usd": 17092,
-                "market_share_pct": 0.1,
-                "quantity_latest": 555,
-                "unit_value_latest": 30796.0,
-                "growth_cagr_pct": -10.34,
-                "growth_last_year_pct": -23.22
-            },
-            {
-                "rank": 54,
-                "name": "Bulgaria",
-                "value_usd": 16430,
-                "market_share_pct": 0.1,
-                "quantity_latest": 1635,
-                "unit_value_latest": 10049.0,
-                "growth_cagr_pct": 8.53,
-                "growth_last_year_pct": 7.15
-            },
-            {
-                "rank": 55,
-                "name": "Pakistan",
-                "value_usd": 15967,
-                "market_share_pct": 0.1,
-                "quantity_latest": 8902066,
-                "unit_value_latest": 1.79,
-                "growth_cagr_pct": 5.13,
-                "growth_last_year_pct": 69.18
-            },
-            {
-                "rank": 56,
-                "name": "Dominican Republic",
-                "value_usd": 15434,
-                "market_share_pct": 0.09,
-                "quantity_latest": 1754,
-                "unit_value_latest": 8799.0,
-                "growth_cagr_pct": 13.44,
-                "growth_last_year_pct": -2.64
-            },
-            {
-                "rank": 57,
-                "name": "Kazakhstan",
-                "value_usd": 13445,
-                "market_share_pct": 0.08,
-                "quantity_latest": 518,
-                "unit_value_latest": 25956.0,
-                "growth_cagr_pct": 14.75,
-                "growth_last_year_pct": 0.76
-            },
-            {
-                "rank": 58,
-                "name": "Bangladesh",
-                "value_usd": 12977,
-                "market_share_pct": 0.08,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": 22.57,
-                "growth_last_year_pct": -0.02
-            },
-            {
-                "rank": 59,
-                "name": "Greece",
-                "value_usd": 12851,
-                "market_share_pct": 0.08,
-                "quantity_latest": 724,
-                "unit_value_latest": 17750.0,
-                "growth_cagr_pct": 6.48,
-                "growth_last_year_pct": -17.58
-            },
-            {
-                "rank": 60,
-                "name": "Colombia",
-                "value_usd": 12700,
-                "market_share_pct": 0.08,
-                "quantity_latest": 1251,
-                "unit_value_latest": 10152.0,
-                "growth_cagr_pct": 6.34,
-                "growth_last_year_pct": -3.33
-            },
-            {
-                "rank": 61,
-                "name": "Croatia",
-                "value_usd": 12480,
-                "market_share_pct": 0.08,
-                "quantity_latest": 224,
-                "unit_value_latest": 55714.0,
-                "growth_cagr_pct": 15.16,
-                "growth_last_year_pct": 22.7
-            },
-            {
-                "rank": 62,
-                "name": "Chile",
-                "value_usd": 11373,
-                "market_share_pct": 0.07,
-                "quantity_latest": 675159,
-                "unit_value_latest": 17.0,
-                "growth_cagr_pct": 13.07,
-                "growth_last_year_pct": 16.19
-            },
-            {
-                "rank": 63,
-                "name": "New Zealand",
-                "value_usd": 10166,
-                "market_share_pct": 0.06,
-                "quantity_latest": 191,
-                "unit_value_latest": 53225.0,
-                "growth_cagr_pct": 6.65,
-                "growth_last_year_pct": 17.65
-            },
-            {
-                "rank": 64,
-                "name": "Cambodia",
-                "value_usd": 9393,
-                "market_share_pct": 0.06,
-                "quantity_latest": 1345,
-                "unit_value_latest": 6984.0,
-                "growth_cagr_pct": -27.89,
-                "growth_last_year_pct": -3.24
-            },
-            {
-                "rank": 65,
-                "name": "Algeria",
-                "value_usd": 9317,
-                "market_share_pct": 0.06,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": 12.02,
-                "growth_last_year_pct": 12.88
-            },
-            {
-                "rank": 66,
-                "name": "Costa Rica",
-                "value_usd": 8295,
-                "market_share_pct": 0.05,
-                "quantity_latest": 263,
-                "unit_value_latest": 31540.0,
-                "growth_cagr_pct": 23.7,
-                "growth_last_year_pct": 50.71
-            },
-            {
-                "rank": 67,
-                "name": "Peru",
-                "value_usd": 7787,
-                "market_share_pct": 0.05,
-                "quantity_latest": 832,
-                "unit_value_latest": 9359.0,
-                "growth_cagr_pct": 8.87,
-                "growth_last_year_pct": 29.7
-            },
-            {
-                "rank": 68,
-                "name": "Iraq",
-                "value_usd": 7187,
-                "market_share_pct": 0.04,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": 16.68,
-                "growth_last_year_pct": 45.84
-            },
-            {
-                "rank": 69,
-                "name": "Ecuador",
-                "value_usd": 5806,
-                "market_share_pct": 0.04,
-                "quantity_latest": 574,
-                "unit_value_latest": 10115.0,
-                "growth_cagr_pct": 15.29,
-                "growth_last_year_pct": 3.27
-            },
-            {
-                "rank": 70,
-                "name": "Tunisia",
-                "value_usd": 5525,
-                "market_share_pct": 0.03,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": -17.49,
-                "growth_last_year_pct": -39.54
-            },
-            {
-                "rank": 71,
-                "name": "Qatar",
-                "value_usd": 5492,
-                "market_share_pct": 0.03,
-                "quantity_latest": 180,
-                "unit_value_latest": 30511.0,
-                "growth_cagr_pct": 5.6,
-                "growth_last_year_pct": 23.97
-            },
-            {
-                "rank": 72,
-                "name": "Estonia",
-                "value_usd": 4980,
-                "market_share_pct": 0.03,
-                "quantity_latest": 65,
-                "unit_value_latest": 76615.0,
-                "growth_cagr_pct": -0.88,
-                "growth_last_year_pct": -26.49
-            },
-            {
-                "rank": 73,
-                "name": "Sri Lanka",
-                "value_usd": 4422,
-                "market_share_pct": 0.03,
-                "quantity_latest": 1839726,
-                "unit_value_latest": 2.4,
-                "growth_cagr_pct": 15.16,
-                "growth_last_year_pct": 3.68
-            },
-            {
-                "rank": 74,
-                "name": "Belarus",
-                "value_usd": 4328,
-                "market_share_pct": 0.03,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": -30.32,
-                "growth_last_year_pct": 24.19
-            },
-            {
-                "rank": 75,
-                "name": "Latvia",
-                "value_usd": 4311,
-                "market_share_pct": 0.03,
-                "quantity_latest": 206,
-                "unit_value_latest": 20927.0,
-                "growth_cagr_pct": 11.43,
-                "growth_last_year_pct": 1.53
-            },
-            {
-                "rank": 76,
-                "name": "Luxembourg",
-                "value_usd": 3975,
-                "market_share_pct": 0.02,
-                "quantity_latest": 162,
-                "unit_value_latest": 24537.0,
-                "growth_cagr_pct": 11.65,
-                "growth_last_year_pct": 19.44
-            },
-            {
-                "rank": 77,
-                "name": "Guatemala",
-                "value_usd": 3601,
-                "market_share_pct": 0.02,
-                "quantity_latest": 272,
-                "unit_value_latest": 13239.0,
-                "growth_cagr_pct": 23.98,
-                "growth_last_year_pct": 28.75
-            },
-            {
-                "rank": 78,
-                "name": "Bosnia and Herzegovina",
-                "value_usd": 3579,
-                "market_share_pct": 0.02,
-                "quantity_latest": 215,
-                "unit_value_latest": 16647.0,
-                "growth_cagr_pct": 3.26,
-                "growth_last_year_pct": 14.38
-            },
-            {
-                "rank": 79,
-                "name": "Oman",
-                "value_usd": 3215,
-                "market_share_pct": 0.02,
-                "quantity_latest": 336,
-                "unit_value_latest": 9568.0,
-                "growth_cagr_pct": -15.01,
-                "growth_last_year_pct": 38.76
-            },
-            {
-                "rank": 80,
-                "name": "Azerbaijan",
-                "value_usd": 3041,
-                "market_share_pct": 0.02,
-                "quantity_latest": 274,
-                "unit_value_latest": 11099.0,
-                "growth_cagr_pct": 14.55,
-                "growth_last_year_pct": -22.46
-            },
-            {
-                "rank": 81,
-                "name": "Nigeria",
-                "value_usd": 2999,
-                "market_share_pct": 0.02,
-                "quantity_latest": 602,
-                "unit_value_latest": 4982.0,
-                "growth_cagr_pct": -28.24,
-                "growth_last_year_pct": -27.12
-            },
-            {
-                "rank": 82,
-                "name": "Kuwait",
-                "value_usd": 2286,
-                "market_share_pct": 0.01,
-                "quantity_latest": 175,
-                "unit_value_latest": 13063.0,
-                "growth_cagr_pct": -10.21,
-                "growth_last_year_pct": -12.98
-            },
-            {
-                "rank": 83,
-                "name": "Yemen",
-                "value_usd": 2276,
-                "market_share_pct": 0.01,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": 2.88,
-                "growth_last_year_pct": 28.81
-            },
-            {
-                "rank": 84,
-                "name": "Lebanon",
-                "value_usd": 2273,
-                "market_share_pct": 0.01,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": 15.24,
-                "growth_last_year_pct": 61.21
-            },
-            {
-                "rank": 85,
-                "name": "Angola",
-                "value_usd": 2226,
-                "market_share_pct": 0.01,
-                "quantity_latest": 408,
-                "unit_value_latest": 5456.0,
-                "growth_cagr_pct": 20.9,
-                "growth_last_year_pct": -49.07
-            },
-            {
-                "rank": 86,
-                "name": "Trinidad and Tobago",
-                "value_usd": 2101,
-                "market_share_pct": 0.01,
-                "quantity_latest": 260,
-                "unit_value_latest": 8081.0,
-                "growth_cagr_pct": 9.14,
-                "growth_last_year_pct": -8.37
-            },
-            {
-                "rank": 87,
-                "name": "Bahamas",
-                "value_usd": 1990,
-                "market_share_pct": 0.01,
-                "quantity_latest": 2674,
-                "unit_value_latest": 744.0,
-                "growth_cagr_pct": 24.29,
-                "growth_last_year_pct": 91.53
-            },
-            {
-                "rank": 88,
-                "name": "Venezuela, Bolivarian Republic of",
-                "value_usd": 1948,
-                "market_share_pct": 0.01,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": 44.24,
-                "growth_last_year_pct": 21.83
-            },
-            {
-                "rank": 89,
-                "name": "Myanmar",
-                "value_usd": 1940,
-                "market_share_pct": 0.01,
-                "quantity_latest": 34,
-                "unit_value_latest": 57059.0,
-                "growth_cagr_pct": -5.33,
-                "growth_last_year_pct": 85.11
-            },
-            {
-                "rank": 90,
-                "name": "Jordan",
-                "value_usd": 1892,
-                "market_share_pct": 0.01,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": 6.15,
-                "growth_last_year_pct": 2.99
-            },
-            {
-                "rank": 91,
-                "name": "Panama",
-                "value_usd": 1849,
-                "market_share_pct": 0.01,
-                "quantity_latest": 159,
-                "unit_value_latest": 11629.0,
-                "growth_cagr_pct": -14.62,
-                "growth_last_year_pct": -52.36
-            },
-            {
-                "rank": 92,
-                "name": "Papua New Guinea",
-                "value_usd": 1739,
-                "market_share_pct": 0.01,
-                "quantity_latest": 72724,
-                "unit_value_latest": 24.0,
-                "growth_cagr_pct": 1.55,
-                "growth_last_year_pct": -40.55
-            },
-            {
-                "rank": 93,
-                "name": "Moldova, Republic of",
-                "value_usd": 1736,
-                "market_share_pct": 0.01,
-                "quantity_latest": 73,
-                "unit_value_latest": 23781.0,
-                "growth_cagr_pct": 9.29,
-                "growth_last_year_pct": 32.42
-            },
-            {
-                "rank": 94,
-                "name": "Bahrain",
-                "value_usd": 1647,
-                "market_share_pct": 0.01,
-                "quantity_latest": 133,
-                "unit_value_latest": 12383.0,
-                "growth_cagr_pct": 12.1,
-                "growth_last_year_pct": 29.58
-            },
-            {
-                "rank": 95,
-                "name": "Honduras",
-                "value_usd": 1598,
-                "market_share_pct": 0.01,
-                "quantity_latest": 296,
-                "unit_value_latest": 5399.0,
-                "growth_cagr_pct": 20.38,
-                "growth_last_year_pct": 30.24
-            },
-            {
-                "rank": 96,
-                "name": "Botswana",
-                "value_usd": 1594,
-                "market_share_pct": 0.01,
-                "quantity_latest": 141,
-                "unit_value_latest": 11305.0,
-                "growth_cagr_pct": 16.48,
-                "growth_last_year_pct": 16.01
-            },
-            {
-                "rank": 97,
-                "name": "Uruguay",
-                "value_usd": 1518,
-                "market_share_pct": 0.01,
-                "quantity_latest": 81,
-                "unit_value_latest": 18741.0,
-                "growth_cagr_pct": 12.85,
-                "growth_last_year_pct": 7.51
-            },
-            {
-                "rank": 98,
-                "name": "Brunei Darussalam",
-                "value_usd": 1513,
-                "market_share_pct": 0.01,
-                "quantity_latest": 2087,
-                "unit_value_latest": 725.0,
-                "growth_cagr_pct": 25.39,
-                "growth_last_year_pct": 323.81
-            },
-            {
-                "rank": 99,
-                "name": "Albania",
-                "value_usd": 1492,
-                "market_share_pct": 0.01,
-                "quantity_latest": 113,
-                "unit_value_latest": 13204.0,
-                "growth_cagr_pct": 49.59,
-                "growth_last_year_pct": 57.22
-            },
-            {
-                "rank": 100,
-                "name": "Kenya",
-                "value_usd": 1453,
-                "market_share_pct": 0.01,
-                "quantity_latest": 229,
-                "unit_value_latest": 6345.0,
-                "growth_cagr_pct": -12.58,
-                "growth_last_year_pct": -5.89
-            },
-            {
-                "rank": 101,
-                "name": "Libya, State of",
-                "value_usd": 1431,
-                "market_share_pct": 0.01,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": 17.84,
-                "growth_last_year_pct": 10.5
-            },
-            {
-                "rank": 102,
-                "name": "Mongolia",
-                "value_usd": 1423,
-                "market_share_pct": 0.01,
-                "quantity_latest": 116,
-                "unit_value_latest": 12267.0,
-                "growth_cagr_pct": 6.97,
-                "growth_last_year_pct": 60.25
-            },
-            {
-                "rank": 103,
-                "name": "Namibia",
-                "value_usd": 1413,
-                "market_share_pct": 0.01,
-                "quantity_latest": 122,
-                "unit_value_latest": 11582.0,
-                "growth_cagr_pct": 9.61,
-                "growth_last_year_pct": -4.46
-            },
-            {
-                "rank": 104,
-                "name": "Cyprus",
-                "value_usd": 1405,
-                "market_share_pct": 0.01,
-                "quantity_latest": 97,
-                "unit_value_latest": 14485.0,
-                "growth_cagr_pct": 7.0,
-                "growth_last_year_pct": -20.62
-            },
-            {
-                "rank": 105,
-                "name": "Zambia",
-                "value_usd": 1405,
-                "market_share_pct": 0.01,
-                "quantity_latest": 259,
-                "unit_value_latest": 5425.0,
-                "growth_cagr_pct": 6.92,
-                "growth_last_year_pct": -46.68
-            },
-            {
-                "rank": 106,
-                "name": "Malta",
-                "value_usd": 1399,
-                "market_share_pct": 0.01,
-                "quantity_latest": 29,
-                "unit_value_latest": 48241.0,
-                "growth_cagr_pct": 5.69,
-                "growth_last_year_pct": 26.72
-            },
-            {
-                "rank": 107,
-                "name": "Guyana",
-                "value_usd": 1393,
-                "market_share_pct": 0.01,
-                "quantity_latest": 152,
-                "unit_value_latest": 9164.0,
-                "growth_cagr_pct": 17.73,
-                "growth_last_year_pct": 42.14
-            },
-            {
-                "rank": 108,
-                "name": "Suriname",
-                "value_usd": 1385,
-                "market_share_pct": 0.01,
-                "quantity_latest": 110,
-                "unit_value_latest": 12591.0,
-                "growth_cagr_pct": 31.02,
-                "growth_last_year_pct": 39.9
-            },
-            {
-                "rank": 109,
-                "name": "Armenia",
-                "value_usd": 1335,
-                "market_share_pct": 0.01,
-                "quantity_latest": 27,
-                "unit_value_latest": 49444.0,
-                "growth_cagr_pct": 32.59,
-                "growth_last_year_pct": 8.01
-            },
-            {
-                "rank": 110,
-                "name": "El Salvador",
-                "value_usd": 1321,
-                "market_share_pct": 0.01,
-                "quantity_latest": 86,
-                "unit_value_latest": 15360.0,
-                "growth_cagr_pct": 1.23,
-                "growth_last_year_pct": -4.76
-            },
-            {
-                "rank": 111,
-                "name": "Iceland",
-                "value_usd": 1289,
-                "market_share_pct": 0.01,
-                "quantity_latest": 19,
-                "unit_value_latest": 67842.0,
-                "growth_cagr_pct": 10.23,
-                "growth_last_year_pct": 13.47
-            },
-            {
-                "rank": 112,
-                "name": "Paraguay",
-                "value_usd": 1241,
-                "market_share_pct": 0.01,
-                "quantity_latest": 55,
-                "unit_value_latest": 22564.0,
-                "growth_cagr_pct": 15.27,
-                "growth_last_year_pct": 27.94
-            },
-            {
-                "rank": 113,
-                "name": "Mauritius",
-                "value_usd": 1163,
-                "market_share_pct": 0.01,
-                "quantity_latest": 16266,
-                "unit_value_latest": 71.0,
-                "growth_cagr_pct": 6.74,
-                "growth_last_year_pct": 0.09
-            },
-            {
-                "rank": 114,
-                "name": "Ghana",
-                "value_usd": 1154,
-                "market_share_pct": 0.01,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": -57.42
-            },
-            {
-                "rank": 115,
-                "name": "Zimbabwe",
-                "value_usd": 1067,
-                "market_share_pct": 0.01,
-                "quantity_latest": 189,
-                "unit_value_latest": 5646.0,
-                "growth_cagr_pct": 32.14,
-                "growth_last_year_pct": 12.08
-            },
-            {
-                "rank": 116,
-                "name": "Côte d'Ivoire",
-                "value_usd": 982,
-                "market_share_pct": 0.01,
-                "quantity_latest": 194,
-                "unit_value_latest": 5062.0,
-                "growth_cagr_pct": 14.62,
-                "growth_last_year_pct": 31.81
-            },
-            {
-                "rank": 117,
-                "name": "Georgia",
-                "value_usd": 966,
-                "market_share_pct": 0.01,
-                "quantity_latest": 76,
-                "unit_value_latest": 12711.0,
-                "growth_cagr_pct": 11.1,
-                "growth_last_year_pct": -2.23
-            },
-            {
-                "rank": 118,
-                "name": "Tanzania, United Republic of",
-                "value_usd": 919,
-                "market_share_pct": 0.01,
-                "quantity_latest": 368,
-                "unit_value_latest": 2497.0,
-                "growth_cagr_pct": 2.64,
-                "growth_last_year_pct": -22.71
-            },
-            {
-                "rank": 119,
-                "name": "Nicaragua",
-                "value_usd": 861,
-                "market_share_pct": 0.01,
-                "quantity_latest": 54,
-                "unit_value_latest": 15944.0,
-                "growth_cagr_pct": 10.96,
-                "growth_last_year_pct": 11.38
-            },
-            {
-                "rank": 120,
-                "name": "Lao People's Democratic Republic",
-                "value_usd": 808,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": -28.83,
-                "growth_last_year_pct": -73.65
-            },
-            {
-                "rank": 121,
-                "name": "Mozambique",
-                "value_usd": 793,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": null,
-                "growth_cagr_pct": 6.47,
-                "growth_last_year_pct": 1.28
-            },
-            {
-                "rank": 122,
-                "name": "Ethiopia",
-                "value_usd": 792,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": -9.06,
-                "growth_last_year_pct": -74.87
-            },
-            {
-                "rank": 123,
-                "name": "Eswatini",
-                "value_usd": 701,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": 40.48,
-                "growth_last_year_pct": 111.14
-            },
-            {
-                "rank": 124,
-                "name": "Fiji",
-                "value_usd": 699,
-                "market_share_pct": 0.0,
-                "quantity_latest": 5975,
-                "unit_value_latest": 117.0,
-                "growth_cagr_pct": 18.29,
-                "growth_last_year_pct": 60.32
-            },
-            {
-                "rank": 125,
-                "name": "Cuba",
-                "value_usd": 684,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": -20.54,
-                "growth_last_year_pct": -18.76
-            },
-            {
-                "rank": 126,
-                "name": "Ship stores and bunkers",
-                "value_usd": 684,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": 59.76,
-                "growth_last_year_pct": -4.87
-            },
-            {
-                "rank": 127,
-                "name": "Congo, Democratic Republic of the",
-                "value_usd": 677,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": -1.53,
-                "growth_last_year_pct": -65.32
-            },
-            {
-                "rank": 128,
-                "name": "Bolivia, Plurinational State of",
-                "value_usd": 676,
-                "market_share_pct": 0.0,
-                "quantity_latest": 94,
-                "unit_value_latest": 7191.0,
-                "growth_cagr_pct": 10.65,
-                "growth_last_year_pct": -16.95
-            },
-            {
-                "rank": 129,
-                "name": "Kyrgyzstan",
-                "value_usd": 660,
-                "market_share_pct": 0.0,
-                "quantity_latest": 39,
-                "unit_value_latest": 16923.0,
-                "growth_cagr_pct": 61.09,
-                "growth_last_year_pct": -47.95
-            },
-            {
-                "rank": 130,
-                "name": "Uganda",
-                "value_usd": 608,
-                "market_share_pct": 0.0,
-                "quantity_latest": 204,
-                "unit_value_latest": 2980.0,
-                "growth_cagr_pct": -8.67,
-                "growth_last_year_pct": -34.55
-            },
-            {
-                "rank": 131,
-                "name": "Tajikistan",
-                "value_usd": 596,
-                "market_share_pct": 0.0,
-                "quantity_latest": 11500,
-                "unit_value_latest": 52.0,
-                "growth_cagr_pct": 50.23,
-                "growth_last_year_pct": 123.22
-            },
-            {
-                "rank": 132,
-                "name": "Burkina Faso",
-                "value_usd": 556,
-                "market_share_pct": 0.0,
-                "quantity_latest": 126,
-                "unit_value_latest": 4413.0,
-                "growth_cagr_pct": 26.08,
-                "growth_last_year_pct": 169.9
-            },
-            {
-                "rank": 133,
-                "name": "Seychelles",
-                "value_usd": 548,
-                "market_share_pct": 0.0,
-                "quantity_latest": 25,
-                "unit_value_latest": 21920.0,
-                "growth_cagr_pct": 29.31,
-                "growth_last_year_pct": 61.65
-            },
-            {
-                "rank": 134,
-                "name": "Barbados",
-                "value_usd": 531,
-                "market_share_pct": 0.0,
-                "quantity_latest": 25,
-                "unit_value_latest": 21240.0,
-                "growth_cagr_pct": 16.23,
-                "growth_last_year_pct": 16.45
-            },
-            {
-                "rank": 135,
-                "name": "Jamaica",
-                "value_usd": 469,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": -17.63,
-                "growth_last_year_pct": -74.87
-            },
-            {
-                "rank": 136,
-                "name": "Nepal",
-                "value_usd": 460,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": -4.15,
-                "growth_last_year_pct": -11.54
-            },
-            {
-                "rank": 137,
-                "name": "Cameroon",
-                "value_usd": 457,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": 22.49,
-                "growth_last_year_pct": 37.65
-            },
-            {
-                "rank": 138,
-                "name": "Turkmenistan",
-                "value_usd": 455,
-                "market_share_pct": 0.0,
-                "quantity_latest": 26,
-                "unit_value_latest": 17500.0,
-                "growth_cagr_pct": 14.8,
-                "growth_last_year_pct": -9.0
-            },
-            {
-                "rank": 139,
-                "name": "Aruba",
-                "value_usd": 386,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": 11.25,
-                "growth_last_year_pct": -1.03
-            },
-            {
-                "rank": 140,
-                "name": "Senegal",
-                "value_usd": 382,
-                "market_share_pct": 0.0,
-                "quantity_latest": 96,
-                "unit_value_latest": 3979.0,
-                "growth_cagr_pct": -5.3,
-                "growth_last_year_pct": -26.11
-            },
-            {
-                "rank": 141,
-                "name": "Antigua and Barbuda",
-                "value_usd": 376,
-                "market_share_pct": 0.0,
-                "quantity_latest": 19,
-                "unit_value_latest": 19789.0,
-                "growth_cagr_pct": 12.95,
-                "growth_last_year_pct": 17.87
-            },
-            {
-                "rank": 142,
-                "name": "Guinea",
-                "value_usd": 359,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": -1.92,
-                "growth_last_year_pct": 98.34
-            },
-            {
-                "rank": 143,
-                "name": "Syrian Arab Republic",
-                "value_usd": 356,
-                "market_share_pct": 0.0,
-                "quantity_latest": 80,
-                "unit_value_latest": 4450.0,
-                "growth_cagr_pct": -12.42,
-                "growth_last_year_pct": -16.63
-            },
-            {
-                "rank": 144,
-                "name": "Saint Vincent and the Grenadines",
-                "value_usd": 348,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": 44.87,
-                "growth_last_year_pct": 141.67
-            },
-            {
-                "rank": 145,
-                "name": "Belize",
-                "value_usd": 343,
-                "market_share_pct": 0.0,
-                "quantity_latest": 24,
-                "unit_value_latest": 14292.0,
-                "growth_cagr_pct": 26.02,
-                "growth_last_year_pct": 6.52
-            },
-            {
-                "rank": 146,
-                "name": "Congo",
-                "value_usd": 327,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": -32.24,
-                "growth_last_year_pct": 161.6
-            },
-            {
-                "rank": 147,
-                "name": "Turks and Caicos Islands",
-                "value_usd": 326,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": 35.4,
-                "growth_last_year_pct": 292.77
-            },
-            {
-                "rank": 148,
-                "name": "Lesotho",
-                "value_usd": 324,
-                "market_share_pct": 0.0,
-                "quantity_latest": 66,
-                "unit_value_latest": 4909.0,
-                "growth_cagr_pct": 18.92,
-                "growth_last_year_pct": 38.46
-            },
-            {
-                "rank": 149,
-                "name": "Haiti",
-                "value_usd": 312,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": 6.23,
-                "growth_last_year_pct": 149.6
-            },
-            {
-                "rank": 150,
-                "name": "Djibouti",
-                "value_usd": 306,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": -35.98
-            },
-            {
-                "rank": 151,
-                "name": "Montenegro",
-                "value_usd": 298,
-                "market_share_pct": 0.0,
-                "quantity_latest": 12,
-                "unit_value_latest": 24833.0,
-                "growth_cagr_pct": 13.43,
-                "growth_last_year_pct": 12.03
-            },
-            {
-                "rank": 152,
-                "name": "Cayman Islands",
-                "value_usd": 290,
-                "market_share_pct": 0.0,
-                "quantity_latest": 7,
-                "unit_value_latest": 41429.0,
-                "growth_cagr_pct": 35.12,
-                "growth_last_year_pct": 61.11
-            },
-            {
-                "rank": 153,
-                "name": "Liberia",
-                "value_usd": 285,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": 59.53,
-                "growth_last_year_pct": -72.6
-            },
-            {
-                "rank": 154,
-                "name": "Gabon",
-                "value_usd": 282,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": 12.35,
-                "growth_last_year_pct": -58.59
-            },
-            {
-                "rank": 155,
-                "name": "Rwanda",
-                "value_usd": 268,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": 3.12,
-                "growth_last_year_pct": 446.94
-            },
-            {
-                "rank": 156,
-                "name": "Afghanistan",
-                "value_usd": 254,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": -19.93,
-                "growth_last_year_pct": -58.43
-            },
-            {
-                "rank": 157,
-                "name": "Malawi",
-                "value_usd": 236,
-                "market_share_pct": 0.0,
-                "quantity_latest": 52,
-                "unit_value_latest": 4538.0,
-                "growth_cagr_pct": 5.43,
-                "growth_last_year_pct": -8.53
-            },
-            {
-                "rank": 158,
-                "name": "Maldives",
-                "value_usd": 226,
-                "market_share_pct": 0.0,
-                "quantity_latest": 1150,
-                "unit_value_latest": 197.0,
-                "growth_cagr_pct": 17.39,
-                "growth_last_year_pct": 0.44
-            },
-            {
-                "rank": 159,
-                "name": "French Polynesia",
-                "value_usd": 217,
-                "market_share_pct": 0.0,
-                "quantity_latest": 5,
-                "unit_value_latest": 43400.0,
-                "growth_cagr_pct": 6.14,
-                "growth_last_year_pct": -23.05
-            },
-            {
-                "rank": 160,
-                "name": "Bermuda",
-                "value_usd": 207,
-                "market_share_pct": 0.0,
-                "quantity_latest": 1,
-                "unit_value_latest": 207000.0,
-                "growth_cagr_pct": 22.14,
-                "growth_last_year_pct": 54.48
-            },
-            {
-                "rank": 161,
-                "name": "Faroe Islands",
-                "value_usd": 206,
-                "market_share_pct": 0.0,
-                "quantity_latest": 8,
-                "unit_value_latest": 25750.0,
-                "growth_cagr_pct": -1.52,
-                "growth_last_year_pct": 70.25
-            },
-            {
-                "rank": 162,
-                "name": "Equatorial Guinea",
-                "value_usd": 200,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": 34.02,
-                "growth_last_year_pct": -22.18
-            },
-            {
-                "rank": 163,
-                "name": "Bhutan",
-                "value_usd": 187,
-                "market_share_pct": 0.0,
-                "quantity_latest": 2071,
-                "unit_value_latest": 90.0,
-                "growth_cagr_pct": 24.43,
-                "growth_last_year_pct": 136.71
-            },
-            {
-                "rank": 164,
-                "name": "Marshall Islands",
-                "value_usd": 171,
-                "market_share_pct": 0.0,
-                "quantity_latest": 10,
-                "unit_value_latest": 17100.0,
-                "growth_cagr_pct": 11.66,
-                "growth_last_year_pct": 56.88
-            },
-            {
-                "rank": 165,
-                "name": "Solomon Islands",
-                "value_usd": 158,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": 90.49,
-                "growth_last_year_pct": 532.0
-            },
-            {
-                "rank": 166,
-                "name": "Timor-Leste",
-                "value_usd": 150,
-                "market_share_pct": 0.0,
-                "quantity_latest": 73,
-                "unit_value_latest": 2055.0,
-                "growth_cagr_pct": 63.48,
-                "growth_last_year_pct": 248.84
-            },
-            {
-                "rank": 167,
-                "name": "Curaçao",
-                "value_usd": 138,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": -11.31,
-                "growth_last_year_pct": 15.0
-            },
-            {
-                "rank": 168,
-                "name": "Cabo Verde",
-                "value_usd": 131,
-                "market_share_pct": 0.0,
-                "quantity_latest": 15,
-                "unit_value_latest": 8733.0,
-                "growth_cagr_pct": 13.48,
-                "growth_last_year_pct": 1.55
-            },
-            {
-                "rank": 169,
-                "name": "Gibraltar",
-                "value_usd": 128,
-                "market_share_pct": 0.0,
-                "quantity_latest": 3,
-                "unit_value_latest": 42667.0,
-                "growth_cagr_pct": 29.87,
-                "growth_last_year_pct": 146.15
-            },
-            {
-                "rank": 170,
-                "name": "Sudan",
-                "value_usd": 124,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": -33.39,
-                "growth_last_year_pct": -56.64
-            },
-            {
-                "rank": 171,
-                "name": "New Caledonia",
-                "value_usd": 115,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": -17.14,
-                "growth_last_year_pct": -71.95
-            },
-            {
-                "rank": 172,
-                "name": "Mali",
-                "value_usd": 109,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": -0.68,
-                "growth_last_year_pct": -75.4
-            },
-            {
-                "rank": 173,
-                "name": "Saint Kitts and Nevis",
-                "value_usd": 109,
-                "market_share_pct": 0.0,
-                "quantity_latest": 1102,
-                "unit_value_latest": 99.0,
-                "growth_cagr_pct": 23.4,
-                "growth_last_year_pct": 87.93
-            },
-            {
-                "rank": 174,
-                "name": "Madagascar",
-                "value_usd": 106,
-                "market_share_pct": 0.0,
-                "quantity_latest": 25,
-                "unit_value_latest": 4240.0,
-                "growth_cagr_pct": -23.53,
-                "growth_last_year_pct": -33.75
-            },
-            {
-                "rank": 175,
-                "name": "Andorra",
-                "value_usd": 106,
-                "market_share_pct": 0.0,
-                "quantity_latest": 4,
-                "unit_value_latest": 26500.0,
-                "growth_cagr_pct": 10.15,
-                "growth_last_year_pct": -56.56
-            },
-            {
-                "rank": 176,
-                "name": "Sierra Leone",
-                "value_usd": 98,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": 11.24,
-                "growth_last_year_pct": -4.85
-            },
-            {
-                "rank": 177,
-                "name": "Central African Republic",
-                "value_usd": 96,
-                "market_share_pct": 0.0,
-                "quantity_latest": 54,
-                "unit_value_latest": 1778.0,
-                "growth_cagr_pct": 163.21,
-                "growth_last_year_pct": -60.98
-            },
-            {
-                "rank": 178,
-                "name": "Palestine, State of",
-                "value_usd": 95,
-                "market_share_pct": 0.0,
-                "quantity_latest": 13,
-                "unit_value_latest": 7308.0,
-                "growth_cagr_pct": -43.59,
-                "growth_last_year_pct": -93.3
-            },
-            {
-                "rank": 179,
-                "name": "Togo",
-                "value_usd": 87,
-                "market_share_pct": 0.0,
-                "quantity_latest": 30,
-                "unit_value_latest": 2900.0,
-                "growth_cagr_pct": -17.41,
-                "growth_last_year_pct": 38.1
-            },
-            {
-                "rank": 180,
-                "name": "Mauritania",
-                "value_usd": 79,
-                "market_share_pct": 0.0,
-                "quantity_latest": 7,
-                "unit_value_latest": 11286.0,
-                "growth_cagr_pct": 22.57,
-                "growth_last_year_pct": 83.72
-            },
-            {
-                "rank": 181,
-                "name": "Samoa",
-                "value_usd": 75,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": 44.93,
-                "growth_last_year_pct": 188.46
-            },
-            {
-                "rank": 182,
-                "name": "Macao, China",
-                "value_usd": 74,
-                "market_share_pct": 0.0,
-                "quantity_latest": 4,
-                "unit_value_latest": 18500.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": -58.89
-            },
-            {
-                "rank": 183,
-                "name": "Burundi",
-                "value_usd": 68,
-                "market_share_pct": 0.0,
-                "quantity_latest": 30,
-                "unit_value_latest": 2267.0,
-                "growth_cagr_pct": 9.1,
-                "growth_last_year_pct": 119.35
-            },
-            {
-                "rank": 184,
-                "name": "Greenland",
-                "value_usd": 67,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": 37.03,
-                "growth_last_year_pct": 0.0
-            },
-            {
-                "rank": 185,
-                "name": "Grenada",
-                "value_usd": 59,
-                "market_share_pct": 0.0,
-                "quantity_latest": 6,
-                "unit_value_latest": 9833.0,
-                "growth_cagr_pct": 0.87,
-                "growth_last_year_pct": 3.51
-            },
-            {
-                "rank": 186,
-                "name": "Saint Lucia",
-                "value_usd": 56,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": -19.89,
-                "growth_last_year_pct": -9.68
-            },
-            {
-                "rank": 187,
-                "name": "Vanuatu",
-                "value_usd": 53,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": 21.9,
-                "growth_last_year_pct": -33.75
-            },
-            {
-                "rank": 188,
-                "name": "Sint Maarten (Dutch part)",
-                "value_usd": 51,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": 70.75,
-                "growth_last_year_pct": 218.75
-            },
-            {
-                "rank": 189,
-                "name": "Somalia",
-                "value_usd": 51,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": -44.79,
-                "growth_last_year_pct": -63.83
-            },
-            {
-                "rank": 190,
-                "name": "Christmas Island",
-                "value_usd": 41,
-                "market_share_pct": 0.0,
-                "quantity_latest": 8,
-                "unit_value_latest": 5125.0,
-                "growth_cagr_pct": 69.22,
-                "growth_last_year_pct": 485.71
-            },
-            {
-                "rank": 191,
-                "name": "United States Minor Outlying Islands",
-                "value_usd": 38,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": 13.37,
-                "growth_last_year_pct": 26.67
-            },
-            {
-                "rank": 192,
-                "name": "British Virgin Islands",
-                "value_usd": 37,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": -20.58,
-                "growth_last_year_pct": -70.4
-            },
-            {
-                "rank": 193,
-                "name": "Tonga",
-                "value_usd": 36,
-                "market_share_pct": 0.0,
-                "quantity_latest": 5,
-                "unit_value_latest": 7200.0,
-                "growth_cagr_pct": 26.63,
-                "growth_last_year_pct": -12.2
-            },
-            {
-                "rank": 194,
-                "name": "Eritrea",
-                "value_usd": 32,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": 22.96,
-                "growth_last_year_pct": 0.0
-            },
-            {
-                "rank": 195,
-                "name": "Benin",
-                "value_usd": 27,
-                "market_share_pct": 0.0,
-                "quantity_latest": 16,
-                "unit_value_latest": 1688.0,
-                "growth_cagr_pct": -7.57,
-                "growth_last_year_pct": -66.25
-            },
-            {
-                "rank": 196,
-                "name": "Kiribati",
-                "value_usd": 26,
-                "market_share_pct": 0.0,
-                "quantity_latest": 117,
-                "unit_value_latest": 222.0,
-                "growth_cagr_pct": 21.32,
-                "growth_last_year_pct": 1200.0
-            },
-            {
-                "rank": 197,
-                "name": "Comoros",
-                "value_usd": 21,
-                "market_share_pct": 0.0,
-                "quantity_latest": 8,
-                "unit_value_latest": 2625.0,
-                "growth_cagr_pct": 23.59,
-                "growth_last_year_pct": 2000.0
-            },
-            {
-                "rank": 198,
-                "name": "Niger",
-                "value_usd": 19,
-                "market_share_pct": 0.0,
-                "quantity_latest": 4,
-                "unit_value_latest": 4750.0,
-                "growth_cagr_pct": -11.52,
-                "growth_last_year_pct": 0.0
-            },
-            {
-                "rank": 199,
-                "name": "South Sudan",
-                "value_usd": 18,
-                "market_share_pct": 0.0,
-                "quantity_latest": 5,
-                "unit_value_latest": 3600.0,
-                "growth_cagr_pct": 45.65,
-                "growth_last_year_pct": 38.46
-            },
-            {
-                "rank": 200,
-                "name": "Saint Pierre and Miquelon",
-                "value_usd": 14,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": 15.02,
-                "growth_last_year_pct": -44.0
-            },
-            {
-                "rank": 201,
-                "name": "Nauru",
-                "value_usd": 14,
-                "market_share_pct": 0.0,
-                "quantity_latest": 7,
-                "unit_value_latest": 2000.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 600.0
-            },
-            {
-                "rank": 202,
-                "name": "Cocos (Keeling) Islands",
-                "value_usd": 13,
-                "market_share_pct": 0.0,
-                "quantity_latest": 4,
-                "unit_value_latest": 3250.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
-            },
-            {
-                "rank": 203,
-                "name": "Chad",
-                "value_usd": 13,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": -50.18,
-                "growth_last_year_pct": -38.1
-            },
-            {
-                "rank": 204,
-                "name": "Anguilla",
-                "value_usd": 13,
-                "market_share_pct": 0.0,
-                "quantity_latest": 57,
-                "unit_value_latest": 228.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": -55.17
-            },
-            {
-                "rank": 205,
-                "name": "Norfolk Island",
-                "value_usd": 13,
-                "market_share_pct": 0.0,
-                "quantity_latest": 1,
-                "unit_value_latest": 13000.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": -96.23
-            },
-            {
-                "rank": 206,
-                "name": "Guinea-Bissau",
-                "value_usd": 11,
-                "market_share_pct": 0.0,
-                "quantity_latest": 1,
-                "unit_value_latest": 11000.0,
-                "growth_cagr_pct": -18.56,
-                "growth_last_year_pct": 266.67
-            },
-            {
-                "rank": 207,
-                "name": "Palau",
-                "value_usd": 11,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": -14.93,
-                "growth_last_year_pct": -35.29
-            },
-            {
-                "rank": 208,
-                "name": "Cook Islands",
-                "value_usd": 10,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": -16.67
-            },
-            {
-                "rank": 209,
-                "name": "Bonaire, Sint Eustatius and Saba",
-                "value_usd": 9,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": -10.46,
-                "growth_last_year_pct": -18.18
-            },
-            {
-                "rank": 210,
-                "name": "Sao Tome and Principe",
-                "value_usd": 9,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": -15.91,
-                "growth_last_year_pct": -72.73
-            },
-            {
-                "rank": 211,
-                "name": "Gambia",
-                "value_usd": 7,
-                "market_share_pct": 0.0,
-                "quantity_latest": 15,
-                "unit_value_latest": 467.0,
-                "growth_cagr_pct": 62.66,
-                "growth_last_year_pct": 0.0
-            },
-            {
-                "rank": 212,
-                "name": "Montserrat",
-                "value_usd": 6,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": 18.92,
-                "growth_last_year_pct": -25.0
-            },
-            {
-                "rank": 213,
-                "name": "Guam",
-                "value_usd": 5,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": -36.63,
-                "growth_last_year_pct": 0.0
-            },
-            {
-                "rank": 214,
-                "name": "Dominica",
-                "value_usd": 5,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": -41.61,
-                "growth_last_year_pct": -94.32
-            },
-            {
-                "rank": 215,
-                "name": "British Indian Ocean Territory",
-                "value_usd": 3,
-                "market_share_pct": 0.0,
-                "quantity_latest": 18,
-                "unit_value_latest": 167.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": -66.67
-            },
-            {
-                "rank": 216,
-                "name": "Bouvet Island",
-                "value_usd": 3,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
-            },
-            {
-                "rank": 217,
-                "name": "Saint Helena",
-                "value_usd": 2,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": -56.33,
-                "growth_last_year_pct": -85.71
-            },
-            {
-                "rank": 218,
-                "name": "Northern Mariana Islands",
-                "value_usd": 2,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 100.0
-            },
-            {
-                "rank": 219,
-                "name": "Tuvalu",
-                "value_usd": 2,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 100.0
-            },
-            {
-                "rank": 220,
-                "name": "French Southern and Antarctic Territories",
-                "value_usd": 1,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
-            },
-            {
-                "rank": 221,
-                "name": "Niue",
-                "value_usd": 1,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
-            },
-            {
-                "rank": 222,
-                "name": "Falkland Islands (Malvinas)",
-                "value_usd": 0,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": -100.0,
-                "growth_last_year_pct": -100.0
-            },
-            {
-                "rank": 223,
-                "name": "Free Zones",
-                "value_usd": 0,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": -100.0,
-                "growth_last_year_pct": -100.0
-            },
-            {
-                "rank": 224,
-                "name": "Micronesia, Federated States of",
-                "value_usd": 0,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": -100.0,
-                "growth_last_year_pct": -100.0
-            }
-        ],
-        "top_suppliers_sample": [
-            {
-                "rank": 1,
-                "name": "United States of America",
-                "value_usd": 2279235,
-                "market_share_pct": 13.99,
-                "quantity_latest": 323981100,
-                "unit_value_latest": 7.04,
-                "growth_cagr_pct": 3.97,
-                "growth_last_year_pct": 0.38
-            },
-            {
-                "rank": 2,
-                "name": "Korea, Republic of",
-                "value_usd": 1823791,
-                "market_share_pct": 11.2,
-                "quantity_latest": 27112,
-                "unit_value_latest": 67269.0,
-                "growth_cagr_pct": 18.19,
-                "growth_last_year_pct": 3.85
-            },
-            {
-                "rank": 3,
-                "name": "China",
-                "value_usd": 1258876,
-                "market_share_pct": 7.73,
-                "quantity_latest": 35502,
-                "unit_value_latest": 35459.0,
-                "growth_cagr_pct": -2.82,
-                "growth_last_year_pct": -2.46
-            },
-            {
-                "rank": 4,
-                "name": "Germany",
-                "value_usd": 1173800,
-                "market_share_pct": 7.21,
-                "quantity_latest": 30376,
-                "unit_value_latest": 38643.0,
-                "growth_cagr_pct": -0.68,
-                "growth_last_year_pct": -3.35
-            },
-            {
-                "rank": 5,
-                "name": "Mexico",
-                "value_usd": 893275,
-                "market_share_pct": 5.48,
-                "quantity_latest": 22014,
-                "unit_value_latest": 40578.0,
-                "growth_cagr_pct": 12.07,
-                "growth_last_year_pct": 12.47
-            },
-            {
-                "rank": 6,
-                "name": "Hong Kong, China",
-                "value_usd": 645412,
-                "market_share_pct": 3.96,
-                "quantity_latest": 418898654,
-                "unit_value_latest": 1.54,
-                "growth_cagr_pct": -4.62,
-                "growth_last_year_pct": 52.27
-            },
-            {
-                "rank": 7,
-                "name": "Japan",
-                "value_usd": 583235,
-                "market_share_pct": 3.58,
-                "quantity_latest": 25949,
-                "unit_value_latest": 22476.0,
-                "growth_cagr_pct": 2.7,
-                "growth_last_year_pct": -3.18
-            },
-            {
-                "rank": 8,
-                "name": "Thailand",
-                "value_usd": 579837,
-                "market_share_pct": 3.56,
-                "quantity_latest": 255877155,
-                "unit_value_latest": 2.27,
-                "growth_cagr_pct": 8.35,
-                "growth_last_year_pct": 14.34
-            },
-            {
-                "rank": 9,
-                "name": "Czech Republic",
-                "value_usd": 493243,
-                "market_share_pct": 3.03,
-                "quantity_latest": 30655,
-                "unit_value_latest": 16090.0,
-                "growth_cagr_pct": 2.66,
-                "growth_last_year_pct": -3.58
-            },
-            {
-                "rank": 10,
-                "name": "India",
-                "value_usd": 380307,
-                "market_share_pct": 2.33,
-                "quantity_latest": 251330620,
-                "unit_value_latest": 1.51,
-                "growth_cagr_pct": 21.26,
-                "growth_last_year_pct": 16.0
-            },
-            {
-                "rank": 11,
-                "name": "Viet Nam",
-                "value_usd": 369211,
-                "market_share_pct": 2.27,
-                "quantity_latest": 9185,
-                "unit_value_latest": 40197.0,
-                "growth_cagr_pct": 14.29,
-                "growth_last_year_pct": 19.2
-            },
-            {
-                "rank": 12,
-                "name": "France",
-                "value_usd": 348237,
-                "market_share_pct": 2.14,
-                "quantity_latest": 12220,
-                "unit_value_latest": 28497.0,
-                "growth_cagr_pct": 5.03,
-                "growth_last_year_pct": -2.97
-            },
-            {
-                "rank": 13,
-                "name": "Netherlands",
-                "value_usd": 337935,
-                "market_share_pct": 2.07,
-                "quantity_latest": 13152,
-                "unit_value_latest": 25695.0,
-                "growth_cagr_pct": 22.52,
-                "growth_last_year_pct": 1.56
-            },
-            {
-                "rank": 14,
-                "name": "Italy",
-                "value_usd": 336572,
-                "market_share_pct": 2.07,
-                "quantity_latest": 20207,
-                "unit_value_latest": 16656.0,
-                "growth_cagr_pct": 8.21,
-                "growth_last_year_pct": -1.29
-            },
-            {
-                "rank": 15,
-                "name": "Poland",
-                "value_usd": 328051,
-                "market_share_pct": 2.01,
-                "quantity_latest": 16207,
-                "unit_value_latest": 20241.0,
-                "growth_cagr_pct": 7.82,
-                "growth_last_year_pct": 12.12
-            },
-            {
-                "rank": 16,
-                "name": "Canada",
-                "value_usd": 322645,
-                "market_share_pct": 1.98,
-                "quantity_latest": 30113561,
-                "unit_value_latest": 11.0,
-                "growth_cagr_pct": 4.12,
-                "growth_last_year_pct": -12.92
-            },
-            {
-                "rank": 17,
-                "name": "United Kingdom",
-                "value_usd": 286666,
-                "market_share_pct": 1.76,
-                "quantity_latest": 8585,
-                "unit_value_latest": 33391.0,
-                "growth_cagr_pct": 6.09,
-                "growth_last_year_pct": -11.15
-            },
-            {
-                "rank": 18,
-                "name": "Austria",
-                "value_usd": 257950,
-                "market_share_pct": 1.58,
-                "quantity_latest": 7899,
-                "unit_value_latest": 32656.0,
-                "growth_cagr_pct": 4.56,
-                "growth_last_year_pct": -7.88
-            },
-            {
-                "rank": 19,
-                "name": "Spain",
-                "value_usd": 236320,
-                "market_share_pct": 1.45,
-                "quantity_latest": 13930,
-                "unit_value_latest": 16965.0,
-                "growth_cagr_pct": 6.2,
-                "growth_last_year_pct": 9.38
-            },
-            {
-                "rank": 20,
-                "name": "Hungary",
-                "value_usd": 233951,
-                "market_share_pct": 1.44,
-                "quantity_latest": 10802,
-                "unit_value_latest": 21658.0,
-                "growth_cagr_pct": -0.11,
-                "growth_last_year_pct": -5.35
-            }
-        ],
-        "hhi": 569.61,
-        "concentration": "not concentrated",
-        "rank": 46,
-        "name": "South Africa",
-        "value_usd": 27897,
-        "market_share_pct": 0.17,
-        "quantity_latest": null,
-        "unit_value_latest": null,
-        "growth_cagr_pct": 16.75,
-        "growth_last_year_pct": 6.95,
-        "regional_suppliers": [
-            {
-                "rank": 45,
-                "name": "Egypt",
-                "value_usd": 30065,
-                "market_share_pct": 0.18,
-                "quantity_latest": 741,
-                "unit_value_latest": 40574.0,
-                "growth_cagr_pct": 6.1,
-                "growth_last_year_pct": 16.45
-            },
-            {
-                "rank": 52,
-                "name": "Morocco",
-                "value_usd": 17687,
-                "market_share_pct": 0.11,
-                "quantity_latest": 1438,
-                "unit_value_latest": 12300.0,
-                "growth_cagr_pct": 29.24,
-                "growth_last_year_pct": 9.97
-            },
-            {
-                "rank": 65,
-                "name": "Algeria",
-                "value_usd": 9317,
-                "market_share_pct": 0.06,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": 12.02,
-                "growth_last_year_pct": 12.88
-            },
-            {
-                "rank": 70,
-                "name": "Tunisia",
-                "value_usd": 5525,
-                "market_share_pct": 0.03,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": -17.49,
-                "growth_last_year_pct": -39.54
-            },
-            {
-                "rank": 81,
-                "name": "Nigeria",
-                "value_usd": 2999,
-                "market_share_pct": 0.02,
-                "quantity_latest": 602,
-                "unit_value_latest": 4982.0,
-                "growth_cagr_pct": -28.24,
-                "growth_last_year_pct": -27.12
-            },
-            {
-                "rank": 85,
-                "name": "Angola",
-                "value_usd": 2226,
-                "market_share_pct": 0.01,
-                "quantity_latest": 408,
-                "unit_value_latest": 5456.0,
-                "growth_cagr_pct": 20.9,
-                "growth_last_year_pct": -49.07
-            },
-            {
-                "rank": 96,
-                "name": "Botswana",
-                "value_usd": 1594,
-                "market_share_pct": 0.01,
-                "quantity_latest": 141,
-                "unit_value_latest": 11305.0,
-                "growth_cagr_pct": 16.48,
-                "growth_last_year_pct": 16.01
-            },
-            {
-                "rank": 100,
-                "name": "Kenya",
-                "value_usd": 1453,
-                "market_share_pct": 0.01,
-                "quantity_latest": 229,
-                "unit_value_latest": 6345.0,
-                "growth_cagr_pct": -12.58,
-                "growth_last_year_pct": -5.89
-            },
-            {
-                "rank": 103,
-                "name": "Namibia",
-                "value_usd": 1413,
-                "market_share_pct": 0.01,
-                "quantity_latest": 122,
-                "unit_value_latest": 11582.0,
-                "growth_cagr_pct": 9.61,
-                "growth_last_year_pct": -4.46
-            },
-            {
-                "rank": 105,
-                "name": "Zambia",
-                "value_usd": 1405,
-                "market_share_pct": 0.01,
-                "quantity_latest": 259,
-                "unit_value_latest": 5425.0,
-                "growth_cagr_pct": 6.92,
-                "growth_last_year_pct": -46.68
-            },
-            {
-                "rank": 113,
-                "name": "Mauritius",
-                "value_usd": 1163,
-                "market_share_pct": 0.01,
-                "quantity_latest": 16266,
-                "unit_value_latest": 71.0,
-                "growth_cagr_pct": 6.74,
-                "growth_last_year_pct": 0.09
-            },
-            {
-                "rank": 114,
-                "name": "Ghana",
-                "value_usd": 1154,
-                "market_share_pct": 0.01,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": -57.42
-            },
-            {
-                "rank": 115,
-                "name": "Zimbabwe",
-                "value_usd": 1067,
-                "market_share_pct": 0.01,
-                "quantity_latest": 189,
-                "unit_value_latest": 5646.0,
-                "growth_cagr_pct": 32.14,
-                "growth_last_year_pct": 12.08
-            },
-            {
-                "rank": 116,
-                "name": "Côte d'Ivoire",
-                "value_usd": 982,
-                "market_share_pct": 0.01,
-                "quantity_latest": 194,
-                "unit_value_latest": 5062.0,
-                "growth_cagr_pct": 14.62,
-                "growth_last_year_pct": 31.81
-            },
-            {
-                "rank": 118,
-                "name": "Tanzania, United Republic of",
-                "value_usd": 919,
-                "market_share_pct": 0.01,
-                "quantity_latest": 368,
-                "unit_value_latest": 2497.0,
-                "growth_cagr_pct": 2.64,
-                "growth_last_year_pct": -22.71
-            },
-            {
-                "rank": 121,
-                "name": "Mozambique",
-                "value_usd": 793,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": null,
-                "growth_cagr_pct": 6.47,
-                "growth_last_year_pct": 1.28
-            },
-            {
-                "rank": 122,
-                "name": "Ethiopia",
-                "value_usd": 792,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": -9.06,
-                "growth_last_year_pct": -74.87
-            },
-            {
-                "rank": 123,
-                "name": "Eswatini",
-                "value_usd": 701,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": 40.48,
-                "growth_last_year_pct": 111.14
-            },
-            {
-                "rank": 130,
-                "name": "Uganda",
-                "value_usd": 608,
-                "market_share_pct": 0.0,
-                "quantity_latest": 204,
-                "unit_value_latest": 2980.0,
-                "growth_cagr_pct": -8.67,
-                "growth_last_year_pct": -34.55
-            },
-            {
-                "rank": 132,
-                "name": "Burkina Faso",
-                "value_usd": 556,
-                "market_share_pct": 0.0,
-                "quantity_latest": 126,
-                "unit_value_latest": 4413.0,
-                "growth_cagr_pct": 26.08,
-                "growth_last_year_pct": 169.9
-            },
-            {
-                "rank": 133,
-                "name": "Seychelles",
-                "value_usd": 548,
-                "market_share_pct": 0.0,
-                "quantity_latest": 25,
-                "unit_value_latest": 21920.0,
-                "growth_cagr_pct": 29.31,
-                "growth_last_year_pct": 61.65
-            },
-            {
-                "rank": 137,
-                "name": "Cameroon",
-                "value_usd": 457,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": 22.49,
-                "growth_last_year_pct": 37.65
-            },
-            {
-                "rank": 140,
-                "name": "Senegal",
-                "value_usd": 382,
-                "market_share_pct": 0.0,
-                "quantity_latest": 96,
-                "unit_value_latest": 3979.0,
-                "growth_cagr_pct": -5.3,
-                "growth_last_year_pct": -26.11
-            },
-            {
-                "rank": 142,
-                "name": "Guinea",
-                "value_usd": 359,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": -1.92,
-                "growth_last_year_pct": 98.34
-            },
-            {
-                "rank": 146,
-                "name": "Congo",
-                "value_usd": 327,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": -32.24,
-                "growth_last_year_pct": 161.6
-            },
-            {
-                "rank": 148,
-                "name": "Lesotho",
-                "value_usd": 324,
-                "market_share_pct": 0.0,
-                "quantity_latest": 66,
-                "unit_value_latest": 4909.0,
-                "growth_cagr_pct": 18.92,
-                "growth_last_year_pct": 38.46
-            },
-            {
-                "rank": 150,
-                "name": "Djibouti",
-                "value_usd": 306,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": -35.98
-            },
-            {
-                "rank": 153,
-                "name": "Liberia",
-                "value_usd": 285,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": 59.53,
-                "growth_last_year_pct": -72.6
-            },
-            {
-                "rank": 154,
-                "name": "Gabon",
-                "value_usd": 282,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": 12.35,
-                "growth_last_year_pct": -58.59
-            },
-            {
-                "rank": 155,
-                "name": "Rwanda",
-                "value_usd": 268,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": 3.12,
-                "growth_last_year_pct": 446.94
-            },
-            {
-                "rank": 157,
-                "name": "Malawi",
-                "value_usd": 236,
-                "market_share_pct": 0.0,
-                "quantity_latest": 52,
-                "unit_value_latest": 4538.0,
-                "growth_cagr_pct": 5.43,
-                "growth_last_year_pct": -8.53
-            },
-            {
-                "rank": 162,
-                "name": "Equatorial Guinea",
-                "value_usd": 200,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": 34.02,
-                "growth_last_year_pct": -22.18
-            },
-            {
-                "rank": 168,
-                "name": "Cabo Verde",
-                "value_usd": 131,
-                "market_share_pct": 0.0,
-                "quantity_latest": 15,
-                "unit_value_latest": 8733.0,
-                "growth_cagr_pct": 13.48,
-                "growth_last_year_pct": 1.55
-            },
-            {
-                "rank": 170,
-                "name": "Sudan",
-                "value_usd": 124,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": -33.39,
-                "growth_last_year_pct": -56.64
-            },
-            {
-                "rank": 172,
-                "name": "Mali",
-                "value_usd": 109,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": -0.68,
-                "growth_last_year_pct": -75.4
-            },
-            {
-                "rank": 174,
-                "name": "Madagascar",
-                "value_usd": 106,
-                "market_share_pct": 0.0,
-                "quantity_latest": 25,
-                "unit_value_latest": 4240.0,
-                "growth_cagr_pct": -23.53,
-                "growth_last_year_pct": -33.75
-            },
-            {
-                "rank": 176,
-                "name": "Sierra Leone",
-                "value_usd": 98,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": 11.24,
-                "growth_last_year_pct": -4.85
-            },
-            {
-                "rank": 177,
-                "name": "Central African Republic",
-                "value_usd": 96,
-                "market_share_pct": 0.0,
-                "quantity_latest": 54,
-                "unit_value_latest": 1778.0,
-                "growth_cagr_pct": 163.21,
-                "growth_last_year_pct": -60.98
-            },
-            {
-                "rank": 179,
-                "name": "Togo",
-                "value_usd": 87,
-                "market_share_pct": 0.0,
-                "quantity_latest": 30,
-                "unit_value_latest": 2900.0,
-                "growth_cagr_pct": -17.41,
-                "growth_last_year_pct": 38.1
-            },
-            {
-                "rank": 180,
-                "name": "Mauritania",
-                "value_usd": 79,
-                "market_share_pct": 0.0,
-                "quantity_latest": 7,
-                "unit_value_latest": 11286.0,
-                "growth_cagr_pct": 22.57,
-                "growth_last_year_pct": 83.72
-            },
-            {
-                "rank": 183,
-                "name": "Burundi",
-                "value_usd": 68,
-                "market_share_pct": 0.0,
-                "quantity_latest": 30,
-                "unit_value_latest": 2267.0,
-                "growth_cagr_pct": 9.1,
-                "growth_last_year_pct": 119.35
-            },
-            {
-                "rank": 189,
-                "name": "Somalia",
-                "value_usd": 51,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": -44.79,
-                "growth_last_year_pct": -63.83
-            },
-            {
-                "rank": 194,
-                "name": "Eritrea",
-                "value_usd": 32,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": 22.96,
-                "growth_last_year_pct": 0.0
-            },
-            {
-                "rank": 195,
-                "name": "Benin",
-                "value_usd": 27,
-                "market_share_pct": 0.0,
-                "quantity_latest": 16,
-                "unit_value_latest": 1688.0,
-                "growth_cagr_pct": -7.57,
-                "growth_last_year_pct": -66.25
-            },
-            {
-                "rank": 197,
-                "name": "Comoros",
-                "value_usd": 21,
-                "market_share_pct": 0.0,
-                "quantity_latest": 8,
-                "unit_value_latest": 2625.0,
-                "growth_cagr_pct": 23.59,
-                "growth_last_year_pct": 2000.0
-            },
-            {
-                "rank": 198,
-                "name": "Niger",
-                "value_usd": 19,
-                "market_share_pct": 0.0,
-                "quantity_latest": 4,
-                "unit_value_latest": 4750.0,
-                "growth_cagr_pct": -11.52,
-                "growth_last_year_pct": 0.0
-            },
-            {
-                "rank": 199,
-                "name": "South Sudan",
-                "value_usd": 18,
-                "market_share_pct": 0.0,
-                "quantity_latest": 5,
-                "unit_value_latest": 3600.0,
-                "growth_cagr_pct": 45.65,
-                "growth_last_year_pct": 38.46
-            },
-            {
-                "rank": 203,
-                "name": "Chad",
-                "value_usd": 13,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": -50.18,
-                "growth_last_year_pct": -38.1
-            },
-            {
-                "rank": 206,
-                "name": "Guinea-Bissau",
-                "value_usd": 11,
-                "market_share_pct": 0.0,
-                "quantity_latest": 1,
-                "unit_value_latest": 11000.0,
-                "growth_cagr_pct": -18.56,
-                "growth_last_year_pct": 266.67
-            },
-            {
-                "rank": 210,
-                "name": "Sao Tome and Principe",
-                "value_usd": 9,
-                "market_share_pct": 0.0,
-                "quantity_latest": 0,
-                "unit_value_latest": 0.0,
-                "growth_cagr_pct": -15.91,
-                "growth_last_year_pct": -72.73
-            },
-            {
-                "rank": 211,
-                "name": "Gambia",
-                "value_usd": 7,
-                "market_share_pct": 0.0,
-                "quantity_latest": 15,
-                "unit_value_latest": 467.0,
-                "growth_cagr_pct": 62.66,
-                "growth_last_year_pct": 0.0
-            }
-        ]
-    },
-    "target_market_analysis": {
-        "years": [
-            2024
-        ],
-        "latest_year": 2024,
-        "start_year": 2024,
-        "periods": 1,
         "raw_file": "target_market_imports_value.txt",
         "world_values_usd": [
+            1206308,
+            1405775,
+            1299447,
+            1214461,
             1173800
         ],
         "world_quantities": [
-            30375
+            40259,
+            45054,
+            40423,
+            31661,
+            30376
         ],
         "world_unit_values": [
-            null
+            29964.0,
+            31202.0,
+            32146.0,
+            38358.0,
+            38643.0
         ],
         "total_value_usd": 1173800,
+        "market_growth_last_year_pct": -3.35,
+        "market_growth_cagr_pct": -0.68,
         "suppliers_full_list": [
             {
                 "rank": 1,
                 "name": "Switzerland",
                 "value_usd": 364708,
                 "market_share_pct": 31.07,
+                "gained_share_over_5_years": true,
                 "quantity_latest": 4425,
                 "unit_value_latest": 82420.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 2.49,
+                "growth_last_year_pct": -4.82
             },
             {
                 "rank": 2,
                 "name": "China",
                 "value_usd": 197826,
                 "market_share_pct": 16.85,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 8994,
                 "unit_value_latest": 21995.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -2.16,
+                "growth_last_year_pct": 2.45
             },
             {
                 "rank": 3,
                 "name": "Hungary",
                 "value_usd": 57414,
                 "market_share_pct": 4.89,
+                "gained_share_over_5_years": true,
                 "quantity_latest": 463,
                 "unit_value_latest": 124004.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 1.24,
+                "growth_last_year_pct": -6.46
             },
             {
                 "rank": 4,
                 "name": "Italy",
                 "value_usd": 54987,
                 "market_share_pct": 4.68,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 3608,
                 "unit_value_latest": 15240.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -3.46,
+                "growth_last_year_pct": -6.2
             },
             {
                 "rank": 5,
                 "name": "Czech Republic",
                 "value_usd": 47162,
                 "market_share_pct": 4.02,
+                "gained_share_over_5_years": true,
                 "quantity_latest": 881,
                 "unit_value_latest": 53532.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 15.81,
+                "growth_last_year_pct": 5.14
             },
             {
                 "rank": 6,
                 "name": "Netherlands",
                 "value_usd": 46828,
                 "market_share_pct": 3.99,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 719,
                 "unit_value_latest": 65129.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -23.51,
+                "growth_last_year_pct": -4.14
             },
             {
                 "rank": 7,
                 "name": "Thailand",
                 "value_usd": 45960,
                 "market_share_pct": 3.92,
+                "gained_share_over_5_years": true,
                 "quantity_latest": 2610,
                 "unit_value_latest": 17609.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 2.18,
+                "growth_last_year_pct": 6.55
             },
             {
                 "rank": 8,
                 "name": "France",
                 "value_usd": 37951,
                 "market_share_pct": 3.23,
+                "gained_share_over_5_years": true,
                 "quantity_latest": 655,
                 "unit_value_latest": 57940.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 4.45,
+                "growth_last_year_pct": 10.6
             },
             {
                 "rank": 9,
                 "name": "Romania",
                 "value_usd": 35114,
                 "market_share_pct": 2.99,
+                "gained_share_over_5_years": true,
                 "quantity_latest": 699,
                 "unit_value_latest": 50235.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 7.36,
+                "growth_last_year_pct": -17.65
             },
             {
                 "rank": 10,
                 "name": "United States of America",
                 "value_usd": 27655,
                 "market_share_pct": 2.36,
+                "gained_share_over_5_years": true,
                 "quantity_latest": 130,
                 "unit_value_latest": 212731.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 5.11,
+                "growth_last_year_pct": -9.61
             },
             {
                 "rank": 11,
                 "name": "Poland",
                 "value_usd": 24631,
                 "market_share_pct": 2.1,
+                "gained_share_over_5_years": true,
                 "quantity_latest": 471,
                 "unit_value_latest": 52295.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 7.27,
+                "growth_last_year_pct": 13.42
             },
             {
                 "rank": 12,
                 "name": "Philippines",
                 "value_usd": 22597,
                 "market_share_pct": 1.93,
+                "gained_share_over_5_years": true,
                 "quantity_latest": 585,
                 "unit_value_latest": 38643.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 15.5,
+                "growth_last_year_pct": 30.54
             },
             {
                 "rank": 13,
                 "name": "Serbia",
                 "value_usd": 22104,
                 "market_share_pct": 1.88,
+                "gained_share_over_5_years": true,
                 "quantity_latest": 823,
                 "unit_value_latest": 26858.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 12.09,
+                "growth_last_year_pct": -7.9
             },
             {
                 "rank": 14,
                 "name": "Slovakia",
                 "value_usd": 18603,
                 "market_share_pct": 1.58,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 756,
                 "unit_value_latest": 24607.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -7.12,
+                "growth_last_year_pct": -8.17
             },
             {
                 "rank": 15,
                 "name": "Viet Nam",
                 "value_usd": 18110,
                 "market_share_pct": 1.54,
+                "gained_share_over_5_years": true,
                 "quantity_latest": 1043,
                 "unit_value_latest": 17363.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 9.01,
+                "growth_last_year_pct": -19.63
             },
             {
                 "rank": 16,
                 "name": "India",
                 "value_usd": 17435,
                 "market_share_pct": 1.49,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 658,
                 "unit_value_latest": 26497.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -4.42,
+                "growth_last_year_pct": -3.97
             },
             {
                 "rank": 17,
                 "name": "Japan",
                 "value_usd": 14988,
                 "market_share_pct": 1.28,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 388,
                 "unit_value_latest": 38643.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -12.55,
+                "growth_last_year_pct": -24.04
             },
             {
                 "rank": 18,
                 "name": "Austria",
                 "value_usd": 14943,
                 "market_share_pct": 1.27,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 346,
                 "unit_value_latest": 43188.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -16.28,
+                "growth_last_year_pct": -25.06
             },
             {
                 "rank": 19,
                 "name": "Slovenia",
                 "value_usd": 13325,
                 "market_share_pct": 1.14,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 196,
                 "unit_value_latest": 67985.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -7.94,
+                "growth_last_year_pct": 3.15
             },
             {
                 "rank": 20,
                 "name": "Sweden",
                 "value_usd": 11624,
                 "market_share_pct": 0.99,
+                "gained_share_over_5_years": true,
                 "quantity_latest": 117,
                 "unit_value_latest": 99350.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 72.4,
+                "growth_last_year_pct": 11.06
             },
             {
                 "rank": 21,
                 "name": "Macedonia, North",
                 "value_usd": 11019,
                 "market_share_pct": 0.94,
+                "gained_share_over_5_years": true,
                 "quantity_latest": 382,
                 "unit_value_latest": 28846.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 624.47,
+                "growth_last_year_pct": 34.13
             },
             {
                 "rank": 22,
                 "name": "United Kingdom",
                 "value_usd": 10910,
                 "market_share_pct": 0.93,
+                "gained_share_over_5_years": true,
                 "quantity_latest": 78,
                 "unit_value_latest": 139872.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 24.86,
+                "growth_last_year_pct": 14.25
             },
             {
                 "rank": 23,
                 "name": "Mexico",
                 "value_usd": 9140,
                 "market_share_pct": 0.78,
+                "gained_share_over_5_years": true,
                 "quantity_latest": 324,
                 "unit_value_latest": 28210.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 19.97,
+                "growth_last_year_pct": 3.27
             },
             {
                 "rank": 24,
                 "name": "Denmark",
                 "value_usd": 6850,
                 "market_share_pct": 0.58,
+                "gained_share_over_5_years": true,
                 "quantity_latest": 113,
                 "unit_value_latest": 60619.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 8.59,
+                "growth_last_year_pct": -19.31
             },
             {
                 "rank": 25,
                 "name": "Ireland",
                 "value_usd": 6248,
                 "market_share_pct": 0.53,
+                "gained_share_over_5_years": true,
                 "quantity_latest": 158,
                 "unit_value_latest": 39544.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 5.28,
+                "growth_last_year_pct": -19.28
             },
             {
                 "rank": 26,
                 "name": "Korea, Republic of",
                 "value_usd": 5933,
                 "market_share_pct": 0.51,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 133,
                 "unit_value_latest": 44609.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -11.25,
+                "growth_last_year_pct": -30.58
             },
             {
                 "rank": 27,
                 "name": "Malaysia",
                 "value_usd": 4242,
                 "market_share_pct": 0.36,
+                "gained_share_over_5_years": true,
                 "quantity_latest": 94,
                 "unit_value_latest": 45128.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 7.9,
+                "growth_last_year_pct": -11.7
             },
             {
                 "rank": 28,
                 "name": "Spain",
                 "value_usd": 4030,
                 "market_share_pct": 0.34,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 165,
                 "unit_value_latest": 24424.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -6.99,
+                "growth_last_year_pct": -3.22
             },
             {
                 "rank": 29,
                 "name": "Portugal",
                 "value_usd": 3879,
                 "market_share_pct": 0.33,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 59,
                 "unit_value_latest": 65746.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -28.78,
+                "growth_last_year_pct": 32.39
             },
             {
                 "rank": 30,
                 "name": "Taipei, Chinese",
                 "value_usd": 3775,
                 "market_share_pct": 0.32,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 75,
                 "unit_value_latest": 50333.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -12.87,
+                "growth_last_year_pct": -16.43
             },
             {
                 "rank": 31,
                 "name": "Myanmar",
                 "value_usd": 2556,
                 "market_share_pct": 0.22,
+                "gained_share_over_5_years": true,
                 "quantity_latest": 62,
                 "unit_value_latest": 41226.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 2.21,
+                "growth_last_year_pct": 14.77
             },
             {
                 "rank": 32,
                 "name": "Canada",
                 "value_usd": 2067,
                 "market_share_pct": 0.18,
+                "gained_share_over_5_years": true,
                 "quantity_latest": 24,
                 "unit_value_latest": 86125.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 45.59,
+                "growth_last_year_pct": -33.45
             },
             {
                 "rank": 33,
                 "name": "Israel",
                 "value_usd": 2022,
                 "market_share_pct": 0.17,
+                "gained_share_over_5_years": true,
                 "quantity_latest": 6,
                 "unit_value_latest": 337000.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 9.65,
+                "growth_last_year_pct": 53.18
             },
             {
                 "rank": 34,
                 "name": "Morocco",
                 "value_usd": 1839,
                 "market_share_pct": 0.16,
+                "gained_share_over_5_years": true,
                 "quantity_latest": 24,
                 "unit_value_latest": 76625.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 14.0,
+                "growth_last_year_pct": -6.7
             },
             {
                 "rank": 35,
                 "name": "Belgium",
                 "value_usd": 1035,
                 "market_share_pct": 0.09,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 12,
                 "unit_value_latest": 86250.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -12.85,
+                "growth_last_year_pct": 4.12
             },
             {
                 "rank": 36,
                 "name": "Hong Kong, China",
                 "value_usd": 680,
                 "market_share_pct": 0.06,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 17,
                 "unit_value_latest": 40000.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -38.45,
+                "growth_last_year_pct": -69.44
             },
             {
                 "rank": 37,
                 "name": "Tunisia",
                 "value_usd": 654,
                 "market_share_pct": 0.06,
+                "gained_share_over_5_years": true,
                 "quantity_latest": 9,
                 "unit_value_latest": 72667.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 238.18,
+                "growth_last_year_pct": 458.97
             },
             {
                 "rank": 38,
                 "name": "Singapore",
                 "value_usd": 622,
                 "market_share_pct": 0.05,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 1,
                 "unit_value_latest": 622000.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -15.77,
+                "growth_last_year_pct": -45.25
             },
             {
                 "rank": 39,
                 "name": "Türkiye",
                 "value_usd": 622,
                 "market_share_pct": 0.05,
+                "gained_share_over_5_years": true,
                 "quantity_latest": 18,
                 "unit_value_latest": 34556.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 15.05,
+                "growth_last_year_pct": 13.71
             },
             {
                 "rank": 40,
                 "name": "Bulgaria",
                 "value_usd": 405,
                 "market_share_pct": 0.03,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 4,
                 "unit_value_latest": 101250.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -19.3,
+                "growth_last_year_pct": 224.0
             },
             {
                 "rank": 41,
                 "name": "Indonesia",
                 "value_usd": 366,
                 "market_share_pct": 0.03,
+                "gained_share_over_5_years": true,
                 "quantity_latest": 20,
                 "unit_value_latest": 18300.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 62.11,
+                "growth_last_year_pct": -72.06
             },
             {
                 "rank": 42,
                 "name": "Cambodia",
                 "value_usd": 310,
                 "market_share_pct": 0.03,
+                "gained_share_over_5_years": true,
                 "quantity_latest": 14,
                 "unit_value_latest": 22143.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 12.14,
+                "growth_last_year_pct": 12.32
             },
             {
                 "rank": 43,
                 "name": "Brazil",
                 "value_usd": 245,
                 "market_share_pct": 0.02,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 8,
                 "unit_value_latest": 30625.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -40.31,
+                "growth_last_year_pct": -91.91
             },
             {
                 "rank": 44,
                 "name": "Finland",
                 "value_usd": 58,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 11.15,
+                "growth_last_year_pct": -23.68
             },
             {
                 "rank": 45,
                 "name": "Argentina",
                 "value_usd": 39,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 5,
                 "unit_value_latest": 7800.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 149.9,
+                "growth_last_year_pct": 11.43
             },
             {
                 "rank": 46,
                 "name": "Norway",
                 "value_usd": 28,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -25.73,
+                "growth_last_year_pct": -65.85
             },
             {
                 "rank": 47,
                 "name": "South Africa",
                 "value_usd": 26,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 30.37,
+                "growth_last_year_pct": -66.67
             },
             {
                 "rank": 48,
                 "name": "Australia",
                 "value_usd": 25,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -16.73,
+                "growth_last_year_pct": -39.02
             },
             {
                 "rank": 49,
                 "name": "Luxembourg",
                 "value_usd": 23,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -28.09,
+                "growth_last_year_pct": -55.77
             },
             {
                 "rank": 50,
                 "name": "Greece",
                 "value_usd": 20,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
+                "growth_cagr_pct": -18.35,
                 "growth_last_year_pct": 0.0
             },
             {
@@ -3535,16 +604,18 @@
                 "name": "Lithuania",
                 "value_usd": 20,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 13.62,
+                "growth_last_year_pct": 33.33
             },
             {
                 "rank": 52,
                 "name": "El Salvador",
                 "value_usd": 19,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 2,
                 "unit_value_latest": 9500.0,
                 "growth_cagr_pct": 0.0,
@@ -3555,46 +626,51 @@
                 "name": "Latvia",
                 "value_usd": 17,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 24.84,
+                "growth_last_year_pct": 54.55
             },
             {
                 "rank": 54,
                 "name": "Bosnia and Herzegovina",
                 "value_usd": 15,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 1,
                 "unit_value_latest": 15000.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 96.8,
+                "growth_last_year_pct": 650.0
             },
             {
                 "rank": 55,
                 "name": "United Arab Emirates",
                 "value_usd": 13,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -45.65,
+                "growth_last_year_pct": -27.78
             },
             {
                 "rank": 56,
                 "name": "Saudi Arabia",
                 "value_usd": 12,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 18.92,
+                "growth_last_year_pct": 71.43
             },
             {
                 "rank": 57,
                 "name": "Albania",
                 "value_usd": 11,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 1,
                 "unit_value_latest": 11000.0,
                 "growth_cagr_pct": 0.0,
@@ -3605,9 +681,10 @@
                 "name": "Eswatini",
                 "value_usd": 11,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
+                "growth_cagr_pct": 82.12,
                 "growth_last_year_pct": 0.0
             },
             {
@@ -3615,9 +692,10 @@
                 "name": "Estonia",
                 "value_usd": 10,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
+                "growth_cagr_pct": 77.83,
                 "growth_last_year_pct": 0.0
             },
             {
@@ -3625,26 +703,29 @@
                 "name": "New Zealand",
                 "value_usd": 8,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 3.39,
+                "growth_last_year_pct": -63.64
             },
             {
                 "rank": 61,
                 "name": "Croatia",
                 "value_usd": 7,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
                 "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_last_year_pct": -91.76
             },
             {
                 "rank": 62,
                 "name": "Mauritius",
                 "value_usd": 7,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
                 "growth_cagr_pct": 0.0,
@@ -3655,16 +736,18 @@
                 "name": "Iceland",
                 "value_usd": 6,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
                 "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_last_year_pct": 500.0
             },
             {
                 "rank": 64,
                 "name": "Bahamas",
                 "value_usd": 3,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
                 "growth_cagr_pct": 0.0,
@@ -3675,6 +758,7 @@
                 "name": "Egypt",
                 "value_usd": 3,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
                 "growth_cagr_pct": 0.0,
@@ -3685,6 +769,7 @@
                 "name": "Georgia",
                 "value_usd": 2,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
                 "growth_cagr_pct": 0.0,
@@ -3695,6 +780,7 @@
                 "name": "Bahrain",
                 "value_usd": 1,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
                 "growth_cagr_pct": 0.0,
@@ -3705,9 +791,10 @@
                 "name": "Chile",
                 "value_usd": 1,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
+                "growth_cagr_pct": -15.91,
                 "growth_last_year_pct": 0.0
             },
             {
@@ -3715,6 +802,7 @@
                 "name": "Oman",
                 "value_usd": 1,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
                 "growth_cagr_pct": 0.0,
@@ -3725,6 +813,7 @@
                 "name": "Faroe Islands",
                 "value_usd": 0,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
                 "growth_cagr_pct": 0.0,
@@ -3735,9 +824,10 @@
                 "name": "Ukraine",
                 "value_usd": 0,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
+                "growth_cagr_pct": -100.0,
                 "growth_last_year_pct": 0.0
             },
             {
@@ -3745,6 +835,7 @@
                 "name": "Armenia",
                 "value_usd": 0,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
                 "growth_cagr_pct": 0.0,
@@ -3755,9 +846,10 @@
                 "name": "Colombia",
                 "value_usd": 0,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
+                "growth_cagr_pct": -100.0,
                 "growth_last_year_pct": 0.0
             },
             {
@@ -3765,9 +857,10 @@
                 "name": "Costa Rica",
                 "value_usd": 0,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
+                "growth_cagr_pct": -100.0,
                 "growth_last_year_pct": 0.0
             },
             {
@@ -3775,6 +868,7 @@
                 "name": "Kuwait",
                 "value_usd": 0,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
                 "growth_cagr_pct": 0.0,
@@ -3785,6 +879,7 @@
                 "name": "Malta",
                 "value_usd": 0,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
                 "growth_cagr_pct": 0.0,
@@ -3795,9 +890,10 @@
                 "name": "Cayman Islands",
                 "value_usd": 0,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
+                "growth_cagr_pct": -100.0,
                 "growth_last_year_pct": 0.0
             },
             {
@@ -3805,9 +901,10 @@
                 "name": "Algeria",
                 "value_usd": 0,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
+                "growth_cagr_pct": -100.0,
                 "growth_last_year_pct": 0.0
             },
             {
@@ -3815,6 +912,7 @@
                 "name": "Bangladesh",
                 "value_usd": 0,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
                 "growth_cagr_pct": 0.0,
@@ -3825,16 +923,18 @@
                 "name": "Belarus",
                 "value_usd": 0,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -100.0,
+                "growth_last_year_pct": -100.0
             },
             {
                 "rank": 81,
                 "name": "Cameroon",
                 "value_usd": 0,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
                 "growth_cagr_pct": 0.0,
@@ -3845,6 +945,7 @@
                 "name": "Central African Republic",
                 "value_usd": 0,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
                 "growth_cagr_pct": 0.0,
@@ -3855,9 +956,10 @@
                 "name": "Sri Lanka",
                 "value_usd": 0,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
+                "growth_cagr_pct": -100.0,
                 "growth_last_year_pct": 0.0
             },
             {
@@ -3865,6 +967,7 @@
                 "name": "Cyprus",
                 "value_usd": 0,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
                 "growth_cagr_pct": 0.0,
@@ -3875,9 +978,10 @@
                 "name": "Ecuador",
                 "value_usd": 0,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
+                "growth_cagr_pct": -100.0,
                 "growth_last_year_pct": 0.0
             },
             {
@@ -3885,6 +989,7 @@
                 "name": "Ghana",
                 "value_usd": 0,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
                 "growth_cagr_pct": 0.0,
@@ -3895,6 +1000,7 @@
                 "name": "Haiti",
                 "value_usd": 0,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
                 "growth_cagr_pct": 0.0,
@@ -3905,6 +1011,7 @@
                 "name": "Honduras",
                 "value_usd": 0,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
                 "growth_cagr_pct": 0.0,
@@ -3915,6 +1022,7 @@
                 "name": "Jamaica",
                 "value_usd": 0,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
                 "growth_cagr_pct": 0.0,
@@ -3925,16 +1033,18 @@
                 "name": "Kazakhstan",
                 "value_usd": 0,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
                 "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_last_year_pct": -100.0
             },
             {
                 "rank": 91,
                 "name": "Lebanon",
                 "value_usd": 0,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
                 "growth_cagr_pct": 0.0,
@@ -3945,16 +1055,18 @@
                 "name": "Macao, China",
                 "value_usd": 0,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
                 "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_last_year_pct": -100.0
             },
             {
                 "rank": 93,
                 "name": "Moldova, Republic of",
                 "value_usd": 0,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
                 "growth_cagr_pct": 0.0,
@@ -3965,9 +1077,10 @@
                 "name": "Pakistan",
                 "value_usd": 0,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
+                "growth_cagr_pct": -100.0,
                 "growth_last_year_pct": 0.0
             },
             {
@@ -3975,9 +1088,10 @@
                 "name": "Panama",
                 "value_usd": 0,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
+                "growth_cagr_pct": -100.0,
                 "growth_last_year_pct": 0.0
             },
             {
@@ -3985,29 +1099,32 @@
                 "name": "Peru",
                 "value_usd": 0,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
                 "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_last_year_pct": -100.0
             },
             {
                 "rank": 97,
                 "name": "Qatar",
                 "value_usd": 0,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
                 "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_last_year_pct": -100.0
             },
             {
                 "rank": 98,
                 "name": "Russian Federation",
                 "value_usd": 0,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
+                "growth_cagr_pct": -100.0,
                 "growth_last_year_pct": 0.0
             },
             {
@@ -4015,6 +1132,7 @@
                 "name": "Saint Kitts and Nevis",
                 "value_usd": 0,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
                 "growth_cagr_pct": 0.0,
@@ -4025,6 +1143,7 @@
                 "name": "Sierra Leone",
                 "value_usd": 0,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
                 "growth_cagr_pct": 0.0,
@@ -4035,9 +1154,10 @@
                 "name": "Sudan",
                 "value_usd": 0,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
+                "growth_cagr_pct": -100.0,
                 "growth_last_year_pct": 0.0
             },
             {
@@ -4045,6 +1165,7 @@
                 "name": "Suriname",
                 "value_usd": 0,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
                 "growth_cagr_pct": 0.0,
@@ -4055,6 +1176,7 @@
                 "name": "Tanzania, United Republic of",
                 "value_usd": 0,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
                 "growth_cagr_pct": 0.0,
@@ -4065,10 +1187,11 @@
                 "name": "Uruguay",
                 "value_usd": 0,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
                 "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_last_year_pct": -100.0
             }
         ],
         "top_suppliers_sample": [
@@ -4077,201 +1200,230 @@
                 "name": "Switzerland",
                 "value_usd": 364708,
                 "market_share_pct": 31.07,
+                "gained_share_over_5_years": true,
                 "quantity_latest": 4425,
                 "unit_value_latest": 82420.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 2.49,
+                "growth_last_year_pct": -4.82
             },
             {
                 "rank": 2,
                 "name": "China",
                 "value_usd": 197826,
                 "market_share_pct": 16.85,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 8994,
                 "unit_value_latest": 21995.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -2.16,
+                "growth_last_year_pct": 2.45
             },
             {
                 "rank": 3,
                 "name": "Hungary",
                 "value_usd": 57414,
                 "market_share_pct": 4.89,
+                "gained_share_over_5_years": true,
                 "quantity_latest": 463,
                 "unit_value_latest": 124004.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 1.24,
+                "growth_last_year_pct": -6.46
             },
             {
                 "rank": 4,
                 "name": "Italy",
                 "value_usd": 54987,
                 "market_share_pct": 4.68,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 3608,
                 "unit_value_latest": 15240.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -3.46,
+                "growth_last_year_pct": -6.2
             },
             {
                 "rank": 5,
                 "name": "Czech Republic",
                 "value_usd": 47162,
                 "market_share_pct": 4.02,
+                "gained_share_over_5_years": true,
                 "quantity_latest": 881,
                 "unit_value_latest": 53532.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 15.81,
+                "growth_last_year_pct": 5.14
             },
             {
                 "rank": 6,
                 "name": "Netherlands",
                 "value_usd": 46828,
                 "market_share_pct": 3.99,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 719,
                 "unit_value_latest": 65129.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -23.51,
+                "growth_last_year_pct": -4.14
             },
             {
                 "rank": 7,
                 "name": "Thailand",
                 "value_usd": 45960,
                 "market_share_pct": 3.92,
+                "gained_share_over_5_years": true,
                 "quantity_latest": 2610,
                 "unit_value_latest": 17609.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 2.18,
+                "growth_last_year_pct": 6.55
             },
             {
                 "rank": 8,
                 "name": "France",
                 "value_usd": 37951,
                 "market_share_pct": 3.23,
+                "gained_share_over_5_years": true,
                 "quantity_latest": 655,
                 "unit_value_latest": 57940.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 4.45,
+                "growth_last_year_pct": 10.6
             },
             {
                 "rank": 9,
                 "name": "Romania",
                 "value_usd": 35114,
                 "market_share_pct": 2.99,
+                "gained_share_over_5_years": true,
                 "quantity_latest": 699,
                 "unit_value_latest": 50235.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 7.36,
+                "growth_last_year_pct": -17.65
             },
             {
                 "rank": 10,
                 "name": "United States of America",
                 "value_usd": 27655,
                 "market_share_pct": 2.36,
+                "gained_share_over_5_years": true,
                 "quantity_latest": 130,
                 "unit_value_latest": 212731.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 5.11,
+                "growth_last_year_pct": -9.61
             },
             {
                 "rank": 11,
                 "name": "Poland",
                 "value_usd": 24631,
                 "market_share_pct": 2.1,
+                "gained_share_over_5_years": true,
                 "quantity_latest": 471,
                 "unit_value_latest": 52295.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 7.27,
+                "growth_last_year_pct": 13.42
             },
             {
                 "rank": 12,
                 "name": "Philippines",
                 "value_usd": 22597,
                 "market_share_pct": 1.93,
+                "gained_share_over_5_years": true,
                 "quantity_latest": 585,
                 "unit_value_latest": 38643.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 15.5,
+                "growth_last_year_pct": 30.54
             },
             {
                 "rank": 13,
                 "name": "Serbia",
                 "value_usd": 22104,
                 "market_share_pct": 1.88,
+                "gained_share_over_5_years": true,
                 "quantity_latest": 823,
                 "unit_value_latest": 26858.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 12.09,
+                "growth_last_year_pct": -7.9
             },
             {
                 "rank": 14,
                 "name": "Slovakia",
                 "value_usd": 18603,
                 "market_share_pct": 1.58,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 756,
                 "unit_value_latest": 24607.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -7.12,
+                "growth_last_year_pct": -8.17
             },
             {
                 "rank": 15,
                 "name": "Viet Nam",
                 "value_usd": 18110,
                 "market_share_pct": 1.54,
+                "gained_share_over_5_years": true,
                 "quantity_latest": 1043,
                 "unit_value_latest": 17363.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 9.01,
+                "growth_last_year_pct": -19.63
             },
             {
                 "rank": 16,
                 "name": "India",
                 "value_usd": 17435,
                 "market_share_pct": 1.49,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 658,
                 "unit_value_latest": 26497.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -4.42,
+                "growth_last_year_pct": -3.97
             },
             {
                 "rank": 17,
                 "name": "Japan",
                 "value_usd": 14988,
                 "market_share_pct": 1.28,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 388,
                 "unit_value_latest": 38643.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -12.55,
+                "growth_last_year_pct": -24.04
             },
             {
                 "rank": 18,
                 "name": "Austria",
                 "value_usd": 14943,
                 "market_share_pct": 1.27,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 346,
                 "unit_value_latest": 43188.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -16.28,
+                "growth_last_year_pct": -25.06
             },
             {
                 "rank": 19,
                 "name": "Slovenia",
                 "value_usd": 13325,
                 "market_share_pct": 1.14,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 196,
                 "unit_value_latest": 67985.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -7.94,
+                "growth_last_year_pct": 3.15
             },
             {
                 "rank": 20,
                 "name": "Sweden",
                 "value_usd": 11624,
                 "market_share_pct": 0.99,
+                "gained_share_over_5_years": true,
                 "quantity_latest": 117,
                 "unit_value_latest": 99350.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 72.4,
+                "growth_last_year_pct": 11.06
             }
+        ],
+        "suppliers_gaining_share": [
+            "Switzerland",
+            "Hungary",
+            "Czech Republic",
+            "Thailand",
+            "France",
+            "Romania",
+            "United States of America"
         ],
         "hhi": 1395.61,
         "concentration": "not concentrated",
@@ -4279,39 +1431,43 @@
         "name": "South Africa",
         "value_usd": 26,
         "market_share_pct": 0.0,
-        "quantity_latest": 0,
+        "gained_share_over_5_years": false,
+        "quantity_latest": null,
         "unit_value_latest": null,
-        "growth_cagr_pct": 0.0,
-        "growth_last_year_pct": 0.0,
+        "growth_cagr_pct": 30.37,
+        "growth_last_year_pct": -66.67,
         "regional_suppliers": [
             {
                 "rank": 34,
                 "name": "Morocco",
                 "value_usd": 1839,
                 "market_share_pct": 0.16,
+                "gained_share_over_5_years": true,
                 "quantity_latest": 24,
                 "unit_value_latest": 76625.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 14.0,
+                "growth_last_year_pct": -6.7
             },
             {
                 "rank": 37,
                 "name": "Tunisia",
                 "value_usd": 654,
                 "market_share_pct": 0.06,
+                "gained_share_over_5_years": true,
                 "quantity_latest": 9,
                 "unit_value_latest": 72667.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 238.18,
+                "growth_last_year_pct": 458.97
             },
             {
                 "rank": 58,
                 "name": "Eswatini",
                 "value_usd": 11,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
+                "growth_cagr_pct": 82.12,
                 "growth_last_year_pct": 0.0
             },
             {
@@ -4319,6 +1475,7 @@
                 "name": "Mauritius",
                 "value_usd": 7,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
                 "growth_cagr_pct": 0.0,
@@ -4329,6 +1486,7 @@
                 "name": "Egypt",
                 "value_usd": 3,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
                 "growth_cagr_pct": 0.0,
@@ -4339,9 +1497,10 @@
                 "name": "Algeria",
                 "value_usd": 0,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
+                "growth_cagr_pct": -100.0,
                 "growth_last_year_pct": 0.0
             },
             {
@@ -4349,6 +1508,7 @@
                 "name": "Cameroon",
                 "value_usd": 0,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
                 "growth_cagr_pct": 0.0,
@@ -4359,6 +1519,7 @@
                 "name": "Central African Republic",
                 "value_usd": 0,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
                 "growth_cagr_pct": 0.0,
@@ -4369,6 +1530,7 @@
                 "name": "Ghana",
                 "value_usd": 0,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
                 "growth_cagr_pct": 0.0,
@@ -4379,6 +1541,7 @@
                 "name": "Sierra Leone",
                 "value_usd": 0,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
                 "growth_cagr_pct": 0.0,
@@ -4389,9 +1552,10 @@
                 "name": "Sudan",
                 "value_usd": 0,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
+                "growth_cagr_pct": -100.0,
                 "growth_last_year_pct": 0.0
             },
             {
@@ -4399,6 +1563,7 @@
                 "name": "Tanzania, United Republic of",
                 "value_usd": 0,
                 "market_share_pct": 0.0,
+                "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
                 "growth_cagr_pct": 0.0,
@@ -4408,5 +1573,45 @@
     },
     "your_country_global_exports": {
         "total_exports_to_world_usd": 11088
+    },
+    "business_partners_sample": [
+        {
+            "name": "F&G Telecommunications CC",
+            "city": "Bloemfontein",
+            "website": "http://www.hymax-bloemfontein.co.za"
+        }
+    ],
+    "factsheet_metrics": {
+        "target_market_total_imports_usd": 1173800,
+        "target_market_imports_from_your_country_usd": 26,
+        "your_country_share_of_target_imports_pct": 0.0,
+        "target_market_rank_in_world_imports": 4,
+        "target_market_unit_value_latest": 38643.0,
+        "your_country_unit_value_latest": null,
+        "world_unit_value_latest": 38643.0,
+        "top_suppliers_top5": [
+            {
+                "name": "Switzerland",
+                "share_pct": 31.07
+            },
+            {
+                "name": "China",
+                "share_pct": 16.85
+            },
+            {
+                "name": "Hungary",
+                "share_pct": 4.89
+            },
+            {
+                "name": "Italy",
+                "share_pct": 4.68
+            },
+            {
+                "name": "Czech Republic",
+                "share_pct": 4.02
+            }
+        ],
+        "hhi": 1395.61,
+        "concentration": "not concentrated"
     }
 }

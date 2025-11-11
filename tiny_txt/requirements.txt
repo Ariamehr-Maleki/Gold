@@ -1,0 +1,9 @@
+# --- Core Libraries ---
+# Last checked: November 2025
+# Selenium now requires Python 3.10+
+selenium>=4.18.0
+
+# BeautifulSoup supports Python 3.7+
+beautifulsoup4>=4.12.3
+
+# --- Scientific Stack -

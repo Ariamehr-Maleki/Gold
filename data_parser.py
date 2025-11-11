@@ -1,91 +1,68 @@
-# data_parser.py (Corrected with missing function restored)
+# data_parser.py (Corrected and Enhanced)
 
 import pandas as pd
 import re
 import os
 import math
 from spider_core import logging
-# --- NEW: Import the library for country-to-continent conversion ---
 import pycountry_convert as pc
 
-# --- NEW: Function to get continent from country name ---
 def get_continent(country_name):
-    """
-    Converts a country name to its continent name.
-    Handles common exceptions and different naming conventions.
-    """
-    # Manual mapping for names that the library doesn't recognize well
     country_map = {
-        "Bolivia (Plurinational State of)": "Bolivia",
-        "Brunei Darussalam": "Brunei",
-        "Iran (Islamic Republic of)": "Iran",
-        "Korea, Republic of": "South Korea",
-        "Russian Federation": "Russia",
-        "United Kingdom": "United Kingdom",
-        "United States of America": "United States",
-        "Viet Nam": "Vietnam",
-        "China, Hong Kong SAR": "Hong Kong",
-        "State of Palestine": "Palestine",
+        "Bolivia (Plurinational State of)": "Bolivia", "Brunei Darussalam": "Brunei",
+        "Iran (Islamic Republic of)": "Iran", "Korea, Republic of": "South Korea",
+        "Russian Federation": "Russia", "United Kingdom": "United Kingdom",
+        "United States of America": "United States", "Viet Nam": "Vietnam",
+        "China, Hong Kong SAR": "Hong Kong", "State of Palestine": "Palestine",
         "Türkiye": "Turkey"
     }
-    # Standardize and clean the name
     country_name = country_map.get(country_name, country_name).strip()
-    
     try:
         country_alpha2 = pc.country_name_to_country_alpha2(country_name)
         continent_code = pc.country_alpha2_to_continent_code(country_alpha2)
-        continent_name = pc.convert_continent_code_to_continent_name(continent_code)
-        return continent_name
-    except (KeyError, Exception):
-        # Return "Unknown" quietly to avoid cluttering logs for every minor parsing difference
+        return pc.convert_continent_code_to_continent_name(continent_code)
+    except Exception:
         return "Unknown"
 
-# --- NEW: Function to add regional supplier data ---
 def _add_regional_suppliers(final_data, config):
-    """
-    Parses the full supplier list and adds a new key with regional suppliers.
-    """
     logging.info("Classifying suppliers by region...")
     your_country_name = config.get('your_country')
     your_region = get_continent(your_country_name)
-
     if your_region == "Unknown":
-        logging.error(f"Could not determine the region for '{your_country_name}'. Cannot find regional suppliers.")
+        logging.error(f"Could not determine region for '{your_country_name}'.")
         final_data["regional_suppliers"] = []
         return final_data
-
-    logging.info(f"'{your_country_name}' is in '{your_region}'. Finding other suppliers from this region.")
     
     regional_suppliers = []
     full_supplier_list = final_data.get('suppliers_full_list', [])
-
     for supplier in full_supplier_list:
         supplier_name = supplier.get('name')
         if supplier_name and get_continent(supplier_name) == your_region:
-            # We don't want to list our own country as a regional supplier to itself
             if supplier_name.lower() != your_country_name.lower():
                 regional_suppliers.append(supplier)
-
     final_data["regional_suppliers"] = regional_suppliers
     logging.info(f"Found {len(regional_suppliers)} other suppliers from {your_region}.")
     return final_data
 
-# This function is the base parser for the "value" file
 def _parse_timeseries_txt(file_path, config):
     logging.info(f"Parsing Time Series data from TXT file: {os.path.basename(file_path)}")
     try:
         df = pd.read_csv(file_path, sep='\t', header=0, encoding='utf-8-sig')
         df.columns = [col.strip().strip('"') for col in df.columns]
         df = df.apply(lambda x: x.str.strip().str.strip('"') if x.dtype == "object" else x)
-
         data_source_col = df.columns[0]
 
-        value_cols = [col for col in df.columns if re.search(r'value in \d{4}', col.lower())]
-        qty_cols = [col for col in df.columns if re.search(r'quantity in \d{4}', col.lower()) or re.search(r'qty in \d{4}', col.lower())]
-        uv_cols = [col for col in df.columns if re.search(r'unit value in \d{4}', col.lower())]
+        # --- FIX 1: More flexible column identification to handle inconsistent naming ---
+        # This new logic correctly identifies columns with years regardless of the text around them.
+        all_year_cols = [col for col in df.columns if re.search(r'\d{4}', col)]
+        value_cols = [c for c in all_year_cols if 'value' in c.lower() and 'unit' not in c.lower()]
+        qty_cols = [c for c in all_year_cols if 'quantity' in c.lower()]
+        uv_cols = [c for c in all_year_cols if 'unit value' in c.lower()]
+        # --- END OF FIX 1 ---
 
+        # If value columns are still not found (e.g., file only has one 'Value' column), try a fallback.
         if not value_cols:
-            value_cols = [col for col in df.columns if 'value in' in col.lower() or col.lower().endswith('value')]
+            value_cols = [col for col in df.columns if 'value' in col.lower()]
         
         for col in value_cols + qty_cols + uv_cols:
             df[col] = pd.to_numeric(df[col], errors='coerce')
@@ -95,9 +72,13 @@ def _parse_timeseries_txt(file_path, config):
             m = re.search(r'(\d{4})', col)
             return int(m.group(1)) if m else None
 
-        years = sorted([year for c in (value_cols or qty_cols) if (year := year_from_col(c))])
-        latest_year, start_year = (years[-1], years[0]) if years else (None, None)
-        periods = (latest_year - start_year) if latest_year and start_year and (latest_year - start_year) > 0 else 1
+        years = sorted(list(set([year for c in value_cols if (year := year_from_col(c))])))
+        if not years:
+             logging.error("Could not extract any years from the column headers. Aborting parse.")
+             return {}
+        
+        latest_year, start_year = years[-1], years[0]
+        periods = (latest_year - start_year) if (latest_year - start_year) > 0 else 1
 
         def col_for_year(prefix_cols, y):
             return next((c for c in prefix_cols if str(y) in c), None)
@@ -109,48 +90,77 @@ def _parse_timeseries_txt(file_path, config):
             return round(((end / start) ** (1 / n) - 1) * 100, 2)
         
         world_row = df[df[data_source_col].astype(str).str.lower() == 'world']
-        if not world_row.empty and years:
-            world_values = [int(world_row[vc].iloc[0]) if (vc := col_for_year(value_cols, y)) else 0 for y in years]
-            world_quantities = [int(world_row[qc].iloc[0]) if qty_cols and (qc := col_for_year(qty_cols, y)) else None for y in years]
-            world_unit_values = [float(world_row[uc].iloc[0]) if uv_cols and (uc := col_for_year(uv_cols, y)) else None for y in years]
-            data.update({'world_values_usd': world_values, 'world_quantities': world_quantities, 'world_unit_values': world_unit_values})
-            data['total_value_usd'] = world_values[-1] if world_values else 0
-            if len(world_values) >= 2:
-                last, prev = world_values[-1], world_values[-2]
-                data['market_growth_last_year_pct'] = round((last - prev) / prev * 100, 2) if prev > 0 else 0.0
-                data['market_growth_cagr_pct'] = safe_cagr(last, world_values[0], periods)
+        if not world_row.empty:
+            world_values = [int(world_row[vc].iloc[0]) if (vc := col_for_year(value_cols, y)) is not None and vc in world_row else 0 for y in years]
+            world_quantities = [int(world_row[qc].iloc[0]) if qty_cols and (qc := col_for_year(qty_cols, y)) is not None and qc in world_row else None for y in years]
+            world_unit_values = [float(world_row[uc].iloc[0]) if uv_cols and (uc := col_for_year(uv_cols, y)) is not None and uc in world_row else None for y in years]
+            
+            data.update({
+                'world_values_usd': world_values, 
+                'world_quantities': world_quantities, 
+                'world_unit_values': world_unit_values
+            })
+            
+            if world_values:
+                data['total_value_usd'] = world_values[-1]
+                if len(world_values) >= 2:
+                    last, prev = world_values[-1], world_values[-2]
+                    data['market_growth_last_year_pct'] = round((last - prev) / prev * 100, 2) if prev > 0 else 0.0
+                    data['market_growth_cagr_pct'] = safe_cagr(last, world_values[0], periods)
 
         suppliers = []
         try:
             comp_df = df[df[data_source_col].astype(str).str.lower() != 'world']
-            latest_val_col = col_for_year(value_cols, years[-1]) if years else None
+            latest_val_col = col_for_year(value_cols, latest_year)
+            start_val_col = col_for_year(value_cols, start_year)
+            
             comp_df_sorted = comp_df.sort_values(by=latest_val_col, ascending=False) if latest_val_col else comp_df
-            world_total = data.get('total_value_usd') or (comp_df_sorted[latest_val_col].sum() if latest_val_col in comp_df_sorted.columns else 0)
+            world_total = data.get('total_value_usd') or (comp_df_sorted[latest_val_col].sum() if latest_val_col in comp_df_sorted else 0)
 
             for i, row in comp_df_sorted.iterrows():
                 name = str(row[data_source_col]).strip()
                 v_latest = int(row.get(latest_val_col, 0))
-                q_col, u_col = (col_for_year(qty_cols, years[-1]), col_for_year(uv_cols, years[-1])) if years else (None, None)
+                
+                # Market Share Calculation
+                share_latest = round((v_latest / world_total) * 100, 2) if world_total else 0.0
+                
+                # --- ENHANCEMENT: Logic for gaining/losing market share ---
+                v_start = row.get(start_val_col, 0) if start_val_col else 0
+                world_start_total = data['world_values_usd'][0] if data.get('world_values_usd') else 0
+                share_start = round((v_start / world_start_total) * 100, 2) if world_start_total > 0 else 0.0
+                gained_share = share_latest > share_start
+                # --- END OF ENHANCEMENT ---
+
+                q_col, u_col = (col_for_year(qty_cols, latest_year), col_for_year(uv_cols, latest_year))
                 q_latest = int(row[q_col]) if q_col and pd.notna(row[q_col]) else None
                 u_latest = float(row[u_col]) if u_col and pd.notna(row[u_col]) else None
                 cagr, last_year_growth = 0.0, 0.0
-                if years and len(years) >= 2:
+
+                if len(years) >= 2:
                     val_col_prev = col_for_year(value_cols, years[-2])
                     v_prev = row.get(val_col_prev) if val_col_prev else 0
                     if pd.notna(v_prev) and v_prev > 0:
                         last_year_growth = round((v_latest - v_prev) / v_prev * 100, 2)
-                if years and periods > 0:
-                    val_col_start = col_for_year(value_cols, start_year)
-                    v_start = row.get(val_col_start) if val_col_start else 0
-                    if pd.notna(v_start) and v_start > 0:
-                        cagr = safe_cagr(v_latest, v_start, periods)
-                suppliers.append({'rank': len(suppliers) + 1, 'name': name, 'value_usd': v_latest, 'market_share_pct': round((v_latest / world_total) * 100, 2) if world_total else 0.0, 'quantity_latest': q_latest, 'unit_value_latest': u_latest, 'growth_cagr_pct': cagr, 'growth_last_year_pct': last_year_growth})
+                
+                if pd.notna(v_start) and v_start > 0:
+                    cagr = safe_cagr(v_latest, v_start, periods)
+
+                suppliers.append({
+                    'rank': len(suppliers) + 1, 'name': name, 'value_usd': v_latest, 
+                    'market_share_pct': share_latest, 'gained_share_over_5_years': gained_share,
+                    'quantity_latest': q_latest, 'unit_value_latest': u_latest, 
+                    'growth_cagr_pct': cagr, 'growth_last_year_pct': last_year_growth
+                })
 
             data['suppliers_full_list'] = suppliers
             data['top_suppliers_sample'] = suppliers[:20]
+            # Add list of suppliers who gained market share
+            data['suppliers_gaining_share'] = [s['name'] for s in suppliers[:10] if s['gained_share_over_5_years']]
+            
             hhi = sum(s['market_share_pct'] ** 2 for s in suppliers[:50])
             data['hhi'] = round(hhi, 2)
             data['concentration'] = 'not concentrated' if hhi < 1500 else 'moderately concentrated' if hhi < 2500 else 'concentrated'
+            
             if found := next((s for s in suppliers if s['name'].lower() == config['your_country'].lower()), None):
                 data.update(found)
         except Exception as e:
@@ -168,23 +178,47 @@ def _merge_supplementary_data(base_data, file_path, data_type='quantity'):
         df = pd.read_csv(file_path, sep='\t', header=0, encoding='utf-8-sig', dtype=str).fillna('0')
         df.columns = [c.strip().strip('"') for c in df.columns]
         partner_col = df.columns[0]
+        
+        # Convert all year columns to numeric
+        year_cols = [c for c in df.columns if re.search(r'\d{4}', c)]
+        for col in year_cols:
+            df[col] = pd.to_numeric(df[col].str.replace(',', ''), errors='coerce').fillna(0)
+
+        # --- FIX: Process the 'World' row specifically to populate overall market metrics ---
+        world_row = df[df[partner_col].str.lower() == 'world']
+        if not world_row.empty:
+            for i, year in enumerate(base_data.get('years', [])):
+                year_col = next((c for c in year_cols if str(year) in c), None)
+                if year_col:
+                    world_value = world_row[year_col].iloc[0]
+                    if data_type == 'quantity' and 'world_quantities' in base_data and i < len(base_data['world_quantities']):
+                        base_data['world_quantities'][i] = int(world_value)
+                    elif data_type == 'unit_value' and 'world_unit_values' in base_data and i < len(base_data['world_unit_values']):
+                        base_data['world_unit_values'][i] = float(world_value)
+        # --- END OF FIX ---
+
+        # Process individual supplier rows
         latest_year = base_data.get('latest_year')
         if not latest_year: return
+        
         target_col_name = next((c for c in df.columns if str(latest_year) in c), None)
         if not target_col_name: return
-        df[target_col_name] = pd.to_numeric(df[target_col_name].str.replace(',', ''), errors='coerce').fillna(0)
+
         suppliers_map = {s['name'].lower(): s for s in base_data['suppliers_full_list']}
-        for _, row in df.iterrows():
+        
+        # Iterate over non-world rows
+        for _, row in df[df[partner_col].str.lower() != 'world'].iterrows():
             partner_name = str(row[partner_col]).strip()
             if partner_name.lower() in suppliers_map:
                 target_partner = suppliers_map[partner_name.lower()]
                 value = row[target_col_name]
-                if data_type == 'quantity': target_partner['quantity_latest'] = int(value)
-                elif data_type == 'unit_value': target_partner['unit_value_latest'] = float(value)
+                if data_type == 'quantity': 
+                    target_partner['quantity_latest'] = int(value)
+                elif data_type == 'unit_value': 
+                    target_partner['unit_value_latest'] = float(value)
     except Exception as e:
         logging.error(f"Failed to merge supplementary data from {file_path}. Error: {e}")
-
-
+        
 def parse_full_timeseries(value_file, quantity_file, unit_value_file, config):
     logging.info("--- Starting full timeseries parsing and merging from 3 files ---")
     if not value_file or not os.path.exists(value_file):
@@ -204,43 +238,50 @@ def parse_full_timeseries(value_file, quantity_file, unit_value_file, config):
         if supplier.get('unit_value_latest') is None and value and quantity and quantity > 0:
             supplier['unit_value_latest'] = round((value * 1000) / quantity, 2)
     
-    # --- MODIFIED: Add regional supplier data if applicable ---
-    # This check ensures we only run classification on data that has a supplier list (i.e., not world data)
     if any(s['name'].lower() != 'world' for s in final_data.get('suppliers_full_list', [])):
         final_data = _add_regional_suppliers(final_data, config)
 
     logging.info("Successfully merged all timeseries data.")
     return final_data
 
-# --- THIS FUNCTION WAS MISSING AND HAS BEEN RESTORED ---
+# --- FIX 2: RESTORED the missing parse_world_importers_txt function ---
 def parse_world_importers_txt(file_path, config):
     logging.info(f"Parsing World Importers data from TXT file: {os.path.basename(file_path)}")
     try:
         df = pd.read_csv(file_path, sep='\t', header=0, encoding='utf-8-sig', dtype=str).fillna('0')
         df.columns = [c.strip().strip('"') for c in df.columns]
         importers_col = df.columns[0]
-        value_col = next((c for c in df.columns if 'value' in c.lower() and re.search(r'\d{4}', c)), df.columns[1])
-        cagr_col = next((c for c in df.columns if 'annual growth' in c.lower()), None)
+
+        # Find the latest year's value column
+        year_cols = [c for c in df.columns if re.search(r'\d{4}', c)]
+        years = sorted([int(re.search(r'(\d{4})', c).group(1)) for c in year_cols])
+        latest_year = years[-1]
+        value_col = next(c for c in year_cols if str(latest_year) in c and 'value' in c.lower())
+        
+        # Convert value column to numeric
         df[value_col] = pd.to_numeric(df[value_col].str.replace(',', ''), errors='coerce').fillna(0)
-        if cagr_col: df[cagr_col] = pd.to_numeric(df[cagr_col].str.replace(',', ''), errors='coerce').fillna(0)
-        world_df = df[df[importers_col].str.lower() == 'world']
-        if world_df.empty: return {}
-        world_row = world_df.iloc[0]
+
+        world_row = df[df[importers_col].str.lower() == 'world'].iloc[0]
         world_total_imports = world_row[value_col]
-        world_import_cagr = world_row.get(cagr_col, 0.0)
+        
         importers_df = df[df[importers_col].str.lower() != 'world'].copy()
         importers_df['rank'] = importers_df[value_col].rank(method='dense', ascending=False).astype(int)
+        
         target_market_row = importers_df[importers_df[importers_col].str.lower() == config['target_market'].lower()]
-        target_market_rank = int(target_market_row.iloc[0]['rank']) if not target_market_row.empty else 'Not found'
+        
+        if not target_market_row.empty:
+            target_market_rank = int(target_market_row.iloc[0]['rank'])
+        else:
+            target_market_rank = 'Not found in top importers'
+
         return {
             "world_total_imports_usd": int(world_total_imports),
-            "world_imports_growth_cagr_pct": float(world_import_cagr),
-            "target_market_world_rank": int(target_market_rank) if isinstance(target_market_rank, (int, float)) else target_market_rank
+            "target_market_world_rank": target_market_rank
         }
     except Exception as e:
         logging.error(f"Could not parse world importers file. Error: {e}", exc_info=True)
         return {}
-# --- END OF RESTORED FUNCTION ---
+# --- END OF FIX 2 ---
 
 def parse_company_txt(file_path):
     logging.info(f"Parsing Company data from TXT file: {os.path.basename(file_path)}")

@@ -1,0 +1,19 @@
+﻿Importers	Exported value in 2020	Exported value in 2021	Exported value in 2022	Exported value in 2023	Exported value in 2024	
+"World"	3878	6144	5289	7348	11088	
+"United States of America"	12	230	412	1813	3548	
+"Botswana"	505	1007	714	1450	1182	
+"Namibia"	653	898	811	744	981	
+"Canada"	4	1	4	19	734	
+"Lesotho"	49	96	195	146	714	
+"Zambia"	526	886	869	727	682	
+"France"	7	1	1	7	502	
+"Mozambique"	342	363	352	344	388	
+"Eswatini"	165	231	292	315	315	
+"Congo, Democratic Republic of the"	220	360	366	396	291	
+"Madagascar"	65	31	21	26	246	
+"Zimbabwe"	317	407	187	175	245	
+"Angola"	252	54	194	174	235	
+"Côte d'Ivoire"	1	8	3	13	159	
+"Uganda"	17	6	7	19	102	
+"United Kingdom"	80	27	37	58	96	
+"Tanz

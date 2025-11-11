@@ -188,27 +188,95 @@ class TradeSpider(object):
         if not self.navigate_to_companies_page(config['hs_code'], config['target_market_id'], trade_flow):
             return []
         try:
-            category_links_xpath = "//table[@id='ctl00_PageContent_MyGridView1']//a[contains(@id, 'LinkButton_CompanyProduct')]"
-            try:
-                WebDriverWait(self.driver, 5).until(EC.presence_of_element_located((By.XPATH, category_links_xpath)))
-                is_intermediate_page = True
-            except TimeoutException:
-                is_intermediate_page = False
+            # 2. Wait for the product clarification table to be visible.
+            clarification_table = (By.ID, "ctl00_PageContent_MyGridView1")
+            logging.info("Waiting for the product clarification table to appear...")
+            self.wait.until(EC.visibility_of_element_located(clarification_table))
+            logging.info("Clarification table found.")
 
-            if is_intermediate_page:
-                first_link_el = self.wait.until(EC.element_to_be_clickable((By.XPATH, category_links_xpath)))
-                category_name = first_link_el.text.strip()
-                logging.info(f"Found product categories. Clicking the first one to get a sample: '{category_name}'")
-                # use safe click and wait a little
-                self.driver.execute_script("arguments[0].scrollIntoView(true);", first_link_el)
-                time.sleep(random.uniform(0.8, 1.5))
-                if not self._safe_click(By.XPATH, category_links_xpath):
-                    logging.error("Failed to click first category link.")
-                    return []
-                # let the page settle
-                time.sleep(random.uniform(1.5, 3.0))
-            else:
-                logging.info("No sub-categories found. Proceeding to download directly.")
+            # 2a. Find product anchors (ignore header anchors). Prefer anchors with id containing 'LinkButton_CompanyProduct'
+            product_anchors = self.driver.find_elements(By.XPATH, "//a[contains(@id,'LinkButton_CompanyProduct')]")
+
+            if not product_anchors:
+                # Fallback: find anchors in data rows (ignore header <th>)
+                product_anchors = self.driver.find_elements(By.XPATH, "//table[@id='ctl00_PageContent_MyGridView1']//tr[td]//a")
+
+            if not product_anchors:
+                logging.error("No product anchors found on clarification page.")
+                self._save_snapshot("company_no_product_anchors")
+                return False
+
+            # Pick the first product anchor
+            first_anchor = product_anchors[0]
+            logging.info(f"Found {len(product_anchors)} product anchors; clicking the first: id={first_anchor.get_attribute('id')} text='{first_anchor.text}'")
+
+            # Try a sequence of click strategies (safe_click -> JS click -> execute onclick -> __doPostBack)
+            clicked = False
+            try:
+                # Strategy 1: use _safe_click by building an exact xpath for this element
+                anchor_id = first_anchor.get_attribute("id")
+                if anchor_id:
+                    anchor_xpath = f"//*[@id='{anchor_id}']"
+                    logging.info("Attempting _safe_click on anchor by id...")
+                    if self._safe_click(By.XPATH, anchor_xpath):
+                        clicked = True
+                # Strategy 2: JS click on the element object
+                if not clicked:
+                    logging.info("Attempting JS click (arguments[0].click())...")
+                    try:
+                        self.driver.execute_script("arguments[0].scrollIntoView(true); arguments[0].click();", first_anchor)
+                        clicked = True
+                    except Exception as e:
+                        logging.debug(f"JS click failed: {e}")
+                # Strategy 3: Execute the element's onclick JS directly (if present)
+                if not clicked:
+                    onclick_js = first_anchor.get_attribute("onclick")
+                    if onclick_js:
+                        logging.info("Attempting to run onclick JS directly.")
+                        try:
+                            # remove leading 'javascript:' if present
+                            exec_js = onclick_js.strip()
+                            if exec_js.lower().startswith("javascript:"):
+                                exec_js = exec_js[len("javascript:"):]
+                            self.driver.execute_script(exec_js)
+                            clicked = True
+                        except Exception as e:
+                            logging.debug(f"Executing onclick JS failed: {e}")
+                # Strategy 4: If href contains __doPostBack, call it explicitly
+                if not clicked:
+                    href = first_anchor.get_attribute("href") or ""
+                    if "__doPostBack" in href:
+                        logging.info("Attempting to call __doPostBack from href.")
+                        try:
+                            # href looks like "javascript:__doPostBack('ctl00$PageContent$MyGridView1$ctl03$LinkButton_CompanyProduct','')"
+                            js_call = href.strip()
+                            if js_call.lower().startswith("javascript:"):
+                                js_call = js_call[len("javascript:"):]
+                            self.driver.execute_script(js_call)
+                            clicked = True
+                        except Exception as e:
+                            logging.debug(f"Calling __doPostBack failed: {e}")
+            except Exception as e:
+                logging.error(f"Exception while attempting click strategies: {e}", exc_info=True)
+
+            if not clicked:
+                logging.error("All click strategies failed for the first product anchor.")
+                self._save_snapshot("company_first_anchor_click_failed")
+                return False
+
+            # After click, wait for either the expected CompaniesList.aspx URL or a clear landmark on the resulting page.
+            try:
+                logging.info("Waiting for final companies list page or an expected landmark after clicking...")
+                WebDriverWait(self.driver, 20).until(EC.any_of(
+                    EC.url_contains("CompaniesList.aspx"),
+                    EC.presence_of_element_located((By.ID, "ctl00_PageContent_MyGridView1")),  # table on final page
+                    EC.presence_of_element_located((By.XPATH, "//input[@type='image' and @title='Text file']"))  # the text file download button
+                ))
+                logging.info("Successfully handled redirect and landed on the final companies list page (or landmark found).")
+            except Exception as e:
+                logging.error(f"Failed to detect final companies page after click: {e}", exc_info=True)
+                self._save_snapshot("company_post_click_verify_failed")
+                return False
 
             download_button_xpath = "//input[@type='image' and @title='Text file']"
             logging.info("Company list page loaded. Waiting for download button to be ready.")
