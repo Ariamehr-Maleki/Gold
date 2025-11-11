@@ -1,4 +1,4 @@
-# data_downloader.py (Final Version with Specialized Company Page Handler)
+# data_downloader.py (Final Version with Robust JavaScript Click)
 
 from spider_core import TradeSpider, logging
 from selenium.webdriver.support import expected_conditions as EC
@@ -13,7 +13,6 @@ import glob
 class DataDownloader(TradeSpider):
 
     def navigate_to_world_view_page(self, config, view='value'):
-        # ... (no changes needed in this method)
         max_attempts = 4
         hs_code = config['hs_code']
         for attempt in range(1, max_attempts + 1):
@@ -43,7 +42,6 @@ class DataDownloader(TradeSpider):
         return False
 
     def navigate_to_country_view_page(self, config, country_id, trade_flow='I', view='value'):
-        # ... (no changes needed in this method)
         max_attempts = 4
         hs_code = config['hs_code']
         for attempt in range(1, max_attempts + 1):
@@ -74,50 +72,47 @@ class DataDownloader(TradeSpider):
         return False
 
     def navigate_to_companies_page(self, config, trade_flow='I'):
-        """
-        Navigates to the companies page, intelligently handling the potential
-        redirect to a product clarification page.
-        """
         country_id = config['target_market_id']
         product_code = config['hs_code']
         logging.info(f"Navigating to Companies page for product {product_code}, country {country_id}")
         trade_flow_code = '1' if trade_flow == 'I' else '2'
         url = f"https://www.trademap.org/CompaniesList.aspx?nvpm=1|{country_id}||||{product_code}|||4|1|1|{trade_flow_code}|3|1|1|1|1|4"
         
-        # --- FIX APPLIED HERE: This logic is now robust to the redirect ---
         logging.info(f"Navigating directly to COMPANIES URL: {url}")
         self.driver.get(url)
         
-        # Give the page a moment to settle and potentially redirect.
         time.sleep(3)
         
-        # Check if we were redirected to the clarification page.
         if "CorrespondingProductsCompanies.aspx" in self.driver.current_url:
             logging.warning("Redirected to product clarification page. This is expected. Handling redirect...")
             try:
-                # 1. WAIT for the table on the redirect page to be visible. THIS IS THE KEY.
                 clarification_table = (By.ID, "ctl00_PageContent_MyGridView1")
                 logging.info("Waiting for the product clarification table to appear...")
                 self.wait.until(EC.visibility_of_element_located(clarification_table))
                 logging.info("Clarification table found.")
 
-                # 2. Click the first product in the list to proceed.
-                first_product_link = (By.XPATH, "//table[@id='ctl00_PageContent_MyGridView1']//a[1]")
-                logging.info("Clicking the first product in the list to clarify...")
-                if not self._safe_click(*first_product_link):
-                    logging.error("Could not click the first product link on the clarification page.")
-                    return False
+                # --- START OF FIX ---
+                # The original click method can fail on JavaScript links.
+                # We will now use a direct JavaScript execution which is more reliable.
+                logging.info("Attempting to click the first product link using a direct JavaScript call...")
+                first_product_link_locator = (By.XPATH, "//table[@id='ctl00_PageContent_MyGridView1']//a[1]")
                 
-                # 3. Wait for the browser to arrive at the final, correct companies list page.
+                # 1. Wait for the element to be present and find it
+                link_element = self.wait.until(EC.presence_of_element_located(first_product_link_locator))
+                
+                # 2. Execute the click via JavaScript
+                self.driver.execute_script("arguments[0].click();", link_element)
+                logging.info("JavaScript click executed successfully.")
+                # --- END OF FIX ---
+                
                 self.wait.until(EC.url_contains("CompaniesList.aspx"))
                 logging.info("Successfully handled redirect and landed on the final companies list page.")
-                return True # Success!
+                return True
             except Exception as e:
                 logging.error(f"Failed to handle the company page redirect after landing on it. Error: {e}")
                 self._save_snapshot("company_redirect_handler_failed")
                 return False
         
-        # If we were not redirected and are already on the right page, confirm it.
         elif "CompaniesList.aspx" in self.driver.current_url:
             logging.info("Successfully landed on the companies list page directly.")
             return True
@@ -126,13 +121,8 @@ class DataDownloader(TradeSpider):
             logging.error(f"Navigation to companies page failed. Ended up on an unknown page: {self.driver.current_url}")
             self._save_snapshot("company_navigation_unknown_failure")
             return False
-        # --- END OF FIX ---
 
     def _download_file(self, rename_to: str | None = None, clean_dir: bool = True):
-        """
-        Clicks the download button and waits for a new file to appear.
-        The clean_dir flag is now correctly managed by the calling functions.
-        """
         if clean_dir:
             logging.info(f"Cleaning old text files from '{self.download_dir}'...")
             for f in glob.glob(os.path.join(self.download_dir, "*.txt*")):
@@ -148,33 +138,31 @@ class DataDownloader(TradeSpider):
             logging.info(f"Download attempt {attempt}/{max_attempts} for '{rename_to or 'file'}'...")
             if not self._safe_click(By.XPATH, click_xpath):
                 logging.error(f"Failed to click download button for '{rename_to}'.")
-                continue # Retry the click
+                continue 
             
             timeout = 60
             end_time = time.time() + timeout
             downloaded_file_path = None
             
-            # Wait loop for the file to appear
             while time.time() < end_time:
                 new_files = set(glob.glob(os.path.join(self.download_dir, "*.txt"))) - existing_files
                 if new_files:
                     latest_file = new_files.pop()
-                    time.sleep(1.5) # Give a moment for the download to finalize
+                    time.sleep(1.5) 
                     try:
                         if os.path.getsize(latest_file) > 0:
                             downloaded_file_path = latest_file
                             logging.info(f"NEW file download confirmed: {os.path.basename(downloaded_file_path)}")
-                            break # Exit the wait loop
+                            break 
                     except Exception as e:
                         logging.debug(f"Error checking file size (file may be locked): {e}")
                 time.sleep(0.5)
 
             if downloaded_file_path:
-                # File was downloaded successfully
                 if rename_to:
                     try:
                         new_path = os.path.join(self.download_dir, rename_to)
-                        os.replace(downloaded_file_path, new_path) # Atomic operation is better than move
+                        os.replace(downloaded_file_path, new_path) 
                         logging.info(f"Successfully renamed downloaded file to '{rename_to}'")
                         return new_path
                     except OSError as e:
@@ -183,7 +171,6 @@ class DataDownloader(TradeSpider):
                 return downloaded_file_path
             
             logging.warning(f"Download attempt {attempt} timed out. No new .txt file was found.")
-            # End of while attempt < max_attempts loop
             
         logging.error(f"All download attempts failed for '{rename_to}'.")
         return None

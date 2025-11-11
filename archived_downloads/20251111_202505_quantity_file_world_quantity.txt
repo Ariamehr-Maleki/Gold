@@ -1,0 +1,226 @@
+﻿Importers	2020-Imported quantity	2020-Unit	2021-Imported quantity	2021-Unit	2022-Imported quantity	2022-Unit	2023-Imported quantity	2023-Unit	2024-Imported quantity	2024-Unit	
+"World"	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	
+"Hong Kong, China"	22839	Tons	767336717	Units	438081036	Units	427439738	Units	418898654	Units	
+"United States of America"	306036879	Units	357080284	Units	335575131	Units	318424612	Units	323981100	Units	
+"Thailand"	219410435	Units	264938069	Units	235219467	Units	207308207	Units	255877155	Units	
+"India"	4936	Tons	6859	Tons	8105	Tons	222291310	Units	251330620	Units	
+"South Africa"	1843641	Units	3103872	Units	2971782	Units	3119520	Units	88538750	Units	
+"Singapore"	87202097	Units	101682510	Units	89715568	Units	72468644	Units	76455826	Units	
+"Malaysia"	48647491	Units	66866516	Units	65969030	Units	73233147	Units	49940013	Units	
+"Canada"	33263208	Units	35675055	Units	33422670	Units	33469839	Units	30113561	Units	
+"Pakistan"	977179	Units	118574	Units	644142	Units	2385243	Units	8902066	Units	
+"Australia"	2037721	Units	2790162	Units	3158675	Units	3436135	Units	3120856	Units	
+"Sri Lanka"	71	Tons	116	Tons	1313700	Units	1061598	Units	1839726	Units	
+"Chile"	509100	Units	789329	Units	524576	Units	552441	Units	675159	Units	
+"Papua New Guinea"	0	Mixed	28140	Units	27946	Units	29202	Units	72724	Units	
+"China"	47376	Tons	50407	Tons	43221	Tons	37016	Tons	35502	Tons	
+"Czech Republic"	45412	Tons	43962	Tons	60819	Units	40681	Tons	30655	Tons	
+"Germany"	40259	Tons	45054	Tons	40423	Tons	31661	Tons	30376	Tons	
+"Korea, Republic of"	23946	Tons	26627	Tons	25687	Tons	26083	Tons	27112	Tons	
+"Japan"	25276	Tons	30515	Tons	29786	Tons	26360	Tons	25949	Tons	
+"Mexico"	17007	Tons	19742	Tons	19924	Tons	233415598	Units	22014	Tons	
+"Brazil"	14528	Tons	18904	Tons	14247	Tons	14474	Tons	20761	Tons	
+"Italy"	19972	Tons	23807	Tons	25328	Tons	22352	Tons	20207	Tons	
+"Philippines"	6743	Tons	7854	Tons	14319	Tons	10761	Tons	18606	Tons	
+"Türkiye"	16114	Tons	19552	Tons	16135	Tons	17073	Tons	16299	Tons	
+"Mauritius"	12448	Units	16954	Units	15948	Units	16385	Units	16266	Units	
+"Poland"	13076	Tons	14121	Tons	13148	Tons	14532	Tons	16207	Tons	
+"Indonesia"	11642	Tons	13583	Tons	12303	Tons	13099	Tons	15890	Tons	
+"Spain"	14108	Tons	16783	Tons	16313	Tons	15439	Tons	13930	Tons	
+"Netherlands"	5010	Tons	6724	Tons	11037	Tons	12622	Tons	13152	Tons	
+"France"	11355	Tons	12440	Tons	13566	Tons	13301	Tons	12220	Tons	
+"Tajikistan"	0	Mixed	6886	Units	4483	Units	0	Mixed	11500	Units	
+"Hungary"	11909	Tons	10050	Tons	13115	Tons	9724	Tons	10802	Tons	
+"Slovakia"	7170	Tons	10194	Tons	9748	Tons	10569	Tons	9906	Tons	
+"Viet Nam"	6071	Tons	7079	Tons	8533	Tons	7705	Tons	9185	Tons	
+"United Kingdom"	6888	Tons	8288	Tons	9669	Tons	9508	Tons	8585	Tons	
+"Austria"	8057	Tons	9540	Tons	8870	Tons	8340	Tons	7899	Tons	
+"Taipei, Chinese"	10018	Tons	13504	Tons	9230	Tons	7511	Tons	7177	Tons	
+"Fiji"	7592	Units	2011	Units	3560	Units	3615	Units	5975	Units	
+"Romania"	5798	Tons	6711	Tons	4913	Tons	5034	Tons	5041	Tons	
+"Argentina"	4297	Tons	6032	Tons	5141	Tons	5536	Tons	3357	Tons	
+"Switzerland"	3428	Tons	3779	Tons	3633	Tons	3449	Tons	3163	Tons	
+"Bahamas"	3963	Units	16598	Units	6493	Units	5696	Units	2674	Units	
+"Portugal"	2587	Tons	2688	Tons	3018	Tons	2650	Tons	2630	Tons	
+"Sweden"	1860	Tons	2159	Tons	2191	Tons	2134	Tons	2522	Tons	
+"Ireland"	1732	Tons	2111	Tons	2181	Tons	2074	Tons	2440	Tons	
+"Brunei Darussalam"	11223	Units	5907	Units	8020	Units	7282	Units	2087	Units	
+"Bhutan"	1778	Units	2393	Units	1418	Units	1249	Units	2071	Units	
+"Dominican Republic"	684	Tons	1071	Tons	1202	Tons	2011	Tons	1754	Tons	
+"Ukraine"	576	Tons	2306	Tons	1515	Tons	1207	Tons	1734	Tons	
+"Denmark"	2666	Tons	2665	Tons	1865	Tons	1538	Tons	1648	Tons	
+"Bulgaria"	1020	Tons	902	Tons	1159	Tons	1309	Tons	1635	Tons	
+"Belgium"	3392628	Units	1905	Tons	1878	Tons	1655	Tons	1522	Tons	
+"Morocco"	609	Tons	1344	Tons	2018	Tons	1357	Tons	1438	Tons	
+"Israel"	1275	Tons	1270	Tons	1365	Tons	1188	Tons	1366	Tons	
+"Cambodia"	6658	Tons	2891	Tons	1106	Tons	983	Tons	1345	Tons	
+"Colombia"	1064	Tons	1391	Tons	1491	Tons	1188	Tons	1251	Tons	
+"Maldives"	786	Units	841	Units	639	Units	7589	Units	1150	Units	
+"Saint Kitts and Nevis"	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	1774	Units	1102	Units	
+"Macedonia, North"	74	Tons	128	Tons	352	Tons	904	Tons	973	Tons	
+"Serbia"	4284	Tons	3480	Tons	883	Tons	614	Tons	895	Tons	
+"Peru"	612	Tons	789	Tons	1133	Tons	601	Tons	832	Tons	
+"Uzbekistan"	3233919	Units	2763477	Units	492	Tons	659	Tons	808	Tons	
+"Saudi Arabia"	620	Tons	823	Tons	2718	Tons	1042	Tons	797	Tons	
+"Egypt"	713	Tons	838	Tons	938	Tons	635	Tons	741	Tons	
+"Greece"	675	Tons	639	Tons	1004	Tons	888	Tons	724	Tons	
+"Slovenia"	1469	Tons	1917	Tons	1426	Tons	959	Tons	677	Tons	
+"Nigeria"	2919	Tons	721	Tons	819	Tons	468	Tons	602	Tons	
+"Ecuador"	304	Tons	406	Tons	475	Tons	461	Tons	574	Tons	
+"Lithuania"	986	Tons	1287	Tons	2424563	Units	828	Tons	555	Tons	
+"Kazakhstan"	669	Tons	551	Tons	71	Tons	660	Tons	518	Tons	
+"Norway"	317	Tons	323	Tons	373	Tons	447	Tons	430	Tons	
+"Finland"	449	Tons	1382963	Units	657	Tons	413	Tons	420	Tons	
+"Angola"	104	Tons	188	Tons	548	Tons	336	Tons	408	Tons	
+"Tanzania, United Republic of"	197	Tons	212	Tons	380	Tons	392	Tons	368	Tons	
+"Oman"	1188	Tons	493	Tons	75	Tons	58	Tons	336	Tons	
+"Honduras"	170	Tons	256	Tons	312	Tons	284	Tons	296	Tons	
+"Azerbaijan"	146	Tons	207	Tons	170	Tons	219	Tons	274	Tons	
+"Guatemala"	119	Tons	145	Tons	166	Tons	159	Tons	272	Tons	
+"Costa Rica"	220	Tons	196	Tons	202	Tons	235	Tons	263	Tons	
+"Trinidad and Tobago"	140	Tons	117	Tons	182	Tons	181	Tons	260	Tons	
+"Zambia"	119	Tons	235	Tons	161	Tons	210	Tons	259	Tons	
+"Kenya"	44	Tons	71	Tons	207	Tons	148	Tons	229	Tons	
+"Croatia"	139	Tons	150	Tons	156	Tons	191	Tons	224	Tons	
+"Bosnia and Herzegovina"	176	Tons	268	Tons	251	Tons	168	Tons	215	Tons	
+"Latvia"	147	Tons	338	Tons	326	Tons	277	Tons	206	Tons	
+"Uganda"	285	Tons	429	Tons	234	Tons	234	Tons	204	Tons	
+"Côte d'Ivoire"	55	Tons	80	Tons	277	Tons	82	Tons	194	Tons	
+"New Zealand"	265	Tons	291	Tons	414	Tons	232	Tons	191	Tons	
+"Zimbabwe"	64	Tons	159	Tons	135	Tons	287	Tons	189	Tons	
+"Qatar"	135	Tons	217	Tons	243	Tons	110	Tons	180	Tons	
+"Kuwait"	240	Tons	225	Tons	194	Tons	141	Tons	175	Tons	
+"Luxembourg"	98	Tons	104	Tons	125	Tons	132	Tons	162	Tons	
+"Panama"	194	Tons	209	Tons	863	Tons	245	Tons	159	Tons	
+"Guyana"	81	Tons	127	Tons	87	Tons	163	Tons	152	Tons	
+"Botswana"	94	Tons	153	Tons	98	Tons	160	Tons	141	Tons	
+"Bahrain"	65	Tons	49	Tons	55	Tons	56	Tons	133	Tons	
+"Burkina Faso"	10	Tons	37	Tons	23	Tons	129	Tons	126	Tons	
+"Namibia"	85	Tons	143	Tons	104	Tons	107	Tons	122	Tons	
+"Kiribati"	0	Tons	318	Units	46	Units	3	Units	117	Units	
+"Mongolia"	35	Tons	2946	Units	82	Tons	75	Tons	116	Tons	
+"Albania"	60	Tons	27	Tons	0	Tons	84	Tons	113	Tons	
+"Suriname"	52	Tons	46	Tons	49	Tons	49	Tons	110	Tons	
+"Cyprus"	88	Tons	63	Tons	58	Tons	109	Tons	97	Tons	
+"Senegal"	65	Tons	40	Tons	73	Tons	53	Tons	96	Tons	
+"Bolivia, Plurinational State of"	89	Tons	74	Tons	78	Tons	133	Tons	94	Tons	
+"El Salvador"	77	Tons	52	Tons	66	Tons	75	Tons	86	Tons	
+"Uruguay"	62	Tons	48	Tons	57	Tons	73	Tons	81	Tons	
+"Syrian Arab Republic"	No Quantity	No Quantity	85	Tons	182	Tons	105	Tons	80	Tons	
+"Georgia"	70	Tons	77	Tons	77	Tons	82	Tons	76	Tons	
+"Moldova, Republic of"	61	Tons	87	Tons	105	Tons	50	Tons	73	Tons	
+"Timor-Leste"	3	Tons	5	Tons	12	Tons	5	Tons	73	Tons	
+"Lesotho"	29	Tons	33	Tons	59	Tons	61	Tons	66	Tons	
+"Estonia"	56	Tons	92	Tons	72	Tons	122	Tons	65	Tons	
+"Anguilla"			586	Units	1972	Units	446	Units	57	Units	
+"Paraguay"	33	Tons	53	Tons	50	Tons	41	Tons	55	Tons	
+"Central African Republic"	0	Tons	36	Tons	1	Tons	114	Tons	54	Tons	
+"Nicaragua"	32	Tons	42	Tons	72	Tons	44	Tons	54	Tons	
+"Malawi"	24	Tons	57	Tons	37	Tons	52	Tons	52	Tons	
+"Kyrgyzstan"	22	Tons	64	Tons	19	Tons	145	Tons	39	Tons	
+"Myanmar"	80	Tons	56	Tons	41	Tons	26	Tons	34	Tons	
+"Burundi"	11	Tons	9	Tons	26	Tons	10	Tons	30	Tons	
+"Togo"	37	Tons	12	Tons	22	Tons	9	Tons	30	Tons	
+"Malta"	27	Tons	32	Tons	37	Tons	26	Tons	29	Tons	
+"Armenia"	22	Tons	26	Tons	23	Tons	23	Tons	27	Tons	
+"Turkmenistan"	6	Tons	No Quantity	No Quantity	61	Tons	No Quantity	No Quantity	26	Tons	
+"Seychelles"	21	Tons	21	Tons	18	Tons	45	Tons	25	Tons	
+"Barbados"	18	Tons	20	Tons	22	Tons	19	Tons	25	Tons	
+"Madagascar"	54	Tons	39	Tons	39	Tons	37	Tons	25	Tons	
+"Belize"	40	Tons	24	Tons	0	Mixed	0	Mixed	24	Tons	
+"Antigua and Barbuda"	35	Tons	12	Tons	18	Tons	16	Tons	19	Tons	
+"Iceland"	18	Tons	16	Tons	22	Tons	20	Tons	19	Tons	
+"British Indian Ocean Territory"			0	Tons			No Quantity	No Quantity	18	Units	
+"Benin"	15	Tons	16	Tons	29	Tons	7	Tons	16	Tons	
+"Cabo Verde"	5	Tons	10	Tons	10	Tons	9	Tons	15	Tons	
+"Gambia"	2	Tons	5	Tons	3	Tons	0		15	Tons	
+"Palestine, State of"	28	Tons	44	Tons	86	Tons	35	Tons	13	Tons	
+"Montenegro"	18	Tons	16	Tons	18	Tons	7	Tons	12	Tons	
+"Marshall Islands"	7	Tons	31	Tons	No Quantity	No Quantity	No Quantity	No Quantity	10	Tons	
+"Faroe Islands"	No Quantity	No Quantity	No Quantity	No Quantity	15	Tons	3	Tons	8	Tons	
+"Christmas Island"	3	Units	3	Units	3	Units	4	Units	8	Units	
+"Comoros"	4	Tons	3	Tons	1	Tons	0	Tons	8	Tons	
+"Cayman Islands"	3	Tons	1	Tons	2	Tons	4	Tons	7	Tons	
+"Mauritania"	2	Tons	2	Tons	1	Tons	3	Tons	7	Tons	
+"Nauru"			4	Units	4	Units	2	Units	7	Units	
+"Grenada"	3	Tons	3	Tons	4	Tons	3	Tons	6	Tons	
+"French Polynesia"	4	Tons	7	Tons	6	Tons	9	Tons	5	Tons	
+"Tonga"	248	Units	35	Units	48	Units	0	Mixed	5	Tons	
+"South Sudan"	1	Tons	3	Tons	3	Tons	No Quantity	No Quantity	5	Tons	
+"Cocos (Keeling) Islands"			0	Tons	2	Units			4	Units	
+"Andorra"	5	Tons	4	Tons	5	Tons	13	Tons	4	Tons	
+"Niger"	15	Tons	7	Tons	8	Tons	6	Tons	4	Tons	
+"Macao, China"	0		0		25	Tons	5	Tons	4	Tons	
+"Gibraltar"	2	Tons	1	Tons	1	Tons	No Quantity	No Quantity	3	Tons	
+"Norfolk Island"							213	Units	1	Units	
+"Bermuda"	No Quantity	No Quantity	No Quantity	No Quantity	2	Tons	0	Tons	1	Tons	
+"Guinea-Bissau"	No Quantity	No Quantity	0	Tons	1	Tons	0	Tons	1	Tons	
+"Northern Mariana Islands"			1	Units			1	Units	0	Tons	
+"Saint Pierre and Miquelon"	0	Tons	0	Tons	0	Tons	1	Tons	0	Tons	
+"Samoa"	94	Units	214	Units	183	Units	0	Mixed	0	Mixed	
+"Bouvet Island"									0	Tons	
+"Chad"	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	0	Tons	
+"Cook Islands"					9	Units	36	Units	0	Mixed	
+"French Southern and Antarctic Territories"			0	Tons			0	Tons	0	Tons	
+"Niue"									0	Tons	
+"Sint Maarten (Dutch part)"	0	Tons	0	Tons	0	Tons	0	Tons	0	Tons	
+"Mozambique"	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	
+"Montserrat"	0	Tons	1	Tons	1	Tons	1	Tons	0	Tons	
+"Eritrea"	No Quantity	No Quantity	No Quantity	No Quantity	0	Tons			0	Tons	
+"Guam"	0	Tons	1	Tons					0	Tons	
+"Guinea"	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	
+"Haiti"	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	
+"Greenland"	0	Tons	0	Tons	1	Tons	2	Tons	No Quantity	No Quantity	
+"Ghana"			1340	Tons	1146	Tons	797	Tons	No Quantity	No Quantity	
+"Iran, Islamic Republic of"	3415	Tons	3710	Tons	3395	Tons	4177	Tons	No Quantity	No Quantity	
+"Iraq"	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	
+"Jamaica"	231	Tons	240	Tons	397	Tons	269	Tons	No Quantity	No Quantity	
+"Lao People's Democratic Republic"	539	Tons	250	Tons	397	Tons	450	Tons	No Quantity	No Quantity	
+"Lebanon"	130	Tons	178	Tons	176	Tons	152	Tons	No Quantity	No Quantity	
+"Jordan"	42	Tons	39	Tons	54	Tons	46	Tons	No Quantity	No Quantity	
+"Liberia"	5	Tons	40	Tons	94	Tons	39	Tons	No Quantity	No Quantity	
+"Libya, State of"	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	
+"Mali"	45	Tons	120	Tons	106	Tons	26	Tons	No Quantity	No Quantity	
+"Bonaire, Sint Eustatius and Saba"	No Quantity	No Quantity	0	Tons	0	Tons	0	Tons	No Quantity	No Quantity	
+"New Caledonia"	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	
+"Vanuatu"	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	
+"Nepal"	90903	Units	235882	Units	186485	Units	No Quantity	No Quantity	No Quantity	No Quantity	
+"Curaçao"	0	Mixed	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	
+"Aruba"	12	Tons	13	Tons	16	Tons	18	Tons	No Quantity	No Quantity	
+"Djibouti"			0	Tons	289	Tons	110	Tons	No Quantity	No Quantity	
+"Gabon"	13	Tons	18	Tons	12	Tons	69	Tons	No Quantity	No Quantity	
+"Falkland Islands (Malvinas)"	1	Tons	28	Tons	4	Tons	11	Tons			
+"Dominica"	7	Tons	7	Tons	5	Tons	6	Tons	No Quantity	No Quantity	
+"Equatorial Guinea"	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	
+"Ethiopia"	183	Tons	102	Tons	184	Tons	261	Tons	No Quantity	No Quantity	
+"Cuba"	121	Tons	77	Tons	50	Tons	No Quantity	No Quantity	No Quantity	No Quantity	
+"Congo"	17	Tons	7	Tons	17	Tons	27	Tons	No Quantity	No Quantity	
+"Congo, Democratic Republic of the"	71	Tons	69	Tons	114	Tons	198	Tons	No Quantity	No Quantity	
+"Solomon Islands"	13	Units	14	Units	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	
+"British Virgin Islands"	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	
+"Cameroon"	139	Tons	135	Tons	122	Tons	71	Tons	No Quantity	No Quantity	
+"Belarus"	916	Tons	973	Tons	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	
+"Bangladesh"	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	
+"Algeria"	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	
+"Afghanistan"	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	55	Tons	No Quantity	No Quantity	
+"Yemen"	1108	Tons	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	
+"Venezuela, Bolivarian Republic of"	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	
+"United States Minor Outlying Islands"	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	
+"Ship stores and bunkers"	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	
+"Free Zones"	No Quantity	No Quantity	4	Tons	9	Tons	15	Tons			
+"Sudan"	No Quantity	No Quantity	60	Tons	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	
+"Eswatini"	15	Tons	23	Tons	21	Tons	17	Tons	No Quantity	No Quantity	
+"United Arab Emirates"	3837	Tons	3847	Tons	4823	Tons	5748	Tons	No Quantity	No Quantity	
+"Tunisia"	556	Tons	637	Tons	495	Tons	504	Tons	No Quantity	No Quantity	
+"Turks and Caicos Islands"	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	
+"Tuvalu"					0	Tons	7	Units	No Quantity	No Quantity	
+"Saint Vincent and the Grenadines"	4	Tons	9	Tons	8	Tons	6	Tons	No Quantity	No Quantity	
+"Sao Tome and Principe"	4	Tons	6	Tons	6	Tons	8	Tons	No Quantity	No Quantity	
+"Saint Lucia"	8	Tons	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	
+"Sierra Leone"	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	
+"Somalia"	No Quantity	No Quantity	No Quantity	No Quantity	5	Tons	No Quantity	No Quantity	No Quantity	No Quantity	
+"Micronesia, Federated States of"	No Quantity	No Quantity	591	Units	0	Tons	No Quantity	No Quantity			
+"Palau"	No Quantity	No Quantity			1	Tons	1	Tons	No Quantity	No Quantity	
+"Russian Federation"	6091	Tons	7434	Tons	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	No Quantity	
+"Rwanda"	36	Tons	28	Tons	15	Tons	No Quantity	No Quantity	No Quantity	No Quantity	
+"Saint Helena"	8	Tons	0	Tons	0	Tons	No Quantity	No Quantity	No Quantity	No Quantity	

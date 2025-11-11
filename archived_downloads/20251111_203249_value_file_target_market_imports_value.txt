@@ -1,0 +1,106 @@
+﻿Exporters	Imported value in 2020	Imported value in 2021	Imported value in 2022	Imported value in 2023	Imported value in 2024	
+"World"	1206308	1405775	1299447	1214461	1173800	
+"Switzerland"	330521	379859	370845	383159	364708	
+"China"	215905	336154	276379	193104	197826	
+"Hungary"	54646	67235	66605	61379	57414	
+"Italy"	63292	63800	53097	58624	54987	
+"Czech Republic"	26216	30543	27571	44856	47162	
+"Netherlands"	136781	110482	114798	48849	46828	
+"Thailand"	42160	54656	46199	43134	45960	
+"France"	31889	32274	30986	34313	37951	
+"Romania"	26435	35866	29007	42638	35114	
+"United States of America"	22654	25896	32256	30595	27655	
+"Poland"	18599	17518	19360	21716	24631	
+"Philippines"	12696	16633	12135	17311	22597	
+"Serbia"	14004	19257	25288	23999	22104	
+"Slovakia"	24992	25607	22799	20258	18603	
+"Viet Nam"	12827	13215	15367	22532	18110	
+"India"	20887	22427	19474	18155	17435	
+"Japan"	25627	20323	16587	19732	14988	
+"Austria"	30414	32706	20379	19940	14943	
+"Slovenia"	18550	21344	15331	12918	13325	
+"Sweden"	1316	1118	8437	10466	11624	
+"Macedonia, North"	4	1	1677	8215	11019	
+"United Kingdom"	4489	8365	9370	9549	10910	
+"Mexico"	4412	4957	6894	8851	9140	
+"Denmark"	4926	3770	3535	8489	6850	
+"Ireland"	5085	7612	8168	7740	6248	
+"Korea, Republic of"	9563	8139	11151	8546	5933	
+"Malaysia"	3130	3941	4393	4804	4242	
+"Spain"	5384	5944	4174	4164	4030	
+"Portugal"	15078	5244	2072	2930	3879	
+"Taipei, Chinese"	6549	7486	6580	4517	3775	
+"Myanmar"	2342	2816	3271	2227	2556	
+"Canada"	460	330	590	3106	2067	
+"Israel"	1399	1502	1618	1320	2022	
+"Morocco"	1089	1810	2409	1971	1839	
+"Belgium"	1794	1887	1025	994	1035	
+"Hong Kong, China"	4737	8606	4267	2225	680	
+"Tunisia"	5		7	117	654	
+"Singapore"	1236	1746	941	1136	622	
+"Türkiye"	355	414	596	547	622	
+"Bulgaria"	955	589	156	125	405	
+"Indonesia"	53	1196	1265	1310	366	
+"Cambodia"	196	209	196	276	310	
+"Brazil"	1930	1746	1672	3028	245	
+"Finland"	38	99	32	76	58	
+"Argentina"	1	2	6	35	39	
+"Norway"	92	57	89	82	28	
+"South Africa"	9	19	59	78	26	
+"Australia"	52	22	46	41	25	
+"Luxembourg"	86	38	21	52	23	
+"Greece"	45	19	31	20	20	
+"Lithuania"	12	11	23	15	20	
+"El Salvador"	0				19	
+"Latvia"	7		0	11	17	
+"Bosnia and Herzegovina"	1	10	16	2	15	
+"United Arab Emirates"	149	25	75	18	13	
+"Saudi Arabia"	6	6	10	7	12	
+"Albania"	0		4	11	11	
+"Eswatini"	1		4		11	
+"Estonia"	1	34	16	10	10	
+"New Zealand"	7	26	40	22	8	
+"Croatia"	0	22	0	85	7	
+"Mauritius"	0				7	
+"Iceland"	0	38	2	1	6	
+"Bahamas"	0				3	
+"Egypt"	0	1			3	
+"Georgia"	0	3		2	2	
+"Bahrain"	0	3	3		1	
+"Chile"	2	2			1	
+"Oman"	0	4			1	
+"Faroe Islands"	0				0	
+"Ukraine"	1	8			0	
+"Armenia"	0				0	
+"Colombia"	5		5	0	0	
+"Costa Rica"	4	2	1		0	
+"Kuwait"	0				0	
+"Malta"	0				0	
+"Cayman Islands"	1					
+"Algeria"	15					
+"Bangladesh"	0			0		
+"Belarus"	41	4	9	11		
+"Cameroon"	0		2			
+"Central African Republic"	0		1			
+"Sri Lanka"	2					
+"Cyprus"	0					
+"Ecuador"	1	0	10			
+"Ghana"	0	2				
+"Haiti"	0	21	2			
+"Honduras"	0		2			
+"Jamaica"	0		0			
+"Kazakhstan"	0			1		
+"Lebanon"	0	1	0			
+"Macao, China"	0	1	3	1		
+"Moldova, Republic of"	0		2			
+"Pakistan"	124	54				
+"Panama"	1					
+"Peru"	0		1	3		
+"Qatar"	0	0	1	9		
+"Russian Federation"	17	2	0			
+"Saint Kitts and Nevis"	0	14				
+"Sierra Leone"	0		1			
+"Sudan"	5					
+"Suriname"	0		3			
+"Tanzania, United Republic of"	0	2				
+"Uruguay"	0			3		
