@@ -1,4 +1,4 @@
-# spider_core.py
+# spider_core.py (Corrected Final Version with Robust Login Landmark)
 
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
@@ -38,6 +38,7 @@ class TradeSpider(object):
         self.driver_path = driver_path
         self.wait_seconds = wait_seconds or self.DEFAULT_WAIT
         self.download_dir = os.path.join(os.getcwd(), "downloads")
+        self.archive_dir = os.path.join(os.getcwd(), "archived_downloads")
 
     def set_driver(self):
         logging.info("Starting Firefox WebDriver")
@@ -52,6 +53,7 @@ class TradeSpider(object):
             options.add_argument("--headless")
 
         os.makedirs(self.download_dir, exist_ok=True)
+        os.makedirs(self.archive_dir, exist_ok=True)
 
         options.set_preference("browser.download.folderList", 2)
         options.set_preference("browser.download.dir", self.download_dir)
@@ -107,13 +109,25 @@ class TradeSpider(object):
         return False
 
     def goto(self, url):
-        logging.info(f"Navigating to {url}")
-        try:
-            self.driver.get(url)
-            return self._wait_for_ready_state()
-        except Exception as e:
-            logging.error(f"Error while navigating to {url}: {e}")
-            return False
+        max_attempts = 4
+        for attempt in range(1, max_attempts + 1):
+            logging.info(f"Navigating to {url} (Attempt {attempt}/{max_attempts})")
+            try:
+                self.driver.get(url)
+                if not self._wait_for_ready_state():
+                    logging.warning(f"Document did not report 'complete' on attempt {attempt}.")
+                time.sleep(random.uniform(3.0, 5.0))
+                current_url_base = self.driver.current_url.split('?')[0]
+                target_url_base = url.split('?')[0]
+                if current_url_base.endswith(target_url_base.split('/')[-1]):
+                    logging.info(f"Successfully loaded URL after {attempt} attempt(s).")
+                    return True
+                else:
+                    logging.warning(f"URL mismatch after navigation (attempt {attempt}). Current: {current_url_base}, Target: {target_url_base}")
+            except Exception as e:
+                logging.error(f"Error while navigating to {url} on attempt {attempt}: {e}")
+        logging.error(f"Failed to navigate and confirm page load after {max_attempts} attempts.")
+        return False
 
     def login(self, ac, pw):
         url = "https://www.trademap.org/Country_SelProduct_TS.aspx"
@@ -142,7 +156,6 @@ class TradeSpider(object):
 
             if "stCaptcha.aspx" in self.driver.current_url:
                 print("ACTION REQUIRED: Please solve the CAPTCHA in the browser window.")
-                # Wait for EITHER the original page OR the Index homepage after CAPTCHA
                 WebDriverWait(self.driver, 300).until(EC.any_of(
                     EC.url_contains("Country_SelProduct_TS.aspx"),
                     EC.url_contains("Index.aspx")
@@ -155,14 +168,15 @@ class TradeSpider(object):
             )
             logging.info("Browser reports document is 'complete'.")
 
-            # --- THE FINAL FIX ---
-            # Wait for a landmark element from EITHER the product page OR the homepage.
-            logging.info("Waiting for a landmark element from either the main dashboard or the homepage...")
+            logging.info("Waiting for a landmark element to confirm successful login...")
+            # --- FIX APPLIED HERE: ADDED A THIRD, MORE RELIABLE LANDMARK (THE LOGOUT BUTTON) ---
             self.wait.until(EC.any_of(
                 EC.presence_of_element_located((By.ID, "ctl00_PageContent_Panel1")), # Landmark for Country_SelProduct_TS.aspx
-                EC.presence_of_element_located((By.ID, "selectionMenu"))             # Landmark for Index.aspx
+                EC.presence_of_element_located((By.ID, "selectionMenu")),             # Landmark for Index.aspx
+                EC.presence_of_element_located((By.ID, "ctl00_MenuControl_marmenu_logout")) # Universal landmark
             ))
-            logging.info("Landmark element found.")
+            # --- END OF FIX ---
+            logging.info("Landmark element found. Login is fully complete and verified.")
             
             time.sleep(1)
 

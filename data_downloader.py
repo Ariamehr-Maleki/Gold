@@ -1,131 +1,172 @@
-# data_downloader.py
+# data_downloader.py (Final Version with Specialized Company Page Handler)
 
 from spider_core import TradeSpider, logging
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
+from urllib.parse import unquote
 import time
 import random
 import os
 import glob
 
-
 class DataDownloader(TradeSpider):
-    # MODIFIED: Added 'view' parameter to dynamically change the URL
-    def navigate_to_timeseries_page(self, product_code, country_id, trade_flow='I', view='value'):
-        logging.info(f"Navigating to Time Series page for product {product_code} (Flow: {trade_flow}, View: {view})")
-        trade_flow_code = '1' if trade_flow == 'I' else '2'
-        
-        # Maps user-friendly view names to TradeMap's URL codes
-        view_codes = {
-            'value': '1',
-            'quantity': '2',
-            'unit_value': '3'
-        }
-        view_code = view_codes.get(view.lower(), '1') # Default to 'value'
 
-        # The last parameter in the nvpm string is the view code
-        url = f"https://www.trademap.org/Country_SelProductCountry_TS.aspx?nvpm=1|{country_id}||||{product_code}|||2|1|1|{trade_flow_code}|2|1|2|{view_code}|1|1"
-        
-        if not self.goto(url): return False
-        time.sleep(3)
-        return True
+    def navigate_to_world_view_page(self, config, view='value'):
+        max_attempts = 4
+        hs_code = config['hs_code']
+        for attempt in range(1, max_attempts + 1):
+            logging.info(f"--- WORLD VIEW ATTEMPT {attempt}/{max_attempts} for '{view}' ---")
+            view_codes = {'value': '1', 'quantity': '2', 'unit_value': '3'}
+            view_code = view_codes.get(view.lower(), '1')
+            url = f"https://www.trademap.org/Country_SelProduct_TS.aspx?nvpm=1|||||{hs_code}|||6|1|1|1|2|1|2|{view_code}|1|1"
+            logging.info(f"Navigating to WORLD URL: {url}")
+            if not self.goto(url):
+                logging.warning(f"Navigation failed on attempt {attempt}. Retrying...")
+                continue
+            try:
+                url_param_to_check = f"|||||{hs_code}|"
+                logging.info(f"Verifying DECODED URL contains parameter: '{url_param_to_check}'...")
+                self.wait.until(lambda driver: url_param_to_check in unquote(driver.current_url))
+                logging.info("URL parameter for HS Code VERIFIED.")
+                header_text = view.replace('_', ' ')
+                header_xpath = f"//table[@id='ctl00_PageContent_MyGridView1']//th[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), '{header_text}')]"
+                logging.info(f"Verifying column header contains '{header_text}'...")
+                self.wait.until(EC.presence_of_element_located((By.XPATH, header_xpath)))
+                logging.info(f"SUCCESS: World page for '{view}' is fully loaded and verified.")
+                return True
+            except TimeoutException:
+                logging.warning(f"URL or content verification failed for '{view}' on attempt {attempt}. Retrying.")
+                self._save_snapshot(f"world_verify_failed_attempt_{attempt}")
+        logging.error(f"All {max_attempts} attempts failed for World '{view}'.")
+        return False
 
-    def navigate_to_companies_page(self, product_code, country_id, trade_flow='I'):
-        logging.info(f"Navigating to Companies page for product {product_code} (Flow: {trade_flow})")
+    def navigate_to_country_view_page(self, config, country_id, trade_flow='I', view='value'):
+        max_attempts = 4
+        hs_code = config['hs_code']
+        for attempt in range(1, max_attempts + 1):
+            logging.info(f"--- COUNTRY VIEW ATTEMPT {attempt}/{max_attempts} for view '{view}' (Country ID: {country_id}) ---")
+            trade_flow_code = '1' if trade_flow == 'I' else '2'
+            view_codes = {'value': '1', 'quantity': '2', 'unit_value': '3'}
+            view_code = view_codes.get(view.lower(), '1')
+            url = f"https://www.trademap.org/Country_SelProductCountry_TS.aspx?nvpm=1|{country_id}||||{hs_code}|||2|1|1|{trade_flow_code}|2|1|2|{view_code}|1|1"
+            logging.info(f"Navigating to COUNTRY URL: {url}")
+            if not self.goto(url):
+                logging.warning(f"Navigation failed on attempt {attempt}. Retrying...")
+                continue
+            try:
+                url_param_to_check = f"|{country_id}|"
+                logging.info(f"Verifying DECODED URL contains parameter: '{url_param_to_check}'...")
+                self.wait.until(lambda driver: url_param_to_check in unquote(driver.current_url))
+                logging.info(f"URL parameter for Country ID VERIFIED.")
+                header_text = view.replace('_', ' ')
+                header_xpath = f"//table[@id='ctl00_PageContent_MyGridView1']//th[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), '{header_text}')]"
+                logging.info(f"Verifying column header contains '{header_text}'...")
+                self.wait.until(EC.presence_of_element_located((By.XPATH, header_xpath)))
+                logging.info(f"SUCCESS: Country page for '{view}' (Country ID: {country_id}) is fully loaded and verified.")
+                return True
+            except TimeoutException:
+                logging.warning(f"URL or content verification failed on attempt {attempt}. Retrying.")
+                self._save_snapshot(f"country_verify_failed_attempt_{attempt}")
+        logging.error(f"All {max_attempts} attempts failed for Country '{view}' (Country ID: {country_id}).")
+        return False
+
+    def navigate_to_companies_page(self, config, trade_flow='I'):
+        country_id = config['target_market_id']
+        product_code = config['hs_code']
+        logging.info(f"Navigating to Companies page for product {product_code}, country {country_id}")
         trade_flow_code = '1' if trade_flow == 'I' else '2'
         url = f"https://www.trademap.org/CompaniesList.aspx?nvpm=1|{country_id}||||{product_code}|||4|1|1|{trade_flow_code}|3|1|1|1|1|4"
-        if not self.goto(url): return False
+        
+        # --- FIX APPLIED HERE: This logic is now robust to the redirect ---
+        # We navigate using a direct .get() to bypass the strict checks in goto()
+        logging.info(f"Navigating directly to COMPANIES URL: {url}")
+        self.driver.get(url)
+        
+        # Give the page a moment to settle and potentially redirect.
         time.sleep(3)
-        return True
+        
+        # Check if we were redirected to the clarification page.
+        if "CorrespondingProductsCompanies.aspx" in self.driver.current_url:
+            logging.warning("Redirected to product clarification page. This is expected. Handling redirect...")
+            try:
+                # 1. WAIT for the table on the redirect page to be visible. THIS IS THE KEY.
+                clarification_table = (By.ID, "ctl00_PageContent_MyGridView1")
+                logging.info("Waiting for the product clarification table to appear...")
+                self.wait.until(EC.visibility_of_element_located(clarification_table))
+                logging.info("Clarification table found.")
 
-    # MODIFIED: Added 'rename_to' parameter to rename downloaded file and prevent overwriting
-# MODIFIED: Added a 'clean_dir' parameter to control the cleaning behavior
-    def _download_file(self, expected_keywords: list | None = None, max_attempts: int = 3, click_xpath: str = "//input[@type='image' and @title='Text file']", rename_to: str | None = None, clean_dir: bool = True):
-        # --- FIX APPLIED HERE ---
-        # The cleaning logic is now conditional
-        if clean_dir:
-            logging.info(f"Cleaning old text files from '{self.download_dir}'...")
-            for f in glob.glob(os.path.join(self.download_dir, "*.txt*")):
-                try:
-                    os.remove(f)
-                except Exception:
-                    pass
+                # 2. Click the first product in the list to proceed.
+                first_product_link = (By.XPATH, "//table[@id='ctl00_PageContent_MyGridView1']//a[1]")
+                logging.info("Clicking the first product in the list to clarify...")
+                if not self._safe_click(*first_product_link):
+                    logging.error("Could not click the first product link on the clarification page.")
+                    return False
+                
+                # 3. Wait for the browser to arrive at the final, correct companies list page.
+                self.wait.until(EC.url_contains("CompaniesList.aspx"))
+                logging.info("Successfully handled redirect and landed on the final companies list page.")
+                return True # Success!
+            except Exception as e:
+                logging.error(f"Failed to handle the company page redirect after landing on it. Error: {e}")
+                self._save_snapshot("company_redirect_handler_failed")
+                return False
+        
+        # If we were not redirected and are already on the right page, confirm it.
+        elif "CompaniesList.aspx" in self.driver.current_url:
+            logging.info("Successfully landed on the companies list page directly.")
+            return True
+            
+        else:
+            logging.error(f"Navigation to companies page failed. Ended up on an unknown page: {self.driver.current_url}")
+            self._save_snapshot("company_navigation_unknown_failure")
+            return False
         # --- END OF FIX ---
 
+    def _download_file(self, rename_to: str | None = None, clean_dir: bool = True):
+        if clean_dir: logging.info(f"Cleaning old text files from '{self.download_dir}'...")
+        for f in glob.glob(os.path.join(self.download_dir, "*.txt*")):
+            try: os.remove(f)
+            except Exception: pass
+        
+        existing_files = set(glob.glob(os.path.join(self.download_dir, "*.txt")))
+        max_attempts = 4
+        click_xpath = "//input[@type='image' and @title='Text file']"
         attempt = 0
         while attempt < max_attempts:
             attempt += 1
-            logging.info(f"Download attempt {attempt}/{max_attempts}...")
+            logging.info(f"Download attempt {attempt}/{max_attempts} for '{rename_to}'...")
             if not self._safe_click(By.XPATH, click_xpath):
-                logging.error("Failed to click download button.")
+                logging.error(f"Failed to click download button for '{rename_to}'.")
                 return None
-
             timeout = 60
             end_time = time.time() + timeout
             downloaded_file_path = None
             while time.time() < end_time:
-                text_files = glob.glob(os.path.join(self.download_dir, "*.txt"))
-                if text_files:
-                    latest_file = max(text_files, key=os.path.getctime)
-                    time.sleep(1.0)
+                new_files = set(glob.glob(os.path.join(self.download_dir, "*.txt"))) - existing_files
+                if new_files:
+                    latest_file = new_files.pop()
+                    time.sleep(1.5) 
                     try:
                         if os.path.getsize(latest_file) > 0:
                             downloaded_file_path = latest_file
-                            logging.info(f"File download confirmed: {downloaded_file_path}")
+                            logging.info(f"NEW file download confirmed: {os.path.basename(downloaded_file_path)}")
                             break
                     except Exception as e:
                         logging.debug(f"Error checking file size: {e}")
                 time.sleep(0.5)
-
             if not downloaded_file_path:
-                logging.error("Download timed out. No .txt file was found.")
+                logging.error(f"Download timed out for '{rename_to}'. No NEW .txt file was found.")
                 continue
-            
-            # --- RENAMING LOGIC ---
-            if downloaded_file_path and rename_to:
+            if rename_to:
                 try:
                     new_path = os.path.join(self.download_dir, rename_to)
-                    # --- FIX #2 APPLIED HERE ---
-                    # Use os.replace for a more robust (atomic) file renaming operation
                     os.replace(downloaded_file_path, new_path)
                     logging.info(f"Successfully renamed downloaded file to '{rename_to}'")
                     downloaded_file_path = new_path
                 except OSError as e:
                     logging.error(f"Failed to rename file to '{rename_to}': {e}")
-                    # If rename fails, we should not proceed as it may corrupt the flow
                     return None
-            # --- END LOGIC ---
-
-            if not expected_keywords:
-                return downloaded_file_path
-
-            try:
-                with open(downloaded_file_path, 'r', encoding='utf-8', errors='ignore') as fh:
-                    content = fh.read(5000)
-                found = False
-                for kw in expected_keywords:
-                    if kw and kw.lower() in content.lower():
-                        found = True
-                        break
-                if found:
-                    logging.info("Downloaded file verified contains expected keywords.")
-                    return downloaded_file_path
-                else:
-                    logging.warning(f"Downloaded file did not contain expected keywords {expected_keywords}. Deleting and retrying.")
-                    try:
-                        os.remove(downloaded_file_path)
-                    except Exception:
-                        pass
-                    time.sleep(random.uniform(1.0, 2.0))
-                    continue
-            except Exception as e:
-                logging.error(f"Error verifying downloaded file: {e}")
-                try:
-                    os.remove(downloaded_file_path)
-                except Exception:
-                    pass
-                continue
-
-        logging.error("All download attempts failed or verification didn't pass.")
+            return downloaded_file_path
+        logging.error(f"All download attempts failed for '{rename_to}'.")
         return None

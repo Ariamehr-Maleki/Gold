@@ -1,10 +1,71 @@
-# data_parser.py
+# data_parser.py (Modified)
 
 import pandas as pd
 import re
 import os
 import math
 from spider_core import logging
+# --- NEW: Import the library for country-to-continent conversion ---
+import pycountry_convert as pc
+
+# --- NEW: Function to get continent from country name ---
+def get_continent(country_name):
+    """
+    Converts a country name to its continent code and name.
+    Handles common exceptions and different naming conventions.
+    """
+    # Manual mapping for names that the library doesn't recognize well
+    country_map = {
+        "Bolivia (Plurinational State of)": "Bolivia",
+        "Brunei Darussalam": "Brunei",
+        "Iran (Islamic Republic of)": "Iran",
+        "Korea, Republic of": "South Korea",
+        "Russian Federation": "Russia",
+        "United Kingdom": "United Kingdom",
+        "United States of America": "United States",
+        "Viet Nam": "Vietnam",
+        "China, Hong Kong SAR": "Hong Kong",
+        "State of Palestine": "Palestine"
+    }
+    country_name = country_map.get(country_name, country_name)
+    try:
+        country_alpha2 = pc.country_name_to_country_alpha2(country_name)
+        continent_code = pc.country_alpha2_to_continent_code(country_alpha2)
+        continent_name = pc.convert_continent_code_to_continent_name(continent_code)
+        return continent_name
+    except (KeyError, Exception):
+        # logging.warning(f"Could not determine continent for '{country_name}'")
+        return "Unknown"
+
+# --- NEW: Function to add regional supplier data ---
+def _add_regional_suppliers(final_data, config):
+    """
+    Parses the full supplier list and adds a new key with regional suppliers.
+    """
+    logging.info("Classifying suppliers by region...")
+    your_country_name = config.get('your_country')
+    your_region = get_continent(your_country_name)
+
+    if your_region == "Unknown":
+        logging.error(f"Could not determine the region for '{your_country_name}'. Cannot find regional suppliers.")
+        final_data["regional_suppliers"] = []
+        return final_data
+
+    logging.info(f"'{your_country_name}' is in '{your_region}'. Finding other suppliers from this region.")
+    
+    regional_suppliers = []
+    full_supplier_list = final_data.get('suppliers_full_list', [])
+
+    for supplier in full_supplier_list:
+        supplier_name = supplier.get('name')
+        if supplier_name and get_continent(supplier_name) == your_region:
+            # We don't want to list our own country as a regional supplier to itself
+            if supplier_name.lower() != your_country_name.lower():
+                regional_suppliers.append(supplier)
+
+    final_data["regional_suppliers"] = regional_suppliers
+    logging.info(f"Found {len(regional_suppliers)} other suppliers from {your_region}.")
+    return final_data
 
 # This function is the base parser for the "value" file
 def _parse_timeseries_txt(file_path, config):
@@ -98,139 +159,98 @@ def _parse_timeseries_txt(file_path, config):
         return {}
 
 
-# *** THIS IS THE MISSING HELPER FUNCTION ***
 def _merge_supplementary_data(base_data, file_path, data_type='quantity'):
     logging.info(f"Merging '{data_type}' data from {os.path.basename(file_path)}")
     try:
         df = pd.read_csv(file_path, sep='\t', header=0, encoding='utf-8-sig', dtype=str).fillna('0')
         df.columns = [c.strip().strip('"') for c in df.columns]
-
         partner_col = df.columns[0]
         latest_year = base_data.get('latest_year')
-        if not latest_year:
-            logging.warning("Cannot merge data without a latest_year in base_data.")
-            return
-
+        if not latest_year: return
         target_col_name = next((c for c in df.columns if str(latest_year) in c), None)
-        if not target_col_name:
-            logging.error(f"Could not find a data column for year {latest_year} in {file_path}")
-            return
-            
+        if not target_col_name: return
         df[target_col_name] = pd.to_numeric(df[target_col_name].str.replace(',', ''), errors='coerce').fillna(0)
-
         suppliers_map = {s['name'].lower(): s for s in base_data['suppliers_full_list']}
-        
         for _, row in df.iterrows():
             partner_name = str(row[partner_col]).strip()
             if partner_name.lower() in suppliers_map:
                 target_partner = suppliers_map[partner_name.lower()]
                 value = row[target_col_name]
-                
-                if data_type == 'quantity':
-                    target_partner['quantity_latest'] = int(value)
-                elif data_type == 'unit_value':
-                    target_partner['unit_value_latest'] = float(value)
-    
+                if data_type == 'quantity': target_partner['quantity_latest'] = int(value)
+                elif data_type == 'unit_value': target_partner['unit_value_latest'] = float(value)
     except Exception as e:
         logging.error(f"Failed to merge supplementary data from {file_path}. Error: {e}")
 
 
-# *** MASTER PARSING FUNCTION for merging all three views ***
 def parse_full_timeseries(value_file, quantity_file, unit_value_file, config):
     logging.info("--- Starting full timeseries parsing and merging from 3 files ---")
-
     if not value_file or not os.path.exists(value_file):
-        logging.error(f"Value file not found or path is invalid: {value_file}. Aborting parse.")
+        logging.error(f"Value file not found: {value_file}. Aborting parse.")
         return {}
-    
     final_data = _parse_timeseries_txt(value_file, config)
     if not final_data or 'suppliers_full_list' not in final_data:
-        logging.error("Parsing the primary value file failed. Cannot proceed with merge.")
+        logging.error("Parsing the primary value file failed. Cannot proceed.")
         return {}
-
     if quantity_file and os.path.exists(quantity_file):
         _merge_supplementary_data(final_data, quantity_file, data_type='quantity')
-    else:
-        logging.warning(f"Quantity file not found: {quantity_file}. Skipping quantity merge.")
-
     if unit_value_file and os.path.exists(unit_value_file):
         _merge_supplementary_data(final_data, unit_value_file, data_type='unit_value')
-    else:
-        logging.warning(f"Unit Value file not found: {unit_value_file}. Skipping unit value merge.")
-
     for supplier in final_data.get('suppliers_full_list', []):
         value = supplier.get('value_usd')
         quantity = supplier.get('quantity_latest')
-        
         if supplier.get('unit_value_latest') is None and value and quantity and quantity > 0:
             supplier['unit_value_latest'] = round((value * 1000) / quantity, 2)
     
+    # --- MODIFIED: Add regional supplier data if applicable ---
+    # This check ensures we only run classification on data that has a supplier list (i.e., not world data)
+    if any(s['name'].lower() != 'world' for s in final_data.get('suppliers_full_list', [])):
+        final_data = _add_regional_suppliers(final_data, config)
+
     logging.info("Successfully merged all timeseries data.")
     return final_data
 
 
-# *** PARSING FUNCTION for World Importers List ***
 def parse_world_importers_txt(file_path, config):
     logging.info(f"Parsing World Importers data from TXT file: {os.path.basename(file_path)}")
     try:
         df = pd.read_csv(file_path, sep='\t', header=0, encoding='utf-8-sig', dtype=str).fillna('0')
         df.columns = [c.strip().strip('"') for c in df.columns]
-        
         importers_col = df.columns[0]
         value_col = next((c for c in df.columns if 'value' in c.lower() and re.search(r'\d{4}', c)), df.columns[1])
         cagr_col = next((c for c in df.columns if 'annual growth' in c.lower()), None)
-        
         df[value_col] = pd.to_numeric(df[value_col].str.replace(',', ''), errors='coerce').fillna(0)
-        if cagr_col:
-            df[cagr_col] = pd.to_numeric(df[cagr_col].str.replace(',', ''), errors='coerce').fillna(0)
-
+        if cagr_col: df[cagr_col] = pd.to_numeric(df[cagr_col].str.replace(',', ''), errors='coerce').fillna(0)
         world_df = df[df[importers_col].str.lower() == 'world']
-        
-        if world_df.empty:
-            logging.error("Could not find the 'World' row in the downloaded file. Cannot parse world importers data.")
-            return {}
-        
+        if world_df.empty: return {}
         world_row = world_df.iloc[0]
-
         world_total_imports = world_row[value_col]
         world_import_cagr = world_row.get(cagr_col, 0.0)
-
         importers_df = df[df[importers_col].str.lower() != 'world'].copy()
         importers_df['rank'] = importers_df[value_col].rank(method='dense', ascending=False).astype(int)
         target_market_row = importers_df[importers_df[importers_col].str.lower() == config['target_market'].lower()]
-        
         target_market_rank = int(target_market_row.iloc[0]['rank']) if not target_market_row.empty else 'Not found'
-
         return {
             "world_total_imports_usd": int(world_total_imports),
             "world_imports_growth_cagr_pct": float(world_import_cagr),
             "target_market_world_rank": int(target_market_rank) if isinstance(target_market_rank, (int, float)) else target_market_rank
         }
-        
     except Exception as e:
         logging.error(f"Could not parse world importers file. Error: {e}", exc_info=True)
         return {}
 
 
-# *** PARSING FUNCTION for Company List ***
 def parse_company_txt(file_path):
     logging.info(f"Parsing Company data from TXT file: {os.path.basename(file_path)}")
     try:
         df = pd.read_csv(file_path, sep='\t', header=0, encoding='utf-8-sig', dtype=str).fillna('')
-        original_cols = list(df.columns)
-        lowered = [c.strip().lower() for c in original_cols]
-
+        original_cols, lowered = list(df.columns), [c.strip().lower() for c in list(df.columns)]
         def find_col(candidates):
             for cand in candidates:
                 for i, c in enumerate(lowered):
                     if cand == c or cand in c or c in cand: return original_cols[i]
             return None
-
         name_col = find_col(['importers', 'company name', 'company', 'exporters'])
-        if not name_col:
-            logging.error(f"No valid company column found in {original_cols}")
-            return []
-
+        if not name_col: return []
         col_map = {'name': name_col, 'city': find_col(['city', 'town']), 'website': find_col(['website', 'web site']),'phone': find_col(['phone', 'tel']), 'email': find_col(['email', 'e-mail']), 'address': find_col(['address', 'addr'])}
         records = [{key: str(row.get(col, '')).strip() for key, col in col_map.items() if col} for _, row in df.iterrows()]
         return records
