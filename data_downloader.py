@@ -13,6 +13,7 @@ import glob
 class DataDownloader(TradeSpider):
 
     def navigate_to_world_view_page(self, config, view='value'):
+        # ... (no changes needed in this method)
         max_attempts = 4
         hs_code = config['hs_code']
         for attempt in range(1, max_attempts + 1):
@@ -42,6 +43,7 @@ class DataDownloader(TradeSpider):
         return False
 
     def navigate_to_country_view_page(self, config, country_id, trade_flow='I', view='value'):
+        # ... (no changes needed in this method)
         max_attempts = 4
         hs_code = config['hs_code']
         for attempt in range(1, max_attempts + 1):
@@ -72,6 +74,10 @@ class DataDownloader(TradeSpider):
         return False
 
     def navigate_to_companies_page(self, config, trade_flow='I'):
+        """
+        Navigates to the companies page, intelligently handling the potential
+        redirect to a product clarification page.
+        """
         country_id = config['target_market_id']
         product_code = config['hs_code']
         logging.info(f"Navigating to Companies page for product {product_code}, country {country_id}")
@@ -79,7 +85,6 @@ class DataDownloader(TradeSpider):
         url = f"https://www.trademap.org/CompaniesList.aspx?nvpm=1|{country_id}||||{product_code}|||4|1|1|{trade_flow_code}|3|1|1|1|1|4"
         
         # --- FIX APPLIED HERE: This logic is now robust to the redirect ---
-        # We navigate using a direct .get() to bypass the strict checks in goto()
         logging.info(f"Navigating directly to COMPANIES URL: {url}")
         self.driver.get(url)
         
@@ -124,10 +129,15 @@ class DataDownloader(TradeSpider):
         # --- END OF FIX ---
 
     def _download_file(self, rename_to: str | None = None, clean_dir: bool = True):
-        if clean_dir: logging.info(f"Cleaning old text files from '{self.download_dir}'...")
-        for f in glob.glob(os.path.join(self.download_dir, "*.txt*")):
-            try: os.remove(f)
-            except Exception: pass
+        """
+        Clicks the download button and waits for a new file to appear.
+        The clean_dir flag is now correctly managed by the calling functions.
+        """
+        if clean_dir:
+            logging.info(f"Cleaning old text files from '{self.download_dir}'...")
+            for f in glob.glob(os.path.join(self.download_dir, "*.txt*")):
+                try: os.remove(f)
+                except Exception: pass
         
         existing_files = set(glob.glob(os.path.join(self.download_dir, "*.txt")))
         max_attempts = 4
@@ -135,38 +145,45 @@ class DataDownloader(TradeSpider):
         attempt = 0
         while attempt < max_attempts:
             attempt += 1
-            logging.info(f"Download attempt {attempt}/{max_attempts} for '{rename_to}'...")
+            logging.info(f"Download attempt {attempt}/{max_attempts} for '{rename_to or 'file'}'...")
             if not self._safe_click(By.XPATH, click_xpath):
                 logging.error(f"Failed to click download button for '{rename_to}'.")
-                return None
+                continue # Retry the click
+            
             timeout = 60
             end_time = time.time() + timeout
             downloaded_file_path = None
+            
+            # Wait loop for the file to appear
             while time.time() < end_time:
                 new_files = set(glob.glob(os.path.join(self.download_dir, "*.txt"))) - existing_files
                 if new_files:
                     latest_file = new_files.pop()
-                    time.sleep(1.5) 
+                    time.sleep(1.5) # Give a moment for the download to finalize
                     try:
                         if os.path.getsize(latest_file) > 0:
                             downloaded_file_path = latest_file
                             logging.info(f"NEW file download confirmed: {os.path.basename(downloaded_file_path)}")
-                            break
+                            break # Exit the wait loop
                     except Exception as e:
-                        logging.debug(f"Error checking file size: {e}")
+                        logging.debug(f"Error checking file size (file may be locked): {e}")
                 time.sleep(0.5)
-            if not downloaded_file_path:
-                logging.error(f"Download timed out for '{rename_to}'. No NEW .txt file was found.")
-                continue
-            if rename_to:
-                try:
-                    new_path = os.path.join(self.download_dir, rename_to)
-                    os.replace(downloaded_file_path, new_path)
-                    logging.info(f"Successfully renamed downloaded file to '{rename_to}'")
-                    downloaded_file_path = new_path
-                except OSError as e:
-                    logging.error(f"Failed to rename file to '{rename_to}': {e}")
-                    return None
-            return downloaded_file_path
+
+            if downloaded_file_path:
+                # File was downloaded successfully
+                if rename_to:
+                    try:
+                        new_path = os.path.join(self.download_dir, rename_to)
+                        os.replace(downloaded_file_path, new_path) # Atomic operation is better than move
+                        logging.info(f"Successfully renamed downloaded file to '{rename_to}'")
+                        return new_path
+                    except OSError as e:
+                        logging.error(f"Failed to rename file to '{rename_to}': {e}")
+                        return None
+                return downloaded_file_path
+            
+            logging.warning(f"Download attempt {attempt} timed out. No new .txt file was found.")
+            # End of while attempt < max_attempts loop
+            
         logging.error(f"All download attempts failed for '{rename_to}'.")
         return None

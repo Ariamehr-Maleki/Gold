@@ -14,11 +14,13 @@ import glob
 import shutil
 
 def save_to_json(data, filename="final_factsheet_data.json"):
+    """Saves the final combined data to a JSON file."""
     with open(filename, 'w', encoding='utf-8') as f:
         json.dump(data, f, ensure_ascii=False, indent=4)
     logging.info(f"Successfully saved all combined data to {filename}")
 
 def archive_downloaded_files(paths_dict, archive_dir):
+    """Moves successfully processed files to the archive directory with a timestamp."""
     if not paths_dict: return
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     logging.info(f"Archiving {len(paths_dict)} downloaded files...")
@@ -34,6 +36,10 @@ def archive_downloaded_files(paths_dict, archive_dir):
                 logging.error(f"Failed to archive file {file_path}. Error: {e}")
 
 def download_and_parse_all_views(scraper, config, task_name, trade_flow='I'):
+    """
+    Handles the multi-view download (value, quantity, unit_value) for a specific market.
+    FIX: Cleans the download directory only ONCE before starting the batch download.
+    """
     logging.info(f"--- Starting Multi-View Download and Parse for: {task_name} ---")
     
     # --- FIX #1 APPLIED HERE: Clean the directory ONCE before the entire multi-view task ---
@@ -63,6 +69,7 @@ def download_and_parse_all_views(scraper, config, task_name, trade_flow='I'):
         logging.error("Essential 'value' data file was not downloaded. Cannot proceed with parsing.")
         return None, download_paths
 
+    # Once all files are downloaded, parse them together.
     parsed_data = parse_full_timeseries(
         value_file=download_paths.get("value_file"),
         quantity_file=download_paths.get("quantity_file"),
@@ -72,8 +79,10 @@ def download_and_parse_all_views(scraper, config, task_name, trade_flow='I'):
     return parsed_data, download_paths
 
 class ScraperWorkflow(DataDownloader):
+    """Extends the base downloader with high-level workflow methods."""
     
     def download_and_parse_world_importers_data(self, config):
+        """Downloads and parses the multi-view timeseries for the 'World' market."""
         logging.info(f"--- Starting Download and Parse for World Importers (multi-view) ---")
         
         # --- FIX #1 APPLIED HERE: Clean the directory ONCE before the entire multi-view task ---
@@ -114,6 +123,7 @@ class ScraperWorkflow(DataDownloader):
         return parsed, download_paths
 
     def download_and_parse_company_sample_data(self, config, trade_flow='I'):
+        """Navigates to the company page (handling redirects) and downloads a sample list."""
         logging.info(f"--- Starting Download for a SAMPLE of Company Data ---")
         if not self.navigate_to_companies_page(config, trade_flow):
             logging.error("Navigation failed for companies page.")
@@ -129,7 +139,8 @@ class ScraperWorkflow(DataDownloader):
             downloaded_file_path = self._download_file(rename_to="company_sample.txt", clean_dir=True)
             
             if downloaded_file_path:
-                return parse_company_txt(downloaded_file_path) or [], {'company_file': downloaded_file_path}
+                parsed_data, files_dict = parse_company_txt(downloaded_file_path), {'company_file': downloaded_file_path}
+                return parsed_data or [], files_dict
             else:
                 return [], None
         except Exception as e:
@@ -147,50 +158,54 @@ if __name__ == '__main__':
     }
 
     final_data = {"header": {**CONFIG, "date": datetime.now().strftime("%B %Y")}}
-    ac = os.environ.get('TM_USERNAME') or input('Enter TM username: ')
-    pw = os.environ.get('TM_PASSWORD') or input('Enter TM password: ')
-    s = ScraperWorkflow(headless=False, driver_path=r".\geckodriver.exe")
+    ac = os.environ.get('TM_USERNAME') # or input('Enter TM username: ')
+    pw = os.environ.get('TM_PASSWORD') # or input('Enter TM password: ')
+    
+    if not ac or not pw:
+        print("Please set TM_USERNAME and TM_PASSWORD environment variables.")
+    else:
+        s = ScraperWorkflow(headless=False, driver_path=r".\geckodriver.exe")
 
-    try:
-        if s.set_driver() and s.login(ac, pw):
-            logging.info("Login successful. Beginning data extraction tasks.")
-            
-            logging.info("="*70)
-            logging.info("===== TASK 1 of 4: SCRAPING WORLD MARKET OVERVIEW                  =====")
-            logging.info("="*70)
-            world_data, world_files = s.download_and_parse_world_importers_data(CONFIG)
-            if world_data: final_data["world_market_overview"] = world_data
-            archive_downloaded_files(world_files, s.archive_dir)
+        try:
+            if s.set_driver() and s.login(ac, pw):
+                logging.info("Login successful. Beginning data extraction tasks.")
+                
+                logging.info("="*70)
+                logging.info("===== TASK 1 of 4: SCRAPING WORLD MARKET OVERVIEW                  =====")
+                logging.info("="*70)
+                world_data, world_files = s.download_and_parse_world_importers_data(CONFIG)
+                if world_data: final_data["world_market_overview"] = world_data
+                archive_downloaded_files(world_files, s.archive_dir)
 
-            logging.info("="*70)
-            logging.info("===== TASK 2 of 4: SCRAPING TARGET MARKET IMPORTS (GERMANY)        =====")
-            logging.info("="*70)
-            target_market_data, target_market_files = download_and_parse_all_views(s, CONFIG, "target_market_imports", trade_flow='I')
-            if target_market_data: final_data["target_market_analysis"] = target_market_data
-            archive_downloaded_files(target_market_files, s.archive_dir)
-            
-            logging.info("="*70)
-            logging.info("===== TASK 3 of 4: SCRAPING YOUR COUNTRY'S GLOBAL EXPORTS (S.A.)   =====")
-            logging.info("="*70)
-            export_data, export_files = download_and_parse_all_views(s, CONFIG, "your_country_exports", trade_flow='E')
-            if export_data: final_data["your_country_global_exports"] = { "total_exports_to_world_usd": export_data.get("total_value_usd")}
-            archive_downloaded_files(export_files, s.archive_dir)
+                logging.info("="*70)
+                logging.info("===== TASK 2 of 4: SCRAPING TARGET MARKET IMPORTS (GERMANY)        =====")
+                logging.info("="*70)
+                target_market_data, target_market_files = download_and_parse_all_views(s, CONFIG, "target_market_imports", trade_flow='I')
+                if target_market_data: final_data["target_market_analysis"] = target_market_data
+                archive_downloaded_files(target_market_files, s.archive_dir)
+                
+                logging.info("="*70)
+                logging.info("===== TASK 3 of 4: SCRAPING YOUR COUNTRY'S GLOBAL EXPORTS (S.A.)   =====")
+                logging.info("="*70)
+                export_data, export_files = download_and_parse_all_views(s, CONFIG, "your_country_exports", trade_flow='E')
+                if export_data: final_data["your_country_global_exports"] = { "total_exports_to_world_usd": export_data.get("total_value_usd")}
+                archive_downloaded_files(export_files, s.archive_dir)
 
-            logging.info("="*70)
-            logging.info("===== TASK 4 of 4: SCRAPING COMPANY DATA SAMPLE                    =====")
-            logging.info("="*70)
-            company_data, company_files = s.download_and_parse_company_sample_data(CONFIG, trade_flow='I')
-            if company_data: final_data["business_partners_sample"] = company_data
-            archive_downloaded_files(company_files, s.archive_dir)
+                logging.info("="*70)
+                logging.info("===== TASK 4 of 4: SCRAPING COMPANY DATA SAMPLE                    =====")
+                logging.info("="*70)
+                company_data, company_files = s.download_and_parse_company_sample_data(CONFIG, trade_flow='I')
+                if company_data: final_data["business_partners_sample"] = company_data
+                archive_downloaded_files(company_files, s.archive_dir)
 
-            save_to_json(final_data)
-            logging.info("SCRIPT FINISHED SUCCESSFULLY.")
-    except Exception as e:
-        logging.critical(f"A CRITICAL ERROR OCCURRED: {e}", exc_info=True)
-    finally:
-        if 's' in locals() and s and s.driver:
-            input("Press Enter to exit and close the browser...")
-            try: s.driver.quit()
-            except Exception: pass
-        else:
-            print("Script finished or encountered an error before browser started.")
+                save_to_json(final_data)
+                logging.info("SCRIPT FINISHED SUCCESSFULLY.")
+        except Exception as e:
+            logging.critical(f"A CRITICAL ERROR OCCURRED: {e}", exc_info=True)
+        finally:
+            if 's' in locals() and s and s.driver:
+                input("Press Enter to exit and close the browser...")
+                try: s.driver.quit()
+                except Exception: pass
+            else:
+                print("Script finished or encountered an error before browser started.")
