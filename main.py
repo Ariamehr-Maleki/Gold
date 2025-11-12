@@ -277,10 +277,12 @@ def enrich_factsheet_metrics(final_data, config):
 
 if __name__ == '__main__':
     CONFIG = {
-        "product_name": "Electric motors of an output not exceeding 37.5 W",
-        "hs_code": "850110",
-        "your_country": "South Africa", "your_country_id": "710",
-        "target_market": "Germany", "target_market_id": "276",
+        "product_name": "Laptops and automatic data processing machines",
+        "hs_code": "847130",
+        "your_country": "China",
+        "your_country_id": "156",
+        "target_market": "United States of America",
+        "target_market_id": "842",
     }
 
     final_data = {"header": {**CONFIG, "date": datetime.now().strftime("%B %Y")}}

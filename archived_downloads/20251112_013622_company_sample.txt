@@ -1,0 +1,36 @@
+﻿Company name	Number of product or service categories traded	Number of employees	Turnover (USD)	Country	City	
+Beijing Csa Computer Sciences Technology Co., Ltd. - Beijing Csa Computer Sciences Technology Co., Ltd. Shanghai Branch	1			China	Shanghai	
+Beijing Founder Electronics Co., Ltd. - Beijing Beida Fangzheng Electronics Co.,ltd. Inner Mongolia Branch Company	2			China	Huhehaote	
+Beijing Founder Electronics Co., Ltd. - Beijing Beida Founder Electronic Co., Ltd. Guangzhou Branch	5			China	Guangzhou	
+Beijing Founder Electronics Co., Ltd. - Beijing Beida Founder Electronics Co., Ltd. Taiyuan Co.	3			China	Taiyuan	
+Dalian Zeus Entertainment Co., Ltd. - Zeus	3	1117		China	Beijing	
+Dongguan New Sunlink Electronic Co.,Ltd	2	20		China	Dongguan	
+Dynabook Technology (Hangzhou) Inc.	2	2700		China	Hangzhou	
+Fuji Xerox (China) Co., Ltd. Chengdu Branch	3			China	Chengdu	
+Hengda Real Estate Group Luoyang Co., Ltd.	1	40		China	Luoyang	
+Hewlett-Packard Enterprise (China) Co., Ltd. - China Hewlett-Packard Co., Ltd. Chengdu Branch	5			China	Chengdu	
+Kingdee Software (China) Co., Ltd. - Jindie Software (China) Co., Ltd. Nanjing Branch	1			China	Nanjing	
+Kingdee Software (China) Co., Ltd. - Jindie Software (China) Co., Ltd. Wuhan Branch	2			China	Wuhan	
+Kingdee Software (China) Co., Ltd. - Kingdee Software (China) Co., Ltd. Chongqing Branch	1			China	Zhongshan	
+Kingdee Software (China) Co., Ltd. - Kingdee Software (China) Co., Ltd. Harbin Branch	2			China	Haerbin	
+Kingnet Network Co., Ltd. - Kingnet	2	1142		China	Shanghai	
+Lanzhou Gonglian HP Specialize Store	2	110		China	Lanzhou	
+Manhattan Associates Software (Shanghai) Co., Ltd.	2	25		China	Shanghai	
+MIM Software Beijing Co., Ltd.	2	15		China	Beijing	
+Mocha Software (Tianjin) Co., Ltd.	2	100		China	Tianjin	
+Modern Electronics Beijing Office	2			China	Beijing	
+Momenta (Suzhou) Technology Co., Ltd.	2	425		China	Suzhou	
+Naike Electronic Instrument(Kunshan) Co.,Ltd.	1	15		China	Kunshan	
+Newegg Technology (Chengdu) Co., Ltd.	2	300		China	Chengdu	
+Oracle (China) Software System Co., Ltd. - Oracle (China) Software Systems Co., Ltd. Chengdu Office	4			China	Chengdu	
+Shanghai Tech-Trans Information Technology Co., Ltd.	2	8		China	Shanghai	
+Shanghai Yecheng Software Technology Co., Ltd.	2	20		China	Shanghai	
+Shanwei Fuhuishi Network Technology Co., Ltd.	1	15		China	Shanwei	
+Silicon Graphics Ltd. Shanghai Representative Office	2			China	Shanghai	
+Suzhou Samsung Electronics Computer Co., Ltd.	2	1808		China	Suzhou	
+Symbio Chengdu Information Technology Co., Ltd - Symbio Chengdu	2	211		China	Chengdu	
+Systems Union (Shanghai) Ltd.	2	200		China	Shanghai	
+United Digital Systems Co., Ltd.	3	160		China	Shanghai	
+Xi'an Digital China Co., Ltd.	2	150		China	Xian	
+Xintiandi Vitcode Technology(Zhuhai) Co., Ltd.	2	89		China	Zhuhai	
+Yinxing Electronic Trading (Shanghai) Co., Ltd.	2	10		China	Shanghai	
