@@ -1,0 +1,17 @@
+{
+  "trademap_main": {
+    "header.product_name": "template_meta.product",
+    "header.hs_code": "template_meta.hs_code",
+    "factsheet_metrics.target_market_total_imports_usd": "size_of_market.target_market_imports_from_world.value_usd",
+    "factsheet_metrics.top_suppliers_top5": "competition.top_exporters",
+    "business_partners_sample": "potential_business_partners"
+  },
+  "macmap_scraper": {
+    "overview.importing_country": "target_market_profile.name_of_country",
+    "overview.import_duty": "market_access.tariff_lines.0.mfn_or_general_tariff",
+    "trade_remedies": "market_access.other_duties_and_trade_remedies"
+  },
+  "eping_scraper": {
+    "notifications": "potential_new_non_tariff_measures.eping_notifications"
+  }
+}

@@ -1,0 +1,59 @@
+{
+  "run_headless": false,
+  "scrapers": [
+    {
+      "name": "trademap",
+      "path": "scrapers/trademap_scraper.py",
+      "output_file": "trademap_output.json",
+      "priority": 100
+    },
+    {
+      "name": "macmap",
+      "path": "scrapers/macmap_scraper.py",
+      "output_file": "macmap_output.json",
+      "priority": 90
+    },
+    {
+      "name": "export_potential",
+      "path": "scrapers/potential_scraper.py",
+      "output_file": "export_potential_output.json",
+      "priority": 80
+    },
+    {
+      "name": "eping",
+      "path": "scrapers/eping_scraper.py",
+      "output_file": "eping_output.json",
+      "priority": 70
+    }
+  ],
+  "mappings": {
+    "trademap": {
+      "market_analysis.total_value_usd": "market_size_and_potential.total_market_value_usd",
+      "market_analysis.market_growth_cagr_pct": "market_size_and_potential.market_growth_cagr_5y_pct",
+      "importer_ranking.target_market_world_rank": "market_size_and_potential.target_market_world_rank",
+      "market_analysis.hhi": "market_concentration.hhi_index",
+      "market_analysis.concentration": "market_concentration.concentration_level",
+      "market_analysis.top_suppliers_sample": "market_concentration.top_5_suppliers",
+      "market_analysis.suppliers_gaining_share": "market_concentration.suppliers_gaining_share",
+      "market_analysis.rank": "competitive_landscape.your_country_rank",
+      "market_analysis.market_share_pct": "competitive_landscape.your_country_market_share_pct",
+      "market_analysis.regional_suppliers": "competitive_landscape.regional_competitors",
+      "potential_importers": "competitive_landscape.potential_importers"
+    },
+    "macmap": {
+      "overview.import_duty": "market_access_conditions.overview.import_duty",
+      "overview.trade_remedies_summary": "market_access_conditions.overview.trade_remedies_summary",
+      "overview.total_regulatory_measures": "market_access_conditions.overview.total_regulatory_measures",
+      "customs_tariffs": "market_access_conditions.customs_tariffs",
+      "trade_remedies": "market_access_conditions.trade_remedies_details",
+      "regulatory_requirements": "market_access_conditions.regulatory_requirements_details"
+    },
+    "export_potential": {
+      "analysis.unrealized_potential": "market_size_and_potential.unrealized_export_potential_usd"
+    },
+    "eping": {
+      "source_url": "regulatory_alerts.source_url",
+      "notifications": "regulatory_alerts.notifications"
+    }
+  }
+}

@@ -1,0 +1,216 @@
+{
+  "template_meta": {
+    "product": null,
+    "target_market": null,
+    "month_year": null,
+    "hs_code": null,
+    "your_country": null,
+    "logos": {
+      "top_logo": null,
+      "secondary_logo": null
+    }
+  },
+  "introduction": {
+    "short_description": null,
+    "product_hs_code_text": null
+  },
+  "visuals": {
+    "product_image": null,
+    "map_image": null
+  },
+  "trade_overview": {
+    "total_exports_from_your_country_to_world": {
+      "year": null,
+      "value_usd": null
+    },
+    "rank_in_world_for_imports_of_this_product": null,
+    "opportunity_summary": null
+  },
+  "target_market_profile": {
+    "name_of_country": null,
+    "capital_city": null,
+    "population": {
+      "value": null,
+      "reference_year": null
+    },
+    "gdp_per_capita": {
+      "value_usd": null,
+      "reference_year": null
+    },
+    "currency": null,
+    "languages": [],
+    "country_profile_link": null
+  },
+  "size_of_market": {
+    "year": null,
+    "target_market_imports_from_world": {
+      "value_usd": null,
+      "share_of_world_imports_percent": null
+    },
+    "target_market_imports_from_your_country": {
+      "value_usd": null,
+      "share_of_target_market_imports_percent": null
+    }
+  },
+  "growth_of_market": {
+    "period_years": "last_5_years",
+    "target_market_imports_growth_annual_percent": null,
+    "world_imports_growth_annual_percent": null,
+    "market_performance_vs_world": null,
+    "target_market_share_trend": null,
+    "most_recent_period": {
+      "period_label": null,
+      "growth_percent": null,
+      "sustained": null
+    },
+    "imports_from_your_country_growth_annual_percent": null,
+    "your_country_market_share_trend": null,
+    "seasonality_comments": null,
+    "historical_time_series_for_plot": [
+      {
+        "year": null,
+        "total_import_value_usd": null
+      }
+    ]
+  },
+  "unit_value": {
+    "reference_year": null,
+    "average_unit_value_target_usd_per_unit": null,
+    "unit_of_measure": null,
+    "comparison_to_world_unit_value": {
+      "relation": null,
+      "world_unit_value_usd_per_unit": null
+    },
+    "target_unit_value_trend_last_5_years": null,
+    "world_unit_value_trend_last_5_years": null,
+    "unit_value_paid_to_your_country_usd_per_unit": null,
+    "your_country_unit_value_comparison": null,
+    "your_country_unit_value_trend": null,
+    "top_5_suppliers_unit_value_appreciated": [],
+    "top_10_unit_value_range": {
+      "highest_value_usd_per_unit": null,
+      "highest_value_country": null,
+      "lowest_value_usd_per_unit": null,
+      "lowest_value_country": null,
+      "heterogeneity_comment": null
+    }
+  },
+  "competition": {
+    "market_concentration": null,
+    "top_exporters": [
+      {
+        "rank": 1,
+        "country": null,
+        "market_share_percent": null
+      },
+      {
+        "rank": 2,
+        "country": null,
+        "market_share_percent": null
+      },
+      {
+        "rank": 3,
+        "country": null,
+        "market_share_percent": null
+      }
+    ],
+    "top_10_suppliers_increasing_share": [],
+    "other_suppliers_from_region": [],
+    "competition_notes": null,
+    "market_shares_pie_chart_data": []
+  },
+  "market_access": {
+    "preferential_access_status": null,
+    "relevant_preferential_trade_agreements": [],
+    "tariff_lines": [
+      {
+        "national_tariff_line_code": null,
+        "product_description": null,
+        "mfn_or_general_tariff": null,
+        "lowest_tariff_faced_by_your_country": null,
+        "lowest_tariff_faced_by_competitor_A": null,
+        "lowest_tariff_faced_by_competitor_B": null,
+        "lowest_tariff_faced_by_competitor_C": null
+      }
+    ],
+    "short_tariff_analysis": null,
+    "preferential_tariff_advantage": null,
+    "other_top_five_pref_facing_countries": [],
+    "rules_of_origin_info": null,
+    "certificate_of_origin_info": null,
+    "tariff_rate_quota": {
+      "applies": null,
+      "quota_volume": null,
+      "quota_period": null,
+      "outside_quota_tariff_rate": null
+    },
+    "other_duties_and_trade_remedies": null,
+    "non_tariff_measures": [
+      {
+        "measure_type": null,
+        "description": null,
+        "source_link": null,
+        "notes": null
+      }
+    ]
+  },
+  "potential_new_non_tariff_measures": {
+    "eping_checked_date": null,
+    "eping_notifications_found": null,
+    "eping_notifications": [
+      {
+        "title": null,
+        "date_notified": null,
+        "summary": null,
+        "link": null,
+        "potential_impact_on_your_country": null
+      }
+    ],
+    "no_notifications_note": null
+  },
+  "potential_business_partners": [
+    {
+      "company_name": null,
+      "city": null,
+      "website": null,
+      "contact_details": {
+        "email": null,
+        "phone": null
+      },
+      "notes": null
+    }
+  ],
+  "other_promising_markets_by_2025": {
+    "in_region": {
+      "region_name": null,
+      "markets": [
+        {
+          "country": null,
+          "justification": null
+        }
+      ]
+    },
+    "in_world": [
+      {
+        "country": null,
+        "justification": null
+      }
+    ]
+  },
+  "key_insights_and_recommendations": {
+    "final_recommendations": null,
+    "additional_resources_suggested": null
+  },
+  "data_sources": [
+    {
+      "name": null,
+      "url": null,
+      "notes": null
+    }
+  ],
+  "contact_info": {
+    "organization_website": null,
+    "email": null,
+    "phone": null
+  }
+}

@@ -7,6 +7,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException, NoSuchElementException
 import time
+import argparse
 
 class MacMapScraper(TradeSpider):
     """
@@ -203,6 +204,12 @@ class MacMapScraper(TradeSpider):
         return final_data
 
 if __name__ == '__main__':
+    # --- MODIFIED: Added argparse to handle --output ---
+    parser = argparse.ArgumentParser(description="Scrape market access data from MacMap.")
+    parser.add_argument("--output", required=True, help="Path to save the output JSON file.")
+    parser.add_argument("--headless", action='store_true', help="Run in headless mode.")
+    args = parser.parse_args()
+
     CONFIG = {
         "product_name": "Laptops and automatic data processing machines",
         "hs_code": "847130",
@@ -211,20 +218,23 @@ if __name__ == '__main__':
     }
     
     macmap_data = None
-    s = MacMapScraper(headless=False, driver_path=r".\geckodriver.exe")
+    s = MacMapScraper(headless=args.headless, driver_path=r".\geckodriver.exe")
     
     try:
         if s.set_driver():
             macmap_data = s.scrape_market_access(CONFIG)
             if macmap_data:
-                with open("macmap_data_final.json", 'w', encoding='utf-8') as f:
+                # --- MODIFIED: Save to the path from command line ---
+                with open(args.output, 'w', encoding='utf-8') as f:
                     json.dump(macmap_data, f, ensure_ascii=False, indent=4)
-                logging.info("Successfully saved all scraped data to macmap_data_final.json")
+                logging.info(f"Successfully saved all scraped data to {args.output}")
             else:
                 logging.error("Scraping failed, no data was returned.")
     except Exception as e:
         logging.critical(f"A critical error occurred: {e}", exc_info=True)
     finally:
         if s and s.driver:
-            input("Press Enter to close the browser...")
+            # --- MODIFIED: Don't wait for input in headless/automated mode ---
+            if not args.headless:
+                input("Press Enter to close the browser...")
             s.driver.quit()

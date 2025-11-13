@@ -1,0 +1,48 @@
+{
+  "defaults": {
+    "parallel": true,
+    "timeout_seconds": 1800,
+    "merge_strategy": "priority"
+  },
+  "scrapers": [
+    {
+      "name": "TradeMap_Data",
+      "path": "trademap_scraper.py",
+      "output_file": "trademap_data.json",
+      "priority": 1
+    },
+    {
+      "name": "MacMap_Analysis",
+      "path": "macmap_scraper.py",
+      "output_file": "macmap_data.json",
+      "priority": 2
+    },
+    {
+      "name": "Export_Potential",
+      "path": "potential_scraper.py",
+      "output_file": "export_potential_data.json",
+      "priority": 3
+    },
+    {
+      "name": "ePing_Notifications",
+      "path": "eping_scraper.py",
+      "output_file": "eping_data.json",
+      "priority": 4
+    }
+  ],
+  "mappings": {
+    "TradeMap_Data": {
+      "market_analysis.total_value_usd": "marketSize.totalValueUSD",
+      "market_analysis.market_growth_cagr_pct": "marketSize.cagrPercent"
+    },
+    "MacMap_Analysis": {
+      "overview.import_duty": "tariffs.averageDuty"
+    },
+    "Export_Potential": {
+        "analysis.unrealized_potential": "marketOpportunities.unrealizedPotentialUSD"
+    },
+    "ePing_Notifications": {
+        "status": "regulatory.epingStatus"
+    }
+  }
+}
