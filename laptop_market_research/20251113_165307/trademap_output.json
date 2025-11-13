@@ -10,22 +10,40 @@
     },
     "market_analysis": {
         "years": [
+            2020,
+            2021,
+            2022,
+            2023,
             2024
         ],
         "latest_year": 2024,
-        "start_year": 2024,
-        "periods": 1,
+        "start_year": 2020,
+        "periods": 4,
         "raw_file": "target_market_value.txt",
         "world_values_usd": [
+            51636353,
+            60789833,
+            54530352,
+            46287585,
             49969257
         ],
         "world_quantities": [
+            122357320,
+            138069595,
+            113577372,
+            101339604,
             101436364
         ],
         "world_unit_values": [
+            422.0,
+            440.0,
+            480.0,
+            457.0,
             493.0
         ],
         "total_value_usd": 49969257,
+        "market_growth_last_year_pct": 7.95,
+        "market_growth_cagr_pct": -0.82,
         "suppliers_full_list": [
             {
                 "rank": 1,
@@ -35,63 +53,63 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 74417296,
                 "unit_value_latest": 444.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -8.77,
+                "growth_last_year_pct": -7.87
             },
             {
                 "rank": 2,
                 "name": "Viet Nam",
                 "value_usd": 13552214,
                 "market_share_pct": 27.12,
-                "gained_share_over_5_years": false,
+                "gained_share_over_5_years": true,
                 "quantity_latest": 21871542,
                 "unit_value_latest": 620.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 78.98,
+                "growth_last_year_pct": 70.83
             },
             {
                 "rank": 3,
                 "name": "Taipei, Chinese",
                 "value_usd": 2010655,
                 "market_share_pct": 4.02,
-                "gained_share_over_5_years": false,
+                "gained_share_over_5_years": true,
                 "quantity_latest": 2092391,
                 "unit_value_latest": 961.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 1.73,
+                "growth_last_year_pct": -3.9
             },
             {
                 "rank": 4,
                 "name": "Mexico",
                 "value_usd": 767433,
                 "market_share_pct": 1.54,
-                "gained_share_over_5_years": false,
+                "gained_share_over_5_years": true,
                 "quantity_latest": 1057975,
                 "unit_value_latest": 725.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 20.19,
+                "growth_last_year_pct": 608.41
             },
             {
                 "rank": 5,
                 "name": "Thailand",
                 "value_usd": 332776,
                 "market_share_pct": 0.67,
-                "gained_share_over_5_years": false,
+                "gained_share_over_5_years": true,
                 "quantity_latest": 939830,
                 "unit_value_latest": 354.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 152.09,
+                "growth_last_year_pct": 2676.84
             },
             {
                 "rank": 6,
                 "name": "Canada",
                 "value_usd": 29473,
                 "market_share_pct": 0.06,
-                "gained_share_over_5_years": false,
+                "gained_share_over_5_years": true,
                 "quantity_latest": 77067,
                 "unit_value_latest": 382.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 4.9,
+                "growth_last_year_pct": -21.94
             },
             {
                 "rank": 7,
@@ -101,19 +119,19 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 83382,
                 "unit_value_latest": 330.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -4.7,
+                "growth_last_year_pct": 27.82
             },
             {
                 "rank": 8,
                 "name": "United Arab Emirates",
                 "value_usd": 23649,
                 "market_share_pct": 0.05,
-                "gained_share_over_5_years": false,
+                "gained_share_over_5_years": true,
                 "quantity_latest": 118542,
                 "unit_value_latest": 199.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 68.62,
+                "growth_last_year_pct": 122.22
             },
             {
                 "rank": 9,
@@ -123,8 +141,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 45678,
                 "unit_value_latest": 498.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -15.76,
+                "growth_last_year_pct": -36.81
             },
             {
                 "rank": 10,
@@ -134,8 +152,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 23210,
                 "unit_value_latest": 913.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -4.32,
+                "growth_last_year_pct": -15.12
             },
             {
                 "rank": 11,
@@ -145,8 +163,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 186482,
                 "unit_value_latest": 102.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -5.42,
+                "growth_last_year_pct": 107.29
             },
             {
                 "rank": 12,
@@ -156,8 +174,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 326007,
                 "unit_value_latest": 51.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -7.79,
+                "growth_last_year_pct": -50.2
             },
             {
                 "rank": 13,
@@ -167,8 +185,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 8614,
                 "unit_value_latest": 1405.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 6.44,
+                "growth_last_year_pct": 37.87
             },
             {
                 "rank": 14,
@@ -178,8 +196,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 25178,
                 "unit_value_latest": 471.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -38.55,
+                "growth_last_year_pct": -15.71
             },
             {
                 "rank": 15,
@@ -189,19 +207,19 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 12435,
                 "unit_value_latest": 713.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -4.74,
+                "growth_last_year_pct": -33.83
             },
             {
                 "rank": 16,
                 "name": "India",
                 "value_usd": 8432,
                 "market_share_pct": 0.02,
-                "gained_share_over_5_years": false,
+                "gained_share_over_5_years": true,
                 "quantity_latest": 39580,
                 "unit_value_latest": 213.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 124.15,
+                "growth_last_year_pct": 251.48
             },
             {
                 "rank": 17,
@@ -211,41 +229,41 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 5604,
                 "unit_value_latest": 835.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 3.05,
+                "growth_last_year_pct": -25.95
             },
             {
                 "rank": 18,
                 "name": "Denmark",
                 "value_usd": 4654,
                 "market_share_pct": 0.01,
-                "gained_share_over_5_years": false,
+                "gained_share_over_5_years": true,
                 "quantity_latest": 4756,
                 "unit_value_latest": 979.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 25.96,
+                "growth_last_year_pct": -0.62
             },
             {
                 "rank": 19,
                 "name": "Costa Rica",
                 "value_usd": 3474,
                 "market_share_pct": 0.01,
-                "gained_share_over_5_years": false,
+                "gained_share_over_5_years": true,
                 "quantity_latest": 5526,
                 "unit_value_latest": 629.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 67.34,
+                "growth_last_year_pct": 406.41
             },
             {
                 "rank": 20,
                 "name": "Switzerland",
                 "value_usd": 3200,
                 "market_share_pct": 0.01,
-                "gained_share_over_5_years": false,
+                "gained_share_over_5_years": true,
                 "quantity_latest": 17306,
                 "unit_value_latest": 185.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 25.55,
+                "growth_last_year_pct": 10.5
             },
             {
                 "rank": 21,
@@ -255,8 +273,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 5916,
                 "unit_value_latest": 507.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -8.74,
+                "growth_last_year_pct": 54.06
             },
             {
                 "rank": 22,
@@ -266,8 +284,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 4009,
                 "unit_value_latest": 617.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 6.31,
+                "growth_last_year_pct": -28.83
             },
             {
                 "rank": 23,
@@ -277,8 +295,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 7211,
                 "unit_value_latest": 334.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -7.53,
+                "growth_last_year_pct": 29.13
             },
             {
                 "rank": 24,
@@ -288,8 +306,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 2462,
                 "unit_value_latest": 840.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -3.17,
+                "growth_last_year_pct": -17.09
             },
             {
                 "rank": 25,
@@ -299,8 +317,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 2087,
                 "unit_value_latest": 942.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -0.7,
+                "growth_last_year_pct": -34.24
             },
             {
                 "rank": 26,
@@ -310,8 +328,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 4910,
                 "unit_value_latest": 357.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 43.51,
+                "growth_last_year_pct": 316.15
             },
             {
                 "rank": 27,
@@ -321,8 +339,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 11839,
                 "unit_value_latest": 128.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -2.28,
+                "growth_last_year_pct": -3.33
             },
             {
                 "rank": 28,
@@ -332,8 +350,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 1255,
                 "unit_value_latest": 1049.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 6.11,
+                "growth_last_year_pct": -15.21
             },
             {
                 "rank": 29,
@@ -343,7 +361,7 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 6384,
                 "unit_value_latest": 188.0,
-                "growth_cagr_pct": 0.0,
+                "growth_cagr_pct": 239.95,
                 "growth_last_year_pct": 0.0
             },
             {
@@ -354,8 +372,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 734,
                 "unit_value_latest": 1589.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 35.59,
+                "growth_last_year_pct": 5.23
             },
             {
                 "rank": 31,
@@ -365,8 +383,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 1257,
                 "unit_value_latest": 871.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 36.65,
+                "growth_last_year_pct": 45.03
             },
             {
                 "rank": 32,
@@ -376,8 +394,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 1521,
                 "unit_value_latest": 592.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 7.22,
+                "growth_last_year_pct": 102.25
             },
             {
                 "rank": 33,
@@ -387,8 +405,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 748,
                 "unit_value_latest": 988.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -28.18,
+                "growth_last_year_pct": 31.26
             },
             {
                 "rank": 34,
@@ -398,8 +416,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 910,
                 "unit_value_latest": 791.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -8.65,
+                "growth_last_year_pct": -18.18
             },
             {
                 "rank": 35,
@@ -409,8 +427,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 2906,
                 "unit_value_latest": 239.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 41.12,
+                "growth_last_year_pct": 34.76
             },
             {
                 "rank": 36,
@@ -420,8 +438,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 2617,
                 "unit_value_latest": 249.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 60.14,
+                "growth_last_year_pct": 68.65
             },
             {
                 "rank": 37,
@@ -431,8 +449,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 2385,
                 "unit_value_latest": 244.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -7.81,
+                "growth_last_year_pct": 104.56
             },
             {
                 "rank": 38,
@@ -442,8 +460,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 1573,
                 "unit_value_latest": 347.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -3.09,
+                "growth_last_year_pct": -85.22
             },
             {
                 "rank": 39,
@@ -453,8 +471,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 909,
                 "unit_value_latest": 579.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 95.51,
+                "growth_last_year_pct": 13.12
             },
             {
                 "rank": 40,
@@ -464,8 +482,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 672,
                 "unit_value_latest": 759.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -24.26,
+                "growth_last_year_pct": 25.0
             },
             {
                 "rank": 41,
@@ -475,8 +493,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 1197,
                 "unit_value_latest": 391.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 66.43,
+                "growth_last_year_pct": -77.89
             },
             {
                 "rank": 42,
@@ -486,8 +504,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 535,
                 "unit_value_latest": 764.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -16.61,
+                "growth_last_year_pct": -12.23
             },
             {
                 "rank": 43,
@@ -497,8 +515,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 3561,
                 "unit_value_latest": 101.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -60.41,
+                "growth_last_year_pct": 60.0
             },
             {
                 "rank": 44,
@@ -509,7 +527,7 @@
                 "quantity_latest": 615,
                 "unit_value_latest": 473.0,
                 "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_last_year_pct": -70.81
             },
             {
                 "rank": 45,
@@ -519,8 +537,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 210,
                 "unit_value_latest": 1281.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 37.16,
+                "growth_last_year_pct": 92.14
             },
             {
                 "rank": 46,
@@ -530,8 +548,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 128,
                 "unit_value_latest": 1977.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 182.01,
+                "growth_last_year_pct": 160.82
             },
             {
                 "rank": 47,
@@ -541,8 +559,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 418,
                 "unit_value_latest": 335.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 24.11,
+                "growth_last_year_pct": 418.52
             },
             {
                 "rank": 48,
@@ -552,8 +570,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 23,
                 "unit_value_latest": 5522.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 155.08,
+                "growth_last_year_pct": 1487.5
             },
             {
                 "rank": 49,
@@ -563,8 +581,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 343,
                 "unit_value_latest": 335.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 35.61,
+                "growth_last_year_pct": 310.71
             },
             {
                 "rank": 50,
@@ -574,8 +592,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 114,
                 "unit_value_latest": 886.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 140.88,
+                "growth_last_year_pct": -6.48
             },
             {
                 "rank": 51,
@@ -585,8 +603,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 102,
                 "unit_value_latest": 873.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 58.79,
+                "growth_last_year_pct": 34.85
             },
             {
                 "rank": 52,
@@ -596,8 +614,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 5500,
                 "unit_value_latest": 15.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -33.09,
+                "growth_last_year_pct": 1975.0
             },
             {
                 "rank": 53,
@@ -607,8 +625,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 1500,
                 "unit_value_latest": 54.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -15.78,
+                "growth_last_year_pct": 350.0
             },
             {
                 "rank": 54,
@@ -618,8 +636,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 49,
                 "unit_value_latest": 1449.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -27.43,
+                "growth_last_year_pct": 2.9
             },
             {
                 "rank": 55,
@@ -640,8 +658,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 348,
                 "unit_value_latest": 175.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -42.95,
+                "growth_last_year_pct": -22.78
             },
             {
                 "rank": 57,
@@ -651,8 +669,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 15,
                 "unit_value_latest": 2533.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -23.85,
+                "growth_last_year_pct": -80.51
             },
             {
                 "rank": 58,
@@ -662,8 +680,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 38,
                 "unit_value_latest": 974.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 1.4,
+                "growth_last_year_pct": 516.67
             },
             {
                 "rank": 59,
@@ -685,7 +703,7 @@
                 "quantity_latest": 37,
                 "unit_value_latest": 946.0,
                 "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_last_year_pct": 1066.67
             },
             {
                 "rank": 61,
@@ -695,7 +713,7 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 20,
                 "unit_value_latest": 1300.0,
-                "growth_cagr_pct": 0.0,
+                "growth_cagr_pct": -38.09,
                 "growth_last_year_pct": 0.0
             },
             {
@@ -706,8 +724,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 31,
                 "unit_value_latest": 806.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -19.99,
+                "growth_last_year_pct": 400.0
             },
             {
                 "rank": 63,
@@ -728,8 +746,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 13,
                 "unit_value_latest": 1538.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 77.83,
+                "growth_last_year_pct": 400.0
             },
             {
                 "rank": 65,
@@ -750,8 +768,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 9,
                 "unit_value_latest": 2000.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 73.21,
+                "growth_last_year_pct": -87.76
             },
             {
                 "rank": 67,
@@ -761,8 +779,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 4,
                 "unit_value_latest": 4000.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -1.5,
+                "growth_last_year_pct": -52.94
             },
             {
                 "rank": 68,
@@ -784,7 +802,7 @@
                 "quantity_latest": 10,
                 "unit_value_latest": 1400.0,
                 "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_last_year_pct": 366.67
             },
             {
                 "rank": 70,
@@ -795,7 +813,7 @@
                 "quantity_latest": 10,
                 "unit_value_latest": 1200.0,
                 "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_last_year_pct": -76.47
             },
             {
                 "rank": 71,
@@ -817,7 +835,7 @@
                 "quantity_latest": 6,
                 "unit_value_latest": 1667.0,
                 "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_last_year_pct": -75.61
             },
             {
                 "rank": 73,
@@ -827,8 +845,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 3,
                 "unit_value_latest": 3333.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 18.92,
+                "growth_last_year_pct": 400.0
             },
             {
                 "rank": 74,
@@ -838,8 +856,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 27,
                 "unit_value_latest": 370.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -45.46,
+                "growth_last_year_pct": 11.11
             },
             {
                 "rank": 75,
@@ -849,8 +867,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 3,
                 "unit_value_latest": 3333.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 5.74,
+                "growth_last_year_pct": 100.0
             },
             {
                 "rank": 76,
@@ -860,7 +878,7 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 5,
                 "unit_value_latest": 1800.0,
-                "growth_cagr_pct": 0.0,
+                "growth_cagr_pct": 31.61,
                 "growth_last_year_pct": 0.0
             },
             {
@@ -882,8 +900,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 2,
                 "unit_value_latest": 4000.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 27.79,
+                "growth_last_year_pct": -20.0
             },
             {
                 "rank": 79,
@@ -904,7 +922,7 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 9,
                 "unit_value_latest": 889.0,
-                "growth_cagr_pct": 0.0,
+                "growth_cagr_pct": -62.42,
                 "growth_last_year_pct": 0.0
             },
             {
@@ -915,8 +933,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 1,
                 "unit_value_latest": 6000.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -53.56,
+                "growth_last_year_pct": -76.0
             },
             {
                 "rank": 82,
@@ -927,7 +945,7 @@
                 "quantity_latest": 15,
                 "unit_value_latest": 400.0,
                 "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_last_year_pct": -33.33
             },
             {
                 "rank": 83,
@@ -937,7 +955,7 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 1,
                 "unit_value_latest": 6000.0,
-                "growth_cagr_pct": 0.0,
+                "growth_cagr_pct": 31.61,
                 "growth_last_year_pct": 0.0
             },
             {
@@ -959,7 +977,7 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 1,
                 "unit_value_latest": 5000.0,
-                "growth_cagr_pct": 0.0,
+                "growth_cagr_pct": 13.62,
                 "growth_last_year_pct": 0.0
             },
             {
@@ -970,8 +988,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 5,
                 "unit_value_latest": 1000.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 25.74,
+                "growth_last_year_pct": -54.55
             },
             {
                 "rank": 87,
@@ -992,8 +1010,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 1,
                 "unit_value_latest": 4000.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -18.35,
+                "growth_last_year_pct": -50.0
             },
             {
                 "rank": 89,
@@ -1003,8 +1021,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 1,
                 "unit_value_latest": 4000.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -45.4,
+                "growth_last_year_pct": -90.91
             },
             {
                 "rank": 90,
@@ -1014,8 +1032,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 1,
                 "unit_value_latest": 4000.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -5.43,
+                "growth_last_year_pct": -55.56
             },
             {
                 "rank": 91,
@@ -1025,8 +1043,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 3,
                 "unit_value_latest": 1333.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -9.64,
+                "growth_last_year_pct": 33.33
             },
             {
                 "rank": 92,
@@ -1047,8 +1065,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 23,
                 "unit_value_latest": 130.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -75.46,
+                "growth_last_year_pct": -50.0
             },
             {
                 "rank": 94,
@@ -1058,8 +1076,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 3,
                 "unit_value_latest": 1000.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -63.17,
+                "growth_last_year_pct": -97.89
             },
             {
                 "rank": 95,
@@ -1070,7 +1088,7 @@
                 "quantity_latest": 1,
                 "unit_value_latest": 3000.0,
                 "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_last_year_pct": -25.0
             },
             {
                 "rank": 96,
@@ -1081,7 +1099,7 @@
                 "quantity_latest": 1,
                 "unit_value_latest": 3000.0,
                 "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_last_year_pct": -62.5
             },
             {
                 "rank": 97,
@@ -1102,8 +1120,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 1,
                 "unit_value_latest": 3000.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -11.99,
+                "growth_last_year_pct": 50.0
             },
             {
                 "rank": 99,
@@ -1125,7 +1143,7 @@
                 "quantity_latest": 2,
                 "unit_value_latest": 1500.0,
                 "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_last_year_pct": -96.97
             },
             {
                 "rank": 101,
@@ -1136,7 +1154,7 @@
                 "quantity_latest": 1,
                 "unit_value_latest": 3000.0,
                 "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_last_year_pct": -94.12
             },
             {
                 "rank": 102,
@@ -1147,7 +1165,7 @@
                 "quantity_latest": 1,
                 "unit_value_latest": 2000.0,
                 "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_last_year_pct": -77.78
             },
             {
                 "rank": 103,
@@ -1168,8 +1186,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -100.0,
+                "growth_last_year_pct": -100.0
             },
             {
                 "rank": 105,
@@ -1179,8 +1197,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -100.0,
+                "growth_last_year_pct": -100.0
             },
             {
                 "rank": 106,
@@ -1190,7 +1208,7 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
+                "growth_cagr_pct": -100.0,
                 "growth_last_year_pct": 0.0
             },
             {
@@ -1202,7 +1220,7 @@
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
                 "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_last_year_pct": -100.0
             },
             {
                 "rank": 108,
@@ -1223,7 +1241,7 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
+                "growth_cagr_pct": -100.0,
                 "growth_last_year_pct": 0.0
             },
             {
@@ -1234,8 +1252,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -100.0,
+                "growth_last_year_pct": -100.0
             },
             {
                 "rank": 111,
@@ -1245,8 +1263,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -100.0,
+                "growth_last_year_pct": -100.0
             },
             {
                 "rank": 112,
@@ -1256,7 +1274,7 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
+                "growth_cagr_pct": -100.0,
                 "growth_last_year_pct": 0.0
             },
             {
@@ -1268,7 +1286,7 @@
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
                 "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_last_year_pct": -100.0
             },
             {
                 "rank": 114,
@@ -1300,7 +1318,7 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
+                "growth_cagr_pct": -100.0,
                 "growth_last_year_pct": 0.0
             },
             {
@@ -1311,7 +1329,7 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
+                "growth_cagr_pct": -100.0,
                 "growth_last_year_pct": 0.0
             },
             {
@@ -1322,7 +1340,7 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
+                "growth_cagr_pct": -100.0,
                 "growth_last_year_pct": 0.0
             },
             {
@@ -1344,7 +1362,7 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
+                "growth_cagr_pct": -100.0,
                 "growth_last_year_pct": 0.0
             },
             {
@@ -1366,7 +1384,7 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
+                "growth_cagr_pct": -100.0,
                 "growth_last_year_pct": 0.0
             },
             {
@@ -1378,7 +1396,7 @@
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
                 "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_last_year_pct": -100.0
             },
             {
                 "rank": 124,
@@ -1388,8 +1406,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -100.0,
+                "growth_last_year_pct": -100.0
             },
             {
                 "rank": 125,
@@ -1400,7 +1418,7 @@
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
                 "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_last_year_pct": -100.0
             },
             {
                 "rank": 126,
@@ -1410,8 +1428,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -100.0,
+                "growth_last_year_pct": -100.0
             },
             {
                 "rank": 127,
@@ -1432,8 +1450,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -100.0,
+                "growth_last_year_pct": -100.0
             },
             {
                 "rank": 129,
@@ -1444,7 +1462,7 @@
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
                 "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_last_year_pct": -100.0
             },
             {
                 "rank": 130,
@@ -1455,7 +1473,7 @@
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
                 "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_last_year_pct": -100.0
             },
             {
                 "rank": 131,
@@ -1465,8 +1483,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -100.0,
+                "growth_last_year_pct": -100.0
             },
             {
                 "rank": 132,
@@ -1488,7 +1506,7 @@
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
                 "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_last_year_pct": -100.0
             },
             {
                 "rank": 134,
@@ -1499,7 +1517,7 @@
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
                 "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_last_year_pct": -100.0
             },
             {
                 "rank": 135,
@@ -1509,8 +1527,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -100.0,
+                "growth_last_year_pct": -100.0
             },
             {
                 "rank": 136,
@@ -1532,7 +1550,7 @@
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
                 "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_last_year_pct": -100.0
             },
             {
                 "rank": 138,
@@ -1542,7 +1560,7 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
+                "growth_cagr_pct": -100.0,
                 "growth_last_year_pct": 0.0
             },
             {
@@ -1553,8 +1571,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -100.0,
+                "growth_last_year_pct": -100.0
             },
             {
                 "rank": 140,
@@ -1564,8 +1582,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -100.0,
+                "growth_last_year_pct": -100.0
             },
             {
                 "rank": 141,
@@ -1597,8 +1615,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -100.0,
+                "growth_last_year_pct": -100.0
             },
             {
                 "rank": 144,
@@ -1609,7 +1627,7 @@
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
                 "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_last_year_pct": -100.0
             },
             {
                 "rank": 145,
@@ -1620,7 +1638,7 @@
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
                 "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_last_year_pct": -100.0
             },
             {
                 "rank": 146,
@@ -1631,7 +1649,7 @@
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
                 "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_last_year_pct": -100.0
             },
             {
                 "rank": 147,
@@ -1642,7 +1660,7 @@
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
                 "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_last_year_pct": -100.0
             },
             {
                 "rank": 148,
@@ -1652,8 +1670,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -100.0,
+                "growth_last_year_pct": -100.0
             },
             {
                 "rank": 149,
@@ -1664,7 +1682,7 @@
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
                 "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_last_year_pct": -100.0
             },
             {
                 "rank": 150,
@@ -1686,7 +1704,7 @@
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
                 "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_last_year_pct": -100.0
             },
             {
                 "rank": 152,
@@ -1696,7 +1714,7 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
+                "growth_cagr_pct": -100.0,
                 "growth_last_year_pct": 0.0
             },
             {
@@ -1718,7 +1736,7 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
+                "growth_cagr_pct": -100.0,
                 "growth_last_year_pct": 0.0
             },
             {
@@ -1729,7 +1747,7 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
+                "growth_cagr_pct": -100.0,
                 "growth_last_year_pct": 0.0
             },
             {
@@ -1741,7 +1759,7 @@
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
                 "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_last_year_pct": -100.0
             },
             {
                 "rank": 157,
@@ -1751,8 +1769,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -100.0,
+                "growth_last_year_pct": -100.0
             }
         ],
         "top_suppliers_sample": [
@@ -1764,63 +1782,63 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 74417296,
                 "unit_value_latest": 444.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -8.77,
+                "growth_last_year_pct": -7.87
             },
             {
                 "rank": 2,
                 "name": "Viet Nam",
                 "value_usd": 13552214,
                 "market_share_pct": 27.12,
-                "gained_share_over_5_years": false,
+                "gained_share_over_5_years": true,
                 "quantity_latest": 21871542,
                 "unit_value_latest": 620.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 78.98,
+                "growth_last_year_pct": 70.83
             },
             {
                 "rank": 3,
                 "name": "Taipei, Chinese",
                 "value_usd": 2010655,
                 "market_share_pct": 4.02,
-                "gained_share_over_5_years": false,
+                "gained_share_over_5_years": true,
                 "quantity_latest": 2092391,
                 "unit_value_latest": 961.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 1.73,
+                "growth_last_year_pct": -3.9
             },
             {
                 "rank": 4,
                 "name": "Mexico",
                 "value_usd": 767433,
                 "market_share_pct": 1.54,
-                "gained_share_over_5_years": false,
+                "gained_share_over_5_years": true,
                 "quantity_latest": 1057975,
                 "unit_value_latest": 725.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 20.19,
+                "growth_last_year_pct": 608.41
             },
             {
                 "rank": 5,
                 "name": "Thailand",
                 "value_usd": 332776,
                 "market_share_pct": 0.67,
-                "gained_share_over_5_years": false,
+                "gained_share_over_5_years": true,
                 "quantity_latest": 939830,
                 "unit_value_latest": 354.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 152.09,
+                "growth_last_year_pct": 2676.84
             },
             {
                 "rank": 6,
                 "name": "Canada",
                 "value_usd": 29473,
                 "market_share_pct": 0.06,
-                "gained_share_over_5_years": false,
+                "gained_share_over_5_years": true,
                 "quantity_latest": 77067,
                 "unit_value_latest": 382.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 4.9,
+                "growth_last_year_pct": -21.94
             },
             {
                 "rank": 7,
@@ -1830,19 +1848,19 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 83382,
                 "unit_value_latest": 330.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -4.7,
+                "growth_last_year_pct": 27.82
             },
             {
                 "rank": 8,
                 "name": "United Arab Emirates",
                 "value_usd": 23649,
                 "market_share_pct": 0.05,
-                "gained_share_over_5_years": false,
+                "gained_share_over_5_years": true,
                 "quantity_latest": 118542,
                 "unit_value_latest": 199.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 68.62,
+                "growth_last_year_pct": 122.22
             },
             {
                 "rank": 9,
@@ -1852,8 +1870,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 45678,
                 "unit_value_latest": 498.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -15.76,
+                "growth_last_year_pct": -36.81
             },
             {
                 "rank": 10,
@@ -1863,8 +1881,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 23210,
                 "unit_value_latest": 913.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -4.32,
+                "growth_last_year_pct": -15.12
             },
             {
                 "rank": 11,
@@ -1874,8 +1892,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 186482,
                 "unit_value_latest": 102.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -5.42,
+                "growth_last_year_pct": 107.29
             },
             {
                 "rank": 12,
@@ -1885,8 +1903,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 326007,
                 "unit_value_latest": 51.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -7.79,
+                "growth_last_year_pct": -50.2
             },
             {
                 "rank": 13,
@@ -1896,8 +1914,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 8614,
                 "unit_value_latest": 1405.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 6.44,
+                "growth_last_year_pct": 37.87
             },
             {
                 "rank": 14,
@@ -1907,8 +1925,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 25178,
                 "unit_value_latest": 471.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -38.55,
+                "growth_last_year_pct": -15.71
             },
             {
                 "rank": 15,
@@ -1918,19 +1936,19 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 12435,
                 "unit_value_latest": 713.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -4.74,
+                "growth_last_year_pct": -33.83
             },
             {
                 "rank": 16,
                 "name": "India",
                 "value_usd": 8432,
                 "market_share_pct": 0.02,
-                "gained_share_over_5_years": false,
+                "gained_share_over_5_years": true,
                 "quantity_latest": 39580,
                 "unit_value_latest": 213.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 124.15,
+                "growth_last_year_pct": 251.48
             },
             {
                 "rank": 17,
@@ -1940,44 +1958,51 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 5604,
                 "unit_value_latest": 835.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 3.05,
+                "growth_last_year_pct": -25.95
             },
             {
                 "rank": 18,
                 "name": "Denmark",
                 "value_usd": 4654,
                 "market_share_pct": 0.01,
-                "gained_share_over_5_years": false,
+                "gained_share_over_5_years": true,
                 "quantity_latest": 4756,
                 "unit_value_latest": 979.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 25.96,
+                "growth_last_year_pct": -0.62
             },
             {
                 "rank": 19,
                 "name": "Costa Rica",
                 "value_usd": 3474,
                 "market_share_pct": 0.01,
-                "gained_share_over_5_years": false,
+                "gained_share_over_5_years": true,
                 "quantity_latest": 5526,
                 "unit_value_latest": 629.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 67.34,
+                "growth_last_year_pct": 406.41
             },
             {
                 "rank": 20,
                 "name": "Switzerland",
                 "value_usd": 3200,
                 "market_share_pct": 0.01,
-                "gained_share_over_5_years": false,
+                "gained_share_over_5_years": true,
                 "quantity_latest": 17306,
                 "unit_value_latest": 185.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 25.55,
+                "growth_last_year_pct": 10.5
             }
         ],
-        "suppliers_gaining_share": [],
+        "suppliers_gaining_share": [
+            "Viet Nam",
+            "Taipei, Chinese",
+            "Mexico",
+            "Thailand",
+            "Canada",
+            "United Arab Emirates"
+        ],
         "hhi": 5131.64,
         "concentration": "concentrated",
         "rank": 1,
@@ -1985,32 +2010,32 @@
         "value_usd": 33059491,
         "market_share_pct": 66.16,
         "gained_share_over_5_years": false,
-        "quantity_latest": 74417296,
-        "unit_value_latest": 444.0,
-        "growth_cagr_pct": 0.0,
-        "growth_last_year_pct": 0.0,
+        "quantity_latest": null,
+        "unit_value_latest": null,
+        "growth_cagr_pct": -8.77,
+        "growth_last_year_pct": -7.87,
         "regional_suppliers": [
             {
                 "rank": 2,
                 "name": "Viet Nam",
                 "value_usd": 13552214,
                 "market_share_pct": 27.12,
-                "gained_share_over_5_years": false,
+                "gained_share_over_5_years": true,
                 "quantity_latest": 21871542,
                 "unit_value_latest": 620.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 78.98,
+                "growth_last_year_pct": 70.83
             },
             {
                 "rank": 5,
                 "name": "Thailand",
                 "value_usd": 332776,
                 "market_share_pct": 0.67,
-                "gained_share_over_5_years": false,
+                "gained_share_over_5_years": true,
                 "quantity_latest": 939830,
                 "unit_value_latest": 354.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 152.09,
+                "growth_last_year_pct": 2676.84
             },
             {
                 "rank": 7,
@@ -2020,19 +2045,19 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 83382,
                 "unit_value_latest": 330.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -4.7,
+                "growth_last_year_pct": 27.82
             },
             {
                 "rank": 8,
                 "name": "United Arab Emirates",
                 "value_usd": 23649,
                 "market_share_pct": 0.05,
-                "gained_share_over_5_years": false,
+                "gained_share_over_5_years": true,
                 "quantity_latest": 118542,
                 "unit_value_latest": 199.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 68.62,
+                "growth_last_year_pct": 122.22
             },
             {
                 "rank": 9,
@@ -2042,8 +2067,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 45678,
                 "unit_value_latest": 498.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -15.76,
+                "growth_last_year_pct": -36.81
             },
             {
                 "rank": 11,
@@ -2053,8 +2078,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 186482,
                 "unit_value_latest": 102.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -5.42,
+                "growth_last_year_pct": 107.29
             },
             {
                 "rank": 14,
@@ -2064,19 +2089,19 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 25178,
                 "unit_value_latest": 471.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -38.55,
+                "growth_last_year_pct": -15.71
             },
             {
                 "rank": 16,
                 "name": "India",
                 "value_usd": 8432,
                 "market_share_pct": 0.02,
-                "gained_share_over_5_years": false,
+                "gained_share_over_5_years": true,
                 "quantity_latest": 39580,
                 "unit_value_latest": 213.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 124.15,
+                "growth_last_year_pct": 251.48
             },
             {
                 "rank": 21,
@@ -2086,8 +2111,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 5916,
                 "unit_value_latest": 507.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -8.74,
+                "growth_last_year_pct": 54.06
             },
             {
                 "rank": 24,
@@ -2097,8 +2122,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 2462,
                 "unit_value_latest": 840.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -3.17,
+                "growth_last_year_pct": -17.09
             },
             {
                 "rank": 43,
@@ -2108,8 +2133,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 3561,
                 "unit_value_latest": 101.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -60.41,
+                "growth_last_year_pct": 60.0
             },
             {
                 "rank": 45,
@@ -2119,8 +2144,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 210,
                 "unit_value_latest": 1281.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 37.16,
+                "growth_last_year_pct": 92.14
             },
             {
                 "rank": 57,
@@ -2130,8 +2155,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 15,
                 "unit_value_latest": 2533.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -23.85,
+                "growth_last_year_pct": -80.51
             },
             {
                 "rank": 71,
@@ -2152,8 +2177,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 3,
                 "unit_value_latest": 3333.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 18.92,
+                "growth_last_year_pct": 400.0
             },
             {
                 "rank": 77,
@@ -2174,8 +2199,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 2,
                 "unit_value_latest": 4000.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": 27.79,
+                "growth_last_year_pct": -20.0
             },
             {
                 "rank": 82,
@@ -2186,7 +2211,7 @@
                 "quantity_latest": 15,
                 "unit_value_latest": 400.0,
                 "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_last_year_pct": -33.33
             },
             {
                 "rank": 85,
@@ -2196,7 +2221,7 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 1,
                 "unit_value_latest": 5000.0,
-                "growth_cagr_pct": 0.0,
+                "growth_cagr_pct": 13.62,
                 "growth_last_year_pct": 0.0
             },
             {
@@ -2207,8 +2232,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 1,
                 "unit_value_latest": 4000.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -5.43,
+                "growth_last_year_pct": -55.56
             },
             {
                 "rank": 94,
@@ -2218,8 +2243,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 3,
                 "unit_value_latest": 1000.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -63.17,
+                "growth_last_year_pct": -97.89
             },
             {
                 "rank": 104,
@@ -2229,8 +2254,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -100.0,
+                "growth_last_year_pct": -100.0
             },
             {
                 "rank": 105,
@@ -2240,8 +2265,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -100.0,
+                "growth_last_year_pct": -100.0
             },
             {
                 "rank": 109,
@@ -2251,7 +2276,7 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
+                "growth_cagr_pct": -100.0,
                 "growth_last_year_pct": 0.0
             },
             {
@@ -2262,7 +2287,7 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
+                "growth_cagr_pct": -100.0,
                 "growth_last_year_pct": 0.0
             },
             {
@@ -2274,7 +2299,7 @@
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
                 "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_last_year_pct": -100.0
             },
             {
                 "rank": 114,
@@ -2295,7 +2320,7 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
+                "growth_cagr_pct": -100.0,
                 "growth_last_year_pct": 0.0
             },
             {
@@ -2318,7 +2343,7 @@
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
                 "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_last_year_pct": -100.0
             },
             {
                 "rank": 131,
@@ -2328,8 +2353,8 @@
                 "gained_share_over_5_years": false,
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
-                "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_cagr_pct": -100.0,
+                "growth_last_year_pct": -100.0
             },
             {
                 "rank": 132,
@@ -2351,7 +2376,7 @@
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
                 "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_last_year_pct": -100.0
             },
             {
                 "rank": 137,
@@ -2362,7 +2387,7 @@
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
                 "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_last_year_pct": -100.0
             },
             {
                 "rank": 156,
@@ -2373,7 +2398,7 @@
                 "quantity_latest": 0,
                 "unit_value_latest": 0.0,
                 "growth_cagr_pct": 0.0,
-                "growth_last_year_pct": 0.0
+                "growth_last_year_pct": -100.0
             }
         ]
     },
