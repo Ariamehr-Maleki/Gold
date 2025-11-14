@@ -66,6 +66,9 @@ class MacMapScraper(TradeSpider):
             tariffs_table_element = self.driver.find_element(By.ID, "custom-duties-results")
             df = pd.read_html(tariffs_table_element.get_attribute('outerHTML'))[0]
             logging.info("Successfully parsed Customs Tariffs table.")
+            # Replace all NaN values with an empty string for clean JSON output
+            df = df.fillna('')
+            # Return cleaned records as list of dicts
             return df.to_dict('records')
         except Exception as e:
             logging.error(f"Failed to parse Customs Tariffs table: {e}")

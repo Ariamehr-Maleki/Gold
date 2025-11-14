@@ -1,0 +1,78 @@
+{
+  "meta": {
+    "report_generated_utc": null,
+    "product_hs6": null,
+    "exporting_country": null,
+    "importing_country": null,
+    "orchestration_timestamp_utc": "2025-11-13T21:10:38.029851",
+    "run_metadata": {
+      "scraper_runs": [
+        {
+          "name": "export_potential",
+          "status": "SUCCESS",
+          "duration": 44.61,
+          "output_path": "./runs\\20251114_003414\\export_potential_output.json",
+          "log_path": "./runs\\20251114_003414\\logs\\export_potential.log"
+        },
+        {
+          "name": "eping",
+          "status": "SUCCESS",
+          "duration": 64.25,
+          "output_path": "./runs\\20251114_003414\\eping_output.json",
+          "log_path": "./runs\\20251114_003414\\logs\\eping.log"
+        },
+        {
+          "name": "macmap",
+          "status": "FAIL",
+          "duration": 70.2,
+          "output_path": "./runs\\20251114_003414\\macmap_output.json",
+          "log_path": "./runs\\20251114_003414\\logs\\macmap.log"
+        },
+        {
+          "name": "trademap",
+          "status": "FAIL",
+          "duration": 383.91,
+          "output_path": "./runs\\20251114_003414\\trademap_output.json",
+          "log_path": "./runs\\20251114_003414\\logs\\trademap.log"
+        }
+      ]
+    }
+  },
+  "market_size_and_potential": {
+    "total_market_value_usd": null,
+    "market_growth_cagr_5y_pct": null,
+    "unrealized_export_potential_usd": "$5 bn",
+    "target_market_world_rank": null
+  },
+  "market_access_conditions": {
+    "overview": {
+      "import_duty": null,
+      "trade_remedies_summary": null,
+      "total_regulatory_measures": null
+    },
+    "customs_tariffs": [],
+    "trade_remedies_details": [],
+    "regulatory_requirements_details": {}
+  },
+  "market_concentration": {
+    "hhi_index": null,
+    "concentration_level": null,
+    "top_5_suppliers": [],
+    "suppliers_gaining_share": []
+  },
+  "competitive_landscape": {
+    "your_country_rank": null,
+    "your_country_market_share_pct": null,
+    "regional_competitors": [],
+    "potential_importers": []
+  },
+  "regulatory_alerts": {
+    "source_url": "https://www.epingalert.org/en/Search/Index?countryIds=C842",
+    "notifications": []
+  },
+  "source_data": {
+    "trademap": {
+      "market_analysis_details": {}
+    }
+  }
+}

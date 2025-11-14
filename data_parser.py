@@ -47,6 +47,12 @@ def _add_regional_suppliers(final_data, config):
 def _parse_timeseries_txt(file_path, config):
     logging.info(f"Parsing Time Series data from TXT file: {os.path.basename(file_path)}")
     try:
+        with open(file_path, 'r', encoding='utf-8-sig') as f:
+            content_preview = f.read(500) # Read first 500 characters
+        if '<html' in content_preview.lower() or 'world' not in content_preview.lower():
+            logging.error(f"File {os.path.basename(file_path)} does not appear to be a valid TradeMap data table. It may be an HTML error page. Aborting parse for this file.")
+            return {} # Stop processing this file
+        
         df = pd.read_csv(file_path, sep='\t', header=0, encoding='utf-8-sig')
         df.columns = [col.strip().strip('"') for col in df.columns]
         df = df.apply(lambda x: x.str.strip().str.strip('"') if x.dtype == "object" else x)
@@ -55,7 +61,7 @@ def _parse_timeseries_txt(file_path, config):
         # --- FIX 1: More flexible column identification to handle inconsistent naming ---
         # This new logic correctly identifies columns with years regardless of the text around them.
         all_year_cols = [col for col in df.columns if re.search(r'\d{4}', col)]
-        value_cols = [c for c in all_year_cols if 'value' in c.lower() and 'unit' not in c.lower()]
+        value_cols = [c for c in all_year_cols if 'value' in c.lower() and 'unit value' not in c.lower()]
         qty_cols = [c for c in all_year_cols if 'quantity' in c.lower()]
         uv_cols = [c for c in all_year_cols if 'unit value' in c.lower()]
         # --- END OF FIX 1 ---

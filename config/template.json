@@ -1,9 +1,9 @@
 {
   "meta": {
     "report_generated_utc": null,
-    "product_hs6": "847130",
-    "exporting_country": "China",
-    "importing_country": "United States of America"
+    "product_hs6": null,
+    "exporting_country": null,
+    "importing_country": null
   },
   "market_size_and_potential": {
     "total_market_value_usd": null,
@@ -36,5 +36,10 @@
   "regulatory_alerts": {
     "source_url": null,
     "notifications": []
+  },
+  "source_data": {
+    "trademap": {
+      "market_analysis_details": {}
+    }
   }
 }

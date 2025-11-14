@@ -1,5 +1,5 @@
 {
-  "run_headless": false,
+  "run_headless": true,
   "scrapers": [
     {
       "name": "trademap",
@@ -28,17 +28,32 @@
   ],
   "mappings": {
     "trademap": {
+      "//": "--- MAPPINGS FOR REPORT METADATA (HEADER) ---",
+      "config.your_country": "meta.exporting_country",
+      "config.target_market": "meta.importing_country",
+      "config.hs_code": "meta.product_hs6",
+
+      "//": "--- MAPPINGS FOR MARKET SIZE & POTENTIAL SECTION ---",
       "market_analysis.total_value_usd": "market_size_and_potential.total_market_value_usd",
       "market_analysis.market_growth_cagr_pct": "market_size_and_potential.market_growth_cagr_5y_pct",
       "importer_ranking.target_market_world_rank": "market_size_and_potential.target_market_world_rank",
+      
+      "//": "--- MAPPINGS FOR MARKET CONCENTRATION & SUPPLIERS ---",
       "market_analysis.hhi": "market_concentration.hhi_index",
       "market_analysis.concentration": "market_concentration.concentration_level",
       "market_analysis.top_suppliers_sample": "market_concentration.top_5_suppliers",
       "market_analysis.suppliers_gaining_share": "market_concentration.suppliers_gaining_share",
+      
+      "//": "--- MAPPINGS FOR YOUR COUNTRY'S COMPETITIVE POSITION ---",
       "market_analysis.rank": "competitive_landscape.your_country_rank",
       "market_analysis.market_share_pct": "competitive_landscape.your_country_market_share_pct",
       "market_analysis.regional_suppliers": "competitive_landscape.regional_competitors",
-      "potential_importers": "competitive_landscape.potential_importers"
+      "potential_importers": "competitive_landscape.potential_importers",
+
+      "//": "--- CRITICAL FIX: ADD MAPPING FOR DETAILED TIME-SERIES DATA ---",
+      "//": "This copies the entire market_analysis object, including 'years' and 'world_values_usd',",
+      "//": "which is needed for the line graph and other calculations in the document generator.",
+      "market_analysis": "source_data.trademap.market_analysis_details"
     },
     "macmap": {
       "overview.import_duty": "market_access_conditions.overview.import_duty",

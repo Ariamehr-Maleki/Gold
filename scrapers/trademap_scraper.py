@@ -1,4 +1,4 @@
-# scrapers/trademap_scraper.py (Corrected Logic v3)
+# scrapers/trademap_scraper.py (Corrected Logic v4 - With Total Exports and World Comparison)
 import argparse
 import json
 import logging
@@ -92,7 +92,7 @@ def scrape_trademap(args):
         else:
             logging.warning("Could not navigate to companies page. Skipping.")
 
-        # --- STEP 3: Parse all downloaded files ---
+        # --- STEP 3: Parse all downloaded files for the main analysis ---
         logging.info("--- Starting Data Parsing ---")
         
         # The main analysis comes from the Target Market files
@@ -113,10 +113,51 @@ def scrape_trademap(args):
         final_data['potential_importers'] = parse_company_txt(
             file_path=all_downloaded_files.get('companies')
         )
-
-        # (Optional) You can also parse and add your country's export data if needed
-        # final_data['your_exports'] = parse_full_timeseries(...)
         
+        ### MODIFICATION START ###
+        # --- STEP 4: Parse World Market Data for Global Comparison ---
+        logging.info("--- Parsing World Market Data for Comparison ---")
+        world_market_data = parse_full_timeseries(
+            value_file=all_downloaded_files.get('world_market_value'),
+            quantity_file=all_downloaded_files.get('world_market_quantity'),
+            unit_value_file=all_downloaded_files.get('world_market_unit_value'),
+            config=CONFIG
+        )
+
+        if world_market_data:
+            # The 'market_growth...' fields are calculated from the 'World' row in the file.
+            # When parsing the world_market file, this gives us the global growth rate.
+            # The 'world_unit_values' list contains the average unit value for each year.
+            final_data['world_comparison_data'] = {
+                "world_import_growth_cagr_pct": world_market_data.get('market_growth_cagr_pct'),
+                "world_import_growth_last_year_pct": world_market_data.get('market_growth_last_year_pct'),
+                "world_unit_value_usd": world_market_data.get('world_unit_values', [None])[-1] # Get latest year's value
+            }
+            logging.info("Successfully parsed world comparison data.")
+        else:
+            logging.warning("Could not parse world market data for comparison.")
+            final_data['world_comparison_data'] = None
+
+        # --- STEP 5: Parse Your Country's Global Export Data ---
+        logging.info("--- Parsing Your Country's Total Exports to the World ---")
+        your_exports_data = parse_full_timeseries(
+            value_file=all_downloaded_files.get('your_country_exports_value'),
+            quantity_file=None, # We only need the total value, no need to parse other files
+            unit_value_file=None,
+            config=CONFIG
+        )
+
+        if your_exports_data and 'total_value_usd' in your_exports_data:
+            final_data['your_country_total_exports'] = {
+                "value_usd": your_exports_data['total_value_usd'],
+                "year": your_exports_data['latest_year']
+            }
+            logging.info(f"Successfully extracted total export value: {your_exports_data['total_value_usd']} for year {your_exports_data['latest_year']}")
+        else:
+            logging.warning("Could not parse or find total export value for your country.")
+            final_data['your_country_total_exports'] = None
+        ### MODIFICATION END ###
+
         # --- SAVE FINAL OUTPUT ---
         with open(args.output, 'w', encoding='utf-8') as f:
             json.dump(final_data, f, ensure_ascii=False, indent=4)
