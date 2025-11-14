@@ -1,0 +1,9 @@
+{
+    "source": "Export Potential Map (exportpotential.intracen.org)",
+    "analysis": {
+        "product": "847130 Automatic data-processing machines, portable, <=1kg",
+        "export_potential": "$47 bn",
+        "unrealized_potential": "$7.5 bn",
+        "baseline_exports": "$40 bn"
+    }
+}
