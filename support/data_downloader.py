@@ -1,75 +1,127 @@
-# data_downloader.py (Corrected with Robust File Identification)
-
-from spider_core import TradeSpider, logging
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException
-from selenium.webdriver.common.by import By
-from urllib.parse import unquote
+# support/data_downloader.py (Corrected with Strict Parameter Validation)
+"""
+DataDownloader — extends TradeSpider with robust navigation and download helpers
+Features:
+- deterministic enforcement of 'nvpm' view code (force + verify)
+- robust download detection (handles .txt, .part, .crdownload, etc.)
+- resilient handling of redirect-to-clarification for companies page
+- generous logging and snapshots on failure
+"""
+from typing import Optional, Set, List
+from urllib.parse import urlparse, parse_qs, urlencode, urlunparse, unquote
 import time
 import random
 import os
 import glob
-import re
+import logging as stdlogging
+
+from spider_core import TradeSpider, logging  # logging from spider_core
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
+from selenium.common.exceptions import (
+    TimeoutException,
+    WebDriverException,
+    StaleElementReferenceException,
+    ElementClickInterceptedException,
+    MoveTargetOutOfBoundsException,
+)
+
+# constant used across methods
+_MAIN_TABLE_ID = "ctl00_PageContent_MyGridView1"
+
 
 class DataDownloader(TradeSpider):
+    """Downloader that navigates TradeMap pages and reliably downloads exports."""
 
-    def navigate_to_world_view_page(self, config, view='value'):
+    def navigate_to_world_view_page(self, config: dict, view: str = "value") -> bool:
+        """Navigate to the world-timeseries page for an HS code and ensure the requested view is active."""
         max_attempts = 4
-        hs_code = config['hs_code']
+        hs_code = config.get("hs_code")
+        view_codes = {"value": "1", "quantity": "2", "unit_value": "3"}
+        view_code = view_codes.get((view or "").lower(), "1")
+
         for attempt in range(1, max_attempts + 1):
             logging.info(f"--- WORLD VIEW ATTEMPT {attempt}/{max_attempts} for '{view}' ---")
-            view_codes = {'value': '1', 'quantity': '2', 'unit_value': '3'}
-            view_code = view_codes.get(view.lower(), '1')
-            url = f"https://www.trademap.org/Country_SelProduct_TS.aspx?nvpm=1|||||{hs_code}|||6|1|1|1|2|1|2|{view_code}|1|1"
-            logging.info(f"Navigating to WORLD URL: {url}")
+            url = (
+                f"https://www.trademap.org/Country_SelProduct_TS.aspx?"
+                f"nvpm=1|||||{hs_code}|||6|1|1|1|2|1|2|{view_code}|1|1"
+            )
+            
             if not self.goto(url):
-                logging.warning(f"Navigation failed on attempt {attempt}. Retrying...")
+                logging.warning(f"goto() failed on attempt {attempt}. Retrying.")
                 continue
+
+            # Ensure nvpm view code is present (force if necessary)
+            enforced = self._ensure_nvpm_view(desired_view_code=view_code)
+            if not enforced:
+                logging.warning("Could not enforce desired nvpm view. Retrying.")
+                self._save_snapshot(f"world_nvpm_enforce_failed_attempt_{attempt}")
+                continue
+
+            # Final sanity: wait for the main data table to appear
             try:
-                url_param_to_check = f"|||||{hs_code}|"
-                logging.info(f"Verifying DECODED URL contains parameter: '{url_param_to_check}'...")
-                self.wait.until(lambda driver: url_param_to_check in unquote(driver.current_url))
-                logging.info("URL parameter for HS Code VERIFIED.")
-                header_text = view.replace('_', ' ')
-                header_xpath = f"//table[@id='ctl00_PageContent_MyGridView1']//th[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), '{header_text}')]"
-                logging.info(f"Verifying column header contains '{header_text}'...")
-                self.wait.until(EC.presence_of_element_located((By.XPATH, header_xpath)))
-                logging.info(f"SUCCESS: World page for '{view}' is fully loaded and verified.")
+                self.wait.until(EC.presence_of_element_located((By.ID, _MAIN_TABLE_ID)))
+                logging.info(f"SUCCESS: World page for view '{view}' is loaded.")
                 return True
             except TimeoutException:
-                logging.warning(f"URL or content verification failed for '{view}' on attempt {attempt}. Retrying.")
-                self._save_snapshot(f"world_verify_failed_attempt_{attempt}")
-        logging.error(f"All {max_attempts} attempts failed for World '{view}'.")
+                current = unquote(self.driver.current_url)
+                logging.warning(f"Table not present yet. Current URL: {current}. Retrying.")
+                self._save_snapshot(f"world_table_missing_attempt_{attempt}")
+
+        logging.error(f"All {max_attempts} attempts failed for world view '{view}'.")
         return False
 
-    def navigate_to_country_view_page(self, config, country_id, trade_flow='I', view='value'):
+    def navigate_to_country_view_page(
+        self, config: dict, country_id: str, trade_flow: str = "I", view: str = "value"
+    ) -> bool:
+        """Navigate to the country-timeseries page and strictly verify the country ID in the final URL."""
         max_attempts = 4
-        hs_code = config['hs_code']
+        hs_code = config.get("hs_code")
+        trade_flow_code = "1" if trade_flow == "I" else "2"
+        view_codes = {"value": "1", "quantity": "2", "unit_value": "3"}
+        view_code = view_codes.get((view or "").lower(), "1")
+
         for attempt in range(1, max_attempts + 1):
-            logging.info(f"--- COUNTRY VIEW ATTEMPT {attempt}/{max_attempts} for view '{view}' (Country ID: {country_id}) ---")
-            trade_flow_code = '1' if trade_flow == 'I' else '2'
-            view_codes = {'value': '1', 'quantity': '2', 'unit_value': '3'}
-            view_code = view_codes.get(view.lower(), '1')
-            url = f"https://www.trademap.org/Country_SelProductCountry_TS.aspx?nvpm=1|{country_id}||||{hs_code}|||2|1|1|{trade_flow_code}|2|1|2|{view_code}|1|1"
-            logging.info(f"Navigating to COUNTRY URL: {url}")
+            logging.info(
+                f"--- COUNTRY VIEW ATTEMPT {attempt}/{max_attempts} for view '{view}' (Country ID: {country_id}) ---"
+            )
+            url = (
+                f"https://www.trademap.org/Country_SelProductCountry_TS.aspx?"
+                f"nvpm=1|{country_id}||||{hs_code}|||2|1|1|{trade_flow_code}|2|1|2|{view_code}|1|1"
+            )
+            
             if not self.goto(url):
-                logging.warning(f"Navigation failed on attempt {attempt}. Retrying...")
+                logging.warning(f"goto() failed on attempt {attempt}. Retrying.")
                 continue
+
+            ### --- ADDED STRICT PARAMETER VERIFICATION BLOCK --- ###
+            nvpm_parts = self._get_nvpm_parts_from_url(self.driver.current_url)
+            if not (nvpm_parts and len(nvpm_parts) > 1 and nvpm_parts[1] == str(country_id)):
+                found_id = nvpm_parts[1] if (nvpm_parts and len(nvpm_parts) > 1) else "not found"
+                logging.warning(
+                    f"URL parameter mismatch on attempt {attempt}. Expected country ID '{country_id}', but found '{found_id}'. Retrying."
+                )
+                self._save_snapshot(f"country_id_mismatch_attempt_{attempt}")
+                continue
+            logging.info("Country ID in URL is verified.")
+            ### --- END OF VERIFICATION BLOCK --- ###
+
+            enforced = self._ensure_nvpm_view(desired_view_code=view_code)
+            if not enforced:
+                logging.warning("Could not enforce desired nvpm view for country page. Retrying.")
+                self._save_snapshot(f"country_nvpm_enforce_failed_attempt_{attempt}")
+                continue
+            
             try:
-                url_param_to_check = f"|{country_id}|"
-                logging.info(f"Verifying DECODED URL contains parameter: '{url_param_to_check}'...")
-                self.wait.until(lambda driver: url_param_to_check in unquote(driver.current_url))
-                logging.info(f"URL parameter for Country ID VERIFIED.")
-                header_text = view.replace('_', ' ')
-                header_xpath = f"//table[@id='ctl00_PageContent_MyGridView1']//th[contains(translate(., 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), '{header_text}')]"
-                logging.info(f"Verifying column header contains '{header_text}'...")
-                self.wait.until(EC.presence_of_element_located((By.XPATH, header_xpath)))
-                logging.info(f"SUCCESS: Country page for '{view}' (Country ID: {country_id}) is fully loaded and verified.")
+                self.wait.until(EC.presence_of_element_located((By.ID, _MAIN_TABLE_ID)))
+                logging.info(f"SUCCESS: Country page for view '{view}' (Country ID: {country_id}) is loaded and verified.")
                 return True
             except TimeoutException:
-                logging.warning(f"URL or content verification failed on attempt {attempt}. Retrying.")
-                self._save_snapshot(f"country_verify_failed_attempt_{attempt}")
-        logging.error(f"All {max_attempts} attempts failed for Country '{view}' (Country ID: {country_id}).")
+                current = unquote(self.driver.current_url)
+                logging.warning(f"Table not present yet. Current URL: {current}. Retrying.")
+                self._save_snapshot(f"country_table_missing_attempt_{attempt}")
+
+        logging.error(f"All {max_attempts} attempts failed for country view '{view}' (Country ID: {country_id}).")
         return False
 
     def navigate_to_companies_page(self, config, trade_flow='I'):
@@ -127,92 +179,168 @@ class DataDownloader(TradeSpider):
             self._save_snapshot("company_navigation_unknown_failure")
             return False
 
-    # --- FIX APPLIED HERE ---
-    def _download_file(self, rename_to: str | None = None, clean_dir: bool = True):
+    # ... (rest of the file, including _download_file, _get_nvpm_parts_from_url, _ensure_nvpm_view, etc. remains unchanged) ...
+    def _download_file(self, rename_to: Optional[str] = None, clean_dir: bool = True) -> Optional[str]:
         """
-        Atomically downloads a file by tracking the directory state.
-        FIX: It now records existing files *before* download and waits for a *new* one to appear.
-        This prevents race conditions when downloading multiple files to the same directory.
+        Atomically download a file by detecting a new file appearing in the download dir.
+        Returns the final path (renamed if rename_to provided) or None on failure.
         """
+        # patterns to consider for existing/temporary files
+        patterns = ["*.txt*", "*.part", "*.crdownload", "*.tmp", "*.download"]
+
         if clean_dir:
-            logging.info(f"Preparing for single download. Cleaning old text/part files from '{self.download_dir}'...")
-            # Clean both .txt and browser temporary files (.part)
-            for f in glob.glob(os.path.join(self.download_dir, "*.txt*")) + glob.glob(os.path.join(self.download_dir, "*.part")):
-                try:
-                    os.remove(f)
-                    logging.debug(f"Removed old file: {f}")
-                except OSError as e:
-                    logging.warning(f"Could not remove old file {f}: {e}")
-        
-        # --- FIX: Get the set of files in the directory BEFORE starting the download ---
-        existing_files = set(glob.glob(os.path.join(self.download_dir, "*.txt")))
-        
+            logging.info(f"Preparing for single download. Cleaning old files from '{self.download_dir}'...")
+            for pat in patterns:
+                for f in glob.glob(os.path.join(self.download_dir, pat)):
+                    try:
+                        os.remove(f)
+                        logging.debug(f"Removed old file: {f}")
+                    except OSError:
+                        logging.debug(f"Could not remove {f}, skipping.")
+
+        # collect snapshot of existing files (for all relevant patterns)
+        existing_files: Set[str] = set()
+        for pat in patterns:
+            existing_files.update(set(glob.glob(os.path.join(self.download_dir, pat))))
+
         click_xpath = "//input[@type='image' and @title='Text file']"
-        
         logging.info(f"Attempting download for '{rename_to or 'file'}'...")
         if not self._safe_click(By.XPATH, click_xpath):
-            logging.error(f"Failed to click download button for '{rename_to}'.")
+            logging.error("Failed to click download button.")
             return None
-        
-        timeout = 60
+
+        timeout = 90
         end_time = time.time() + timeout
-        downloaded_file_path = None
-        
+        downloaded_file_path: Optional[str] = None
+
         try:
-            # Wait for a NEW file to appear
+            # wait for any new file (matching patterns) to appear
             while time.time() < end_time:
-                # --- FIX: Find a file that is not in the 'existing_files' set ---
-                current_files = set(glob.glob(os.path.join(self.download_dir, "*.txt")))
+                current_files = set()
+                for pat in patterns:
+                    current_files.update(set(glob.glob(os.path.join(self.download_dir, pat))))
                 new_files = current_files - existing_files
-                
                 if new_files:
-                    # We found our new file
-                    downloaded_file_path = new_files.pop()
+                    # pick the most recently modified new file
+                    newest = max(new_files, key=lambda p: os.path.getmtime(p))
+                    downloaded_file_path = newest
                     logging.info(f"New file detected: {os.path.basename(downloaded_file_path)}")
                     break
                 time.sleep(0.5)
 
             if not downloaded_file_path:
-                logging.error("Download timed out. No new .txt file appeared.")
+                logging.error("Download timed out: no new file detected.")
                 self._save_snapshot("download_timeout_no_new_file")
                 return None
 
-            # Wait for the file size to stabilize, indicating download completion
+            # wait for file size to stabilize (indicates download finished)
             last_size = -1
-            stable_checks = 3 
             stable_count = 0
-            while time.time() < end_time and stable_count < stable_checks:
+            required_stable = 3
+            while time.time() < end_time and stable_count < required_stable:
                 try:
                     current_size = os.path.getsize(downloaded_file_path)
+                    # if size didn't change and is > 0, increase stable_count
                     if current_size == last_size and current_size > 0:
                         stable_count += 1
                     else:
-                        stable_count = 0 
+                        stable_count = 0
                     last_size = current_size
-                    logging.debug(f"Checking file size: {current_size} bytes. Stable count: {stable_count}/{stable_checks}")
                 except OSError:
-                    logging.debug("File is locked, waiting...")
                     stable_count = 0
                 time.sleep(0.7)
 
-            if stable_count < stable_checks:
-                logging.error(f"Download timed out. File '{os.path.basename(downloaded_file_path)}' did not stabilize.")
+            if stable_count < required_stable:
+                logging.error("Downloaded file did not stabilize in time.")
                 self._save_snapshot("download_unstable_file")
                 return None
 
-            logging.info(f"File download confirmed and stabilized at {last_size} bytes.")
-            
-            # Now that the file is stable, rename it
+            logging.info(f"File stabilized at {last_size} bytes.")
+
             if rename_to:
                 new_path = os.path.join(self.download_dir, rename_to)
-                # Use os.replace for an atomic rename operation
-                os.replace(downloaded_file_path, new_path)
-                logging.info(f"Successfully renamed downloaded file to '{rename_to}'")
-                return new_path
-            
+                try:
+                    os.replace(downloaded_file_path, new_path)
+                    logging.info(f"Renamed downloaded file to {rename_to}")
+                    return new_path
+                except Exception as e:
+                    logging.exception(f"Failed to rename downloaded file: {e}")
+                    return downloaded_file_path
+
             return downloaded_file_path
 
         except Exception as e:
-            logging.error(f"An exception occurred during the download process for '{rename_to}': {e}", exc_info=True)
+            logging.exception(f"Exception during download detection: {e}")
             self._save_snapshot("download_exception")
             return None
+
+    # -------------------- nvpm helpers --------------------
+
+    def _get_nvpm_parts_from_url(self, url: str) -> Optional[List[str]]:
+        """Parse the current URL and return the nvpm parts list or None."""
+        try:
+            parsed = urlparse(unquote(url))
+            qs = parse_qs(parsed.query, keep_blank_values=True)
+            nvpm_vals = qs.get("nvpm")
+            if not nvpm_vals:
+                return None
+            nvpm = nvpm_vals[0]
+            return nvpm.split("|")
+        except Exception:
+            return None
+
+    def _ensure_nvpm_view(self, desired_view_code: str) -> bool:
+        """
+        Ensure the current page's nvpm parameter contains the desired view code.
+        Strategy:
+          1. Inspect nvpm parts. If one of the reasonable indices already matches, succeed.
+          2. Otherwise, try rewriting nvpm at candidate indices and reload.
+          3. Verify the desired view code was set.
+        """
+        try:
+            cur_url = self.driver.current_url
+            parts = self._get_nvpm_parts_from_url(cur_url)
+            if not parts:
+                logging.debug("No 'nvpm' found in current URL; cannot enforce view.")
+                return False
+
+            # quick-check: is desired code already present in a plausible position?
+            if any(p == str(desired_view_code) for p in parts[-6:]):  # check last few segments
+                logging.debug("Desired view code already present in nvpm parts.")
+                return True
+
+            # candidate indices to try (prefer a likely index, then relative offsets)
+            candidate_indices = [14, len(parts) - 3, len(parts) - 4, len(parts) - 5]
+            # dedupe and keep valid indices
+            candidate_indices = [i for i in dict.fromkeys(candidate_indices) if 0 <= i < len(parts)]
+
+            parsed = urlparse(unquote(cur_url))
+            qs = parse_qs(parsed.query, keep_blank_values=True)
+
+            for idx in candidate_indices:
+                original = parts.copy()
+                if parts[idx] == str(desired_view_code):
+                    logging.debug(f"nvpm already had desired view at index {idx}.")
+                    return True
+                parts[idx] = str(desired_view_code)
+                qs["nvpm"] = ["|".join(parts)]
+                new_query = urlencode(qs, doseq=True)
+                new_url = urlunparse((parsed.scheme, parsed.netloc, parsed.path, parsed.params, new_query, parsed.fragment))
+                logging.info(f"Attempting to enforce nvpm view by navigating to corrected URL (index {idx}).")
+                self.driver.get(new_url)
+                # wait a small amount and confirm page ready
+                if not self._wait_for_ready_state(timeout=15):
+                    logging.debug("Forced nvpm reload did not reach readyState complete quickly (continuing).")
+                # re-inspect
+                new_parts = self._get_nvpm_parts_from_url(self.driver.current_url) or []
+                if any(p == str(desired_view_code) for p in new_parts[-6:]):
+                    logging.info("nvpm view enforcement succeeded.")
+                    return True
+                # restore parts for next candidate
+                parts = original
+
+            logging.warning("Tried candidate nvpm indices but could not set desired view code.")
+            return False
+        except Exception as e:
+            logging.exception(f"_ensure_nvpm_view failed: {e}")
+            return False

@@ -1,0 +1,10 @@
+﻿rank,name,value_usd,market_share_pct,gained_share_over_5_years,quantity_latest,unit_value_latest,growth_cagr_pct,growth_last_year_pct
+1,United States of America,32417814.0,31.72,False,,,-6.42,-6.09
+2,"Hong Kong, China",10582094.0,10.36,True,,,3.13,13.93
+3,Netherlands,8847401.0,8.66,False,,,-5.5,-0.4
+4,Germany,6290437.0,6.16,True,,,-2.13,2.71
+5,Japan,5833082.0,5.71,False,,,-8.34,11.02
+6,India,5194233.0,5.08,True,,,11.65,16.06
+7,United Kingdom,3895678.0,3.81,False,,,-5.38,8.89
+8,Australia,2569576.0,2.51,False,,,-3.19,-0.91
+9,United Arab Emirates,2486151.0,2.43,True,,,7.8,12.33

@@ -5,41 +5,47 @@
     "exporting_country": null,
     "importing_country": null
   },
-  "market_size_and_potential": {
-    "total_market_value_usd": null,
-    "market_growth_cagr_5y_pct": null,
-    "unrealized_export_potential_usd": null,
+  "summary": {
+    "your_country_total_exports_usd": null,
     "target_market_world_rank": null
   },
+  "market_size_and_growth": {
+    "target_market_total_imports_usd": null,
+    "target_market_growth_cagr_5y_pct": null,
+    "target_market_growth_last_year_pct": null,
+    "world_total_imports_usd": null,
+    "world_market_growth_cagr_5y_pct": null,
+    "unrealized_export_potential_usd": null
+  },
+  "competition_and_suppliers": {
+    "hhi_index": null,
+    "concentration_level": null,
+    "all_suppliers": [],
+    "suppliers_gaining_share": [],
+    "regional_competitors": [],
+    "your_country_specifics": {
+      "rank_in_target_market": null,
+      "market_share_pct": null,
+      "growth_cagr_pct": null
+    }
+  },
+  "potential_importers": [],
+  "unit_values": {
+    "target_market_avg_unit_value_usd": null,
+    "world_avg_unit_value_usd": null,
+    "your_country_unit_value_usd": null
+  },
+  "historical_data": {
+    "years": [],
+    "target_market_import_values_usd": []
+  },
   "market_access_conditions": {
-    "overview": {
-      "import_duty": null,
-      "trade_remedies_summary": null,
-      "total_regulatory_measures": null
-    },
     "customs_tariffs": [],
     "trade_remedies_details": [],
     "regulatory_requirements_details": {}
   },
-  "market_concentration": {
-    "hhi_index": null,
-    "concentration_level": null,
-    "top_5_suppliers": [],
-    "suppliers_gaining_share": []
-  },
-  "competitive_landscape": {
-    "your_country_rank": null,
-    "your_country_market_share_pct": null,
-    "regional_competitors": [],
-    "potential_importers": []
-  },
   "regulatory_alerts": {
     "source_url": null,
     "notifications": []
-  },
-  "source_data": {
-    "trademap": {
-      "market_analysis_details": {}
-    }
   }
 }

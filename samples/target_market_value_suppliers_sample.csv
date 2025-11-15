@@ -1,0 +1,10 @@
+﻿rank,name,value_usd,market_share_pct,gained_share_over_5_years,quantity_latest,unit_value_latest,growth_cagr_pct,growth_last_year_pct
+1,China,33059491.0,66.16,False,74417296.0,444.0,1569.06,7742169.56
+2,Viet Nam,13552214.0,27.12,False,21871542.0,620.0,1482.67,2336488.62
+3,"Taipei, Chinese",2010655.0,4.02,False,2092391.0,961.0,614.15,219884.14
+4,Mexico,767433.0,1.54,False,1057975.0,725.0,457.75,79098.45
+5,Thailand,332776.0,0.67,False,939830.0,354.0,346.0,105543.17
+6,Canada,29473.0,0.06,False,77067.0,382.0,182.31,4929.52
+7,"Korea, Republic of",27513.0,0.06,False,83382.0,330.0,203.1,8606.65
+8,United Arab Emirates,23649.0,0.05,False,118542.0,199.0,294.14,19284.43
+9,Malaysia,22756.0,0.05,False,45678.0,498.0,133.08,1489.11

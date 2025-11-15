@@ -77,7 +77,7 @@ class Orchestrator:
         # if self.config.get('run_headless', True):
         #     cmd.append('--headless')
 
-        self.logger.info(f"Running scraper '{name}': {' '.join(cmd)}")
+        self.logger.info(f"Rutnning scraper '{name}': {' '.join(cmd)}")
         start_time = time.time()
         result = {"name": name, "status": "FAIL", "duration": 0, "output_path": output_path, "log_path": log_path}
 
