@@ -1,8 +1,3 @@
-### **`README.md`**
-
-This enhanced README file provides a comprehensive guide to the project.
-
-```markdown
 # Automated Trade Data Analysis Suite
 
 This project is a sophisticated orchestration engine designed to automate the collection, aggregation, and analysis of international trade data. It launches a suite of scrapers to gather information from various specialized sources, merges the data into a unified structure, and generates a comprehensive quantitative factsheet in both DOCX and PDF formats.
@@ -176,4 +171,3 @@ For each run, a new directory is created (e.g., `runs/20251117_103000/`), contai
 ├── geckodriver.exe               # Firefox WebDriver
 ├── requirements.txt              # Python package dependencies
 └── Quantitative_Factsheet_Template.docx  # Word template for the final report
-```
