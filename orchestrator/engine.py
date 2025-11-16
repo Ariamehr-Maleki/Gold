@@ -19,15 +19,19 @@ class Orchestrator:
     """
     Orchestrates scraper execution, data aggregation, and report generation.
     """
-    def __init__(self, config: Dict, template: Dict, outdir: str,
+    def __init__(self, config: Dict, template: Dict, outdir: str, run_params: Dict,
                  is_dry_run: bool, parallel: bool, timeout: int, logger: logging.Logger):
         self.config = config
         self.template = template
         self.outdir = outdir
+        self.run_params = run_params # Now stores the structured config
         self.is_dry_run = is_dry_run
         self.parallel = parallel
         self.timeout = timeout
         self.logger = logger
+        self.log_dir = os.path.join(self.outdir, 'logs')
+        os.makedirs(self.log_dir, exist_ok=True)
+        self.run_metadata = {}
         
         # Define the directory for scraper-specific logs
         self.log_dir = os.path.join(self.outdir, 'logs')
@@ -40,6 +44,7 @@ class Orchestrator:
     def run(self):
         """Main execution flow of the orchestration process."""
         self.logger.info("Orchestration started.")
+        self.logger.info(f"Using run parameters: {json.dumps(self.run_params, indent=2)}")
         self.logger.info(f"Dry run: {self.is_dry_run}, Parallel: {self.parallel}, Timeout: {self.timeout}s")
 
         run_results = []
@@ -58,26 +63,31 @@ class Orchestrator:
 
     def _run_single_scraper(self, scraper_config: Dict) -> Dict:
         """
-        Executes a single scraper as a separate process and captures its result.
+        Executes a single scraper, merging common and specific parameters.
         """
         name = scraper_config['name']
         script_path = scraper_config['path']
-        output_filename = scraper_config.get('output_file', f"{name}_output.json")
-        output_path = os.path.join(self.outdir, output_filename)
+        output_path = os.path.join(self.outdir, scraper_config.get('output_file', f"{name}_output.json"))
         log_path = os.path.join(self.log_dir, f"{name}.log")
 
-        # --- Improved Command Building: More robust and flexible ---
-        cmd = [
-            sys.executable,  # Use the same python interpreter that runs the orchestrator
-            script_path,
-            '--output',
-            output_path
-        ]
-        # Add optional headless flag if specified in the main config
-        # if self.config.get('run_headless', True):
-        #     cmd.append('--headless')
+        # --- NEW: Parameter Merging Logic ---
+        # 1. Start with a copy of the common parameters
+        final_params = self.run_params.get('common_params', {}).copy()
+        # 2. Get scraper-specific parameters for the current scraper
+        specific_params = self.run_params.get('scraper_specific_params', {}).get(name, {})
+        # 3. Merge them - specific values will overwrite common ones if keys are the same
+        final_params.update(specific_params)
+        
+        cmd = [sys.executable, script_path, '--output', output_path]
+        
+        # Add the final, merged parameters to the command
+        for key, value in final_params.items():
+            if value is not None:
+                arg_name = f'--{key.replace("_", "-")}'
+                cmd.extend([arg_name, str(value)])
 
-        self.logger.info(f"Rutnning scraper '{name}': {' '.join(cmd)}")
+        self.logger.info(f"Running scraper '{name}' with final params: {final_params}")
+        self.logger.debug(f"Executing command: {' '.join(cmd)}")
         start_time = time.time()
         result = {"name": name, "status": "FAIL", "duration": 0, "output_path": output_path, "log_path": log_path}
 
@@ -98,21 +108,20 @@ class Orchestrator:
             result["duration"] = duration
             
             if process.returncode == 0:
-                self.logger.info(f"Scraper '{name}' finished successfully in {duration}s.")
                 result["status"] = "SUCCESS"
+                self.logger.info(f"Scraper '{name}' finished successfully in {duration}s.")
             else:
                 self.logger.error(f"Scraper '{name}' failed with exit code {process.returncode}. See log: {log_path}")
                 
         except subprocess.TimeoutExpired:
-            result["duration"] = self.timeout
-            result["status"] = "TIMEOUT"
+            result.update({"duration": self.timeout, "status": "TIMEOUT"})
             self.logger.error(f"Scraper '{name}' timed out after {self.timeout}s. Log: {log_path}")
         except Exception as e:
             result["duration"] = round(time.time() - start_time, 2)
             self.logger.critical(f"An unexpected error occurred while running '{name}': {e}", exc_info=True)
             
         return result
-
+    
     def _run_scrapers(self) -> List[Dict]:
         """
         Runs all scrapers defined in the configuration, either in parallel or sequentially.

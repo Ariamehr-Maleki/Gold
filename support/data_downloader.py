@@ -15,7 +15,7 @@ import os
 import glob
 import logging as stdlogging
 
-from spider_core import TradeSpider, logging  # logging from spider_core
+from support.spider_core import TradeSpider, logging  # logging from spider_core
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import (
@@ -51,17 +51,31 @@ class DataDownloader(TradeSpider):
                 logging.warning(f"goto() failed on attempt {attempt}. Retrying.")
                 continue
 
-            # Ensure nvpm view code is present (force if necessary)
+            ### --- THIS IS THE CRITICAL FIX --- ###
+            # After navigating, parse the ACTUAL URL in the browser and verify the HS code is correct.
+            nvpm_parts = self._get_nvpm_parts_from_url(self.driver.current_url)
+            # For the world view URL, the HS code is at index 5 in the 'nvpm' parameter.
+            if not (nvpm_parts and len(nvpm_parts) > 5 and nvpm_parts[5] == str(hs_code)):
+                found_code = nvpm_parts[5] if (nvpm_parts and len(nvpm_parts) > 5) else "not found or incorrect"
+                logging.warning(
+                    f"URL parameter mismatch on attempt {attempt}. Expected HS code '{hs_code}', but found '{found_code}'. This means the server returned the wrong page. Retrying."
+                )
+                self._save_snapshot(f"world_hs_code_mismatch_attempt_{attempt}")
+                # A brief pause before retrying can help if the server is just slow
+                time.sleep(2) 
+                continue # Force a retry
+            logging.info("HS Code in URL is verified.")
+            ### --- END OF FIX --- ###
+
             enforced = self._ensure_nvpm_view(desired_view_code=view_code)
             if not enforced:
                 logging.warning("Could not enforce desired nvpm view. Retrying.")
                 self._save_snapshot(f"world_nvpm_enforce_failed_attempt_{attempt}")
                 continue
-
-            # Final sanity: wait for the main data table to appear
+            
             try:
                 self.wait.until(EC.presence_of_element_located((By.ID, _MAIN_TABLE_ID)))
-                logging.info(f"SUCCESS: World page for view '{view}' is loaded.")
+                logging.info(f"SUCCESS: World page for view '{view}' is loaded and verified.")
                 return True
             except TimeoutException:
                 current = unquote(self.driver.current_url)
@@ -94,17 +108,19 @@ class DataDownloader(TradeSpider):
                 logging.warning(f"goto() failed on attempt {attempt}. Retrying.")
                 continue
 
-            ### --- ADDED STRICT PARAMETER VERIFICATION BLOCK --- ###
+            ### --- APPLYING THE SAME FIX HERE FOR CONSISTENCY --- ###
             nvpm_parts = self._get_nvpm_parts_from_url(self.driver.current_url)
+            # For this URL, the country ID is at index 1.
             if not (nvpm_parts and len(nvpm_parts) > 1 and nvpm_parts[1] == str(country_id)):
                 found_id = nvpm_parts[1] if (nvpm_parts and len(nvpm_parts) > 1) else "not found"
                 logging.warning(
                     f"URL parameter mismatch on attempt {attempt}. Expected country ID '{country_id}', but found '{found_id}'. Retrying."
                 )
                 self._save_snapshot(f"country_id_mismatch_attempt_{attempt}")
-                continue
+                time.sleep(2)
+                continue # Force a retry
             logging.info("Country ID in URL is verified.")
-            ### --- END OF VERIFICATION BLOCK --- ###
+            ### --- END OF FIX --- ###
 
             enforced = self._ensure_nvpm_view(desired_view_code=view_code)
             if not enforced:
@@ -124,6 +140,7 @@ class DataDownloader(TradeSpider):
         logging.error(f"All {max_attempts} attempts failed for country view '{view}' (Country ID: {country_id}).")
         return False
 
+    # ... (rest of the file, including navigate_to_companies_page, _download_file, etc. remains unchanged) ...
     def navigate_to_companies_page(self, config, trade_flow='I'):
         """
         Navigate to the Companies page. If TradeMap redirects to a clarification page
@@ -179,7 +196,6 @@ class DataDownloader(TradeSpider):
             self._save_snapshot("company_navigation_unknown_failure")
             return False
 
-    # ... (rest of the file, including _download_file, _get_nvpm_parts_from_url, _ensure_nvpm_view, etc. remains unchanged) ...
     def _download_file(self, rename_to: Optional[str] = None, clean_dir: bool = True) -> Optional[str]:
         """
         Atomically download a file by detecting a new file appearing in the download dir.

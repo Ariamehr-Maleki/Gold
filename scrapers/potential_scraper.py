@@ -75,13 +75,37 @@ class ExportPotentialAnalyzer:
     def handle_popup(self):
         try:
             wait = WebDriverWait(self.driver, 7)
-            checkbox = wait.until(EC.presence_of_element_located((By.ID, "mat-mdc-checkbox-1-input")))
-            if not checkbox.is_selected():
-                self.driver.execute_script("arguments[0].click();", checkbox)
-            self.driver.find_element(By.XPATH, "//button[contains(@class, 'mat-mdc-dialog-close-button')]").click()
-            wait.until(EC.invisibility_of_element_located((By.CLASS_NAME, "cdk-overlay-backdrop")))
+
+            # Try to detect popup root first
+            popup_present = wait.until(
+                EC.presence_of_element_located((By.CSS_SELECTOR, ".mat-mdc-dialog-container"))
+            )
+
+            if popup_present:
+                try:
+                    checkbox = self.driver.find_element(By.ID, "mat-mdc-checkbox-1-input")
+                    if not checkbox.is_selected():
+                        self.driver.execute_script("arguments[0].click();", checkbox)
+                except Exception:
+                    logging.info("Checkbox not found inside popup (ignoring).")
+
+                # Now try to close the popup safely
+                try:
+                    close_btn = self.driver.find_element(
+                        By.XPATH,
+                        "//button[contains(@class, 'mat-mdc-dialog-close-button')]"
+                    )
+                    close_btn.click()
+                    wait.until(EC.invisibility_of_element_located(
+                        (By.CLASS_NAME, "cdk-overlay-backdrop")
+                    ))
+                    logging.info("Popup closed.")
+                except Exception:
+                    logging.info("Close button not found — popup may already be absent.")
+
         except TimeoutException:
-            logging.info("No popup was detected.")
+            # Fully OK → means popup was not shown at all
+            logging.info("No popup was detected (timeout).")
 
     def select_product(self, hs_code):
         try:
@@ -150,13 +174,27 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Scrape Export Potential Map data.")
     parser.add_argument("--output", required=True, help="Path to save the output JSON file.")
     parser.add_argument("--headless", action='store_true', help="Run in headless mode.")
+    # --- Add dynamic config arguments ---
+    parser.add_argument("--hs-code", help="HS code for the product.")
+    parser.add_argument("--your-country-id", help="Numeric ID for the exporting country.")
+    parser.add_argument("--target-market-id", help="Numeric ID for the target market.")
+    # Unused, but added for consistency with orchestrator
+    parser.add_argument("--your-country-name", help="Unused.")
+    parser.add_argument("--target-market-name", help="Unused.")
+    
     args = parser.parse_args()
     
+    # Default CONFIG
     CONFIG = {
         "hs_code": "847130",
         "your_country_id": "156",
         "target_market_id": "842",
     }
+
+    # Override with command-line arguments if provided
+    if args.hs_code: CONFIG['hs_code'] = args.hs_code
+    if args.your_country_id: CONFIG['your_country_id'] = args.your_country_id
+    if args.target_market_id: CONFIG['target_market_id'] = args.target_market_id
 
     s = ExportPotentialAnalyzer(headless=args.headless, driver_path=r".\geckodriver.exe")
     

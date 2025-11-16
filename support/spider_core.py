@@ -1,4 +1,4 @@
-# spider_core.py (Corrected Final Version with Robust Login Landmark)
+# support/spider_core.py (Corrected Final Version with 3-State Outcome Check)
 
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
@@ -8,6 +8,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import (
     TimeoutException,
     WebDriverException,
+    NoSuchElementException, # Make sure this is imported
 )
 from selenium.webdriver.common.by import By
 import time
@@ -110,30 +111,35 @@ class TradeSpider(object):
 
     def goto(self, url):
         max_attempts = 4
+        target_page_filename = url.split('?')[0].split('/')[-1]
+        
         for attempt in range(1, max_attempts + 1):
             logging.info(f"Navigating to {url} (Attempt {attempt}/{max_attempts})")
             try:
                 self.driver.get(url)
-                if not self._wait_for_ready_state():
-                    logging.warning(f"Document did not report 'complete' on attempt {attempt}.")
-                time.sleep(random.uniform(3.0, 5.0))
-                current_url_base = self.driver.current_url.split('?')[0]
-                target_url_base = url.split('?')[0]
-                if current_url_base.endswith(target_url_base.split('/')[-1]):
-                    logging.info(f"Successfully loaded URL after {attempt} attempt(s).")
-                    return True
-                else:
-                    logging.warning(f"URL mismatch after navigation (attempt {attempt}). Current: {current_url_base}, Target: {target_url_base}")
+                WebDriverWait(self.driver, 15).until(
+                    EC.url_contains(target_page_filename)
+                )
+                self._wait_for_ready_state(10)
+                logging.info(f"Successfully loaded and verified URL for '{target_page_filename}' on attempt {attempt}.")
+                return True
+            except TimeoutException:
+                logging.warning(
+                    f"Navigation timed out on attempt {attempt}. "
+                    f"Expected URL containing '{target_page_filename}', but current URL is '{self.driver.current_url}'. Retrying..."
+                )
             except Exception as e:
-                logging.error(f"Error while navigating to {url} on attempt {attempt}: {e}")
-        logging.error(f"Failed to navigate and confirm page load after {max_attempts} attempts.")
+                logging.error(f"An unexpected error occurred during navigation on attempt {attempt}: {e}")
+        
+        logging.error(f"Failed to navigate to '{target_page_filename}' after {max_attempts} attempts.")
+        self._save_snapshot(f"goto_failed_{target_page_filename}")
         return False
 
     def login(self, ac, pw):
         url = "https://www.trademap.org/Country_SelProduct_TS.aspx"
         if not self.goto(url): return False
         
-        time.sleep(random.uniform(3.0, 5.0))
+        time.sleep(random.uniform(2.0, 4.0))
         if not self._safe_click(By.ID, 'ctl00_MenuControl_marmenu_login'): return False
         
         time.sleep(random.uniform(2, 4))
@@ -144,46 +150,64 @@ class TradeSpider(object):
             self._safe_click(By.XPATH, "//button[@name='button' and @value='login']")
         except Exception as e:
             logging.error(f"Error during login input: {e}")
+            self._save_snapshot("login_input_fail")
             return False
             
         try:
-            logging.info("Login submitted. Waiting for redirect...")
+            logging.info("Login submitted. Waiting for outcome (Success, CAPTCHA, or Failure)...")
             
-            WebDriverWait(self.driver, 30).until(EC.any_of(
-                EC.url_contains("Country_SelProduct_TS.aspx"), 
-                EC.url_contains("stCaptcha.aspx")
+            # --- DEFINE THE THREE POSSIBLE OUTCOMES ---
+            logout_button_locator = (By.ID, "ctl00_MenuControl_marmenu_logout")
+            login_error_locator = (By.ID, "ValidationSummary1") # Standard ASP.NET error summary
+            
+            # --- ATOMICALLY WAIT FOR THE FIRST OUTCOME TO OCCUR ---
+            WebDriverWait(self.driver, 20).until(EC.any_of(
+                EC.presence_of_element_located(logout_button_locator),
+                EC.url_contains("stCaptcha.aspx"),
+                EC.presence_of_element_located(login_error_locator)
             ))
 
+            # --- NOW, DETERMINE WHICH OUTCOME HAPPENED ---
+            
+            # 1. Check for Failure
+            try:
+                error_element = self.driver.find_element(*login_error_locator)
+                if error_element.is_displayed():
+                    error_text = error_element.text.strip().replace('\n', ' ')
+                    logging.error(f"LOGIN FAILED. Site reported an error: '{error_text}'")
+                    self._save_snapshot("login_explicit_fail")
+                    return False
+            except NoSuchElementException:
+                pass # This is the expected path if there was no error.
+
+            # 2. Check for CAPTCHA
             if "stCaptcha.aspx" in self.driver.current_url:
-                print("ACTION REQUIRED: Please solve the CAPTCHA in the browser window.")
-                WebDriverWait(self.driver, 300).until(EC.any_of(
-                    EC.url_contains("Country_SelProduct_TS.aspx"),
-                    EC.url_contains("Index.aspx")
-                ))
+                logging.warning("ACTION REQUIRED: CAPTCHA detected. Please solve it. Waiting up to 5 minutes.")
+                WebDriverWait(self.driver, 300).until_not(EC.url_contains("stCaptcha.aspx"))
+                logging.info("CAPTCHA page is gone. Verifying final destination...")
             
-            logging.info("URL confirmed. Now waiting for page to be fully interactive...")
+            # 3. If neither failure nor CAPTCHA, it must have been a success.
+            else:
+                 logging.info("No CAPTCHA or failure detected. Verifying successful login...")
 
-            WebDriverWait(self.driver, 15).until(
-                lambda d: d.execute_script('return document.readyState') == 'complete'
-            )
-            logging.info("Browser reports document is 'complete'.")
-
-            logging.info("Waiting for a landmark element to confirm successful login...")
-            # --- FIX APPLIED HERE: ADDED A THIRD, MORE RELIABLE LANDMARK (THE LOGOUT BUTTON) ---
+            # --- FINAL VERIFICATION FOR SUCCESS/CAPTCHA PATHS ---
+            # This ensures the destination page is fully interactive before we proceed. THIS IS THE KEY TO FIXING THE RACE CONDITION.
+            logging.info("Verifying destination page is fully loaded and interactive...")
             self.wait.until(EC.any_of(
-                EC.presence_of_element_located((By.ID, "ctl00_PageContent_Panel1")), # Landmark for Country_SelProduct_TS.aspx
-                EC.presence_of_element_located((By.ID, "selectionMenu")),             # Landmark for Index.aspx
-                EC.presence_of_element_located((By.ID, "ctl00_MenuControl_marmenu_logout")) # Universal landmark
+                EC.presence_of_element_located((By.ID, "ctl00_PageContent_Panel1")),
+                EC.presence_of_element_located((By.ID, "selectionMenu")),
+                EC.presence_of_element_located(logout_button_locator)
             ))
-            # --- END OF FIX ---
-            logging.info("Landmark element found. Login is fully complete and verified.")
-            
-            time.sleep(1)
 
-            logging.info("Login successful and page is confirmed to be loaded!")
+            self._wait_for_ready_state(5)
+            logging.info("Login process complete and destination page is verified.")
             return True
 
         except TimeoutException:
-            logging.error("Verification failed. The script timed out waiting for the page after login.")
-            self._save_snapshot("post_login_verification_failed")
+            logging.error("Verification failed. Timed out waiting for login process to complete. This could be due to invalid credentials or a page load issue.")
+            self._save_snapshot("post_login_timeout_or_fail")
+            return False
+        except Exception as e:
+            logging.error(f"An unexpected error occurred during login verification: {e}")
+            self._save_snapshot("post_login_unexpected_error")
             return False

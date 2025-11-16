@@ -160,8 +160,8 @@ class EPingScraper:
 
     def scrape_notifications(self, config):
         hs_code_prefix = config['hs_code'][:4]
-        country_code = f"C{config['target_market_id']}"
-        url = f"https://www.epingalert.org/en/Search/Index?countryIds={country_code}"
+        country_code = config['target_market_id'] # Now expects "C842" directly from config
+        url = f"https://www.epingalert.org/en/Search/Index?countryIds=C{country_code}"
 
         if not self.start_browser(): return None
         
@@ -200,12 +200,25 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Scrape ePing notifications.")
     parser.add_argument("--output", required=True, help="Path to save the output JSON file.")
     parser.add_argument("--headless", action='store_true', help="Run in headless mode.")
+    # --- Add dynamic config arguments ---
+    parser.add_argument("--hs-code", help="HS code for the product.")
+    parser.add_argument("--target-market-id", help="Numeric ID for the target market.")
+    # Unused, but added for consistency with orchestrator
+    parser.add_argument("--your-country-id", help="Unused.")
+    parser.add_argument("--your-country-name", help="Unused.")
+    parser.add_argument("--target-market-name", help="Unused.")
+
     args = parser.parse_args()
 
+    # Default CONFIG
     CONFIG = {
         "hs_code": "847130",
         "target_market_id": "842"
     }
+
+    # Override with command-line arguments if provided
+    if args.hs_code: CONFIG['hs_code'] = args.hs_code
+    if args.target_market_id: CONFIG['target_market_id'] = args.target_market_id
     
     scraper = EPingScraper(headless=args.headless, driver_path=r".\geckodriver.exe")
     

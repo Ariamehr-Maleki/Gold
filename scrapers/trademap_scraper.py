@@ -52,6 +52,13 @@ def scrape_trademap(args):
         "login_pass": os.environ.get("TRADEMAP_PASS", "1996")
     }
 
+     # Override with command-line arguments if provided
+    if args.hs_code: CONFIG['hs_code'] = args.hs_code
+    if args.your_country_id: CONFIG['your_country_id'] = args.your_country_id
+    if args.your_country_name: CONFIG['your_country'] = args.your_country_name
+    if args.target_market_id: CONFIG['target_market_id'] = args.target_market_id
+    if args.target_market_name: CONFIG['target_market'] = args.target_market_name
+
     scraper = DataDownloader(headless=args.headless, driver_path=r"./geckodriver.exe")
     all_downloaded_files = {}
     final_data = {
@@ -174,5 +181,12 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Scrape TradeMap data.")
     parser.add_argument("--output", required=True, help="Path to save the output JSON file.")
     parser.add_argument("--headless", action='store_true', help="Run in headless mode.")
+    # --- Add dynamic config arguments ---
+    parser.add_argument("--hs-code", help="HS code for the product.")
+    parser.add_argument("--your-country-id", help="Numeric ID for the exporting country.")
+    parser.add_argument("--your-country-name", help="Name of the exporting country.")
+    parser.add_argument("--target-market-id", help="Numeric ID for the target market.")
+    parser.add_argument("--target-market-name", help="Name of the target market.")
+
     args = parser.parse_args()
     scrape_trademap(args)

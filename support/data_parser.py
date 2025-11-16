@@ -20,7 +20,7 @@ from typing import Dict, List, Optional, Tuple
 
 import pandas as pd
 
-from spider_core import logging
+from support.spider_core import logging
 import pycountry_convert as pc
 
 # ----------------------------- Helpers ----------------------------------
