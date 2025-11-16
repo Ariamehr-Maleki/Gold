@@ -1,2 +1,0 @@
-﻿Company name	Number of product or service categories traded	Number of employees	Turnover (USD)	Country	City	Website	
-F&G Telecommunications CC	2			South Africa	Bloemfontein	http://www.hymax-bloemfontein.co.za	

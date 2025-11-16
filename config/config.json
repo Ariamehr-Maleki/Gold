@@ -1,0 +1,64 @@
+{
+  "run_headless": true,
+  "scrapers": [
+    {
+      "name": "trademap",
+      "path": "scrapers/trademap_scraper.py",
+      "output_file": "trademap_output.json",
+      "priority": 100
+    },
+    {
+      "name": "macmap",
+      "path": "scrapers/macmap_scraper.py",
+      "output_file": "macmap_output.json",
+      "priority": 90
+    },
+    {
+      "name": "export_potential",
+      "path": "scrapers/potential_scraper.py",
+      "output_file": "export_potential_output.json",
+      "priority": 80
+    },
+    {
+      "name": "eping",
+      "path": "scrapers/eping_scraper.py",
+      "output_file": "eping_output.json",
+      "priority": 70
+    }
+  ],
+  "mappings": {
+    "trademap": {
+      "config.your_country": "meta.exporting_country",
+      "config.target_market": "meta.importing_country",
+      "config.hs_code": "meta.product_hs6",
+      "your_country_total_exports.value_usd": "summary.your_country_total_exports_usd",
+      "importer_ranking.target_market_world_rank": "summary.target_market_world_rank",
+      "market_analysis.total_value_usd": "market_size_and_growth.target_market_total_imports_usd",
+      "market_analysis.market_growth_cagr_pct": "market_size_and_growth.target_market_growth_cagr_5y_pct",
+      "market_analysis.market_growth_last_year_pct": "market_size_and_growth.target_market_growth_last_year_pct",
+      "importer_ranking.world_total_imports_usd": "market_size_and_growth.world_total_imports_usd",
+      "world_comparison_data.world_import_growth_cagr_pct": "market_size_and_growth.world_market_growth_cagr_5y_pct",
+      "market_analysis.hhi": "competition_and_suppliers.hhi_index",
+      "market_analysis.concentration": "competition_and_suppliers.concentration_level",
+      "market_analysis.suppliers_full_list": "competition_and_suppliers.all_suppliers",
+      "market_analysis.suppliers_gaining_share": "competition_and_suppliers.suppliers_gaining_share",
+      "market_analysis.regional_suppliers": "competition_and_suppliers.regional_competitors",
+      "potential_importers": "potential_importers",
+      "world_comparison_data.world_unit_value_usd": "unit_values.world_avg_unit_value_usd",
+      "market_analysis.years": "historical_data.years",
+      "market_analysis.world_values_usd": "historical_data.target_market_import_values_usd"
+    },
+    "macmap": {
+      "regulatory_requirements": "market_access_conditions.regulatory_requirements_details",
+      "tariffs": "market_access_conditions.customs_tariffs",
+      "trade_remedies": "market_access_conditions.trade_remedies_details"
+    },
+    "export_potential": {
+      "analysis.unrealized_potential": "market_size_and_growth.unrealized_export_potential_usd"
+    },
+    "eping": {
+      "source_url": "regulatory_alerts.source_url",
+      "notifications": "regulatory_alerts.notifications"
+    }
+  }
+}

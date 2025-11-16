@@ -1,0 +1,81 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Orchestrator Configuration",
+  "type": "object",
+  "required": [
+    "scrapers",
+    "mappings"
+  ],
+  "properties": {
+    "defaults": {
+      "type": "object",
+      "properties": {
+        "timeout_seconds": {
+          "type": "integer",
+          "description": "Default timeout in seconds for each scraper process.",
+          "default": 180
+        },
+        "parallel": {
+          "type": "boolean",
+          "description": "Whether to run scrapers in parallel.",
+          "default": true
+        },
+        "merge_strategy": {
+          "type": "string",
+          "description": "Default strategy for resolving conflicting data from multiple scrapers.",
+          "enum": ["priority", "most_recent", "mean", "weighted_mean"],
+          "default": "priority"
+        }
+      }
+    },
+    "scrapers": {
+      "type": "array",
+      "description": "List of scraper configurations.",
+      "items": {
+        "type": "object",
+        "required": ["name", "path", "output_path"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Unique name for the scraper, used in mappings."
+          },
+          "path": {
+            "type": "string",
+            "description": "Path to the scraper's Python entry point script."
+          },
+          "cmd_template": {
+            "type": "string",
+            "description": "Command template to execute the scraper. Use {path} and {output} placeholders.",
+            "default": "python {path} --output {output}"
+          },
+          "output_path": {
+            "type": "string",
+            "description": "Path where the scraper is expected to write its JSON output."
+          },
+          "priority": {
+            "type": "integer",
+            "description": "Priority for this scraper's data during merging (higher wins).",
+            "default": 0
+          },
+          "confidence": {
+            "type": "number",
+            "description": "A confidence score (0.0 to 1.0) for the data from this source.",
+            "minimum": 0,
+            "maximum": 1
+          }
+        }
+      }
+    },
+    "mappings": {
+      "type": "object",
+      "description": "Defines how to map data from scraper outputs to the template. Each key is a scraper name.",
+      "additionalProperties": {
+        "type": "object",
+        "description": "A map of source keys (dot.notation) to template destination keys (dot.notation).",
+        "additionalProperties": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "common_params": {
+    "hs_code": "847130",
+    "your_country_id": "156",
+    "your_country_name": "China",
+    "target_market_id": "842",
+    "target_market_name": "United States"
+  },
+  "scraper_specific_params": {
+    "eping": {
+      "target_market_id": "840"
+    }
+  }
+}
