@@ -91,7 +91,8 @@ def scrape_trademap(args):
 
         # Task 4: Company Data
         logging.info("--- Downloading Company List ---")
-        if scraper.navigate_to_companies_page(CONFIG, trade_flow='I'):
+        if scraper.navigate_to_companies_page(CONFIG, country_id=CONFIG['target_market_id'], trade_flow='I'):
+            
             # CRITICAL: clean_dir=False
             company_file = scraper._download_file(rename_to="company_list.txt", clean_dir=False)
             if company_file:

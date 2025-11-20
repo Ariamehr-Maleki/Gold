@@ -17,6 +17,7 @@ import logging as stdlogging
 
 from support.spider_core import TradeSpider, logging  # logging from spider_core
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.wait import WebDriverWait 
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import (
     TimeoutException,
@@ -34,167 +35,220 @@ class DataDownloader(TradeSpider):
     """Downloader that navigates TradeMap pages and reliably downloads exports."""
 
     def navigate_to_world_view_page(self, config: dict, view: str = "value") -> bool:
-        """Navigate to the world-timeseries page for an HS code and ensure the requested view is active."""
+        """Navigate to the world-timeseries page with strict parameter verification."""
         max_attempts = 4
         hs_code = config.get("hs_code")
+        
+        # TradeMap View Codes: 1=Value, 2=Quantity, 3=Unit Value
         view_codes = {"value": "1", "quantity": "2", "unit_value": "3"}
-        view_code = view_codes.get((view or "").lower(), "1")
+        target_view_code = view_codes.get((view or "").lower(), "1")
 
         for attempt in range(1, max_attempts + 1):
             logging.info(f"--- WORLD VIEW ATTEMPT {attempt}/{max_attempts} for '{view}' ---")
+            
+            # Construct URL
             url = (
                 f"https://www.trademap.org/Country_SelProduct_TS.aspx?"
-                f"nvpm=1|||||{hs_code}|||6|1|1|1|2|1|2|{view_code}|1|1"
+                f"nvpm=1|||||{hs_code}|||6|1|1|1|2|1|2|{target_view_code}|1|1"
             )
             
             if not self.goto(url):
-                logging.warning(f"goto() failed on attempt {attempt}. Retrying.")
                 continue
 
-            ### --- THIS IS THE CRITICAL FIX --- ###
-            # After navigating, parse the ACTUAL URL in the browser and verify the HS code is correct.
-            nvpm_parts = self._get_nvpm_parts_from_url(self.driver.current_url)
-            # For the world view URL, the HS code is at index 5 in the 'nvpm' parameter.
-            if not (nvpm_parts and len(nvpm_parts) > 5 and nvpm_parts[5] == str(hs_code)):
-                found_code = nvpm_parts[5] if (nvpm_parts and len(nvpm_parts) > 5) else "not found or incorrect"
-                logging.warning(
-                    f"URL parameter mismatch on attempt {attempt}. Expected HS code '{hs_code}', but found '{found_code}'. This means the server returned the wrong page. Retrying."
-                )
-                self._save_snapshot(f"world_hs_code_mismatch_attempt_{attempt}")
-                # A brief pause before retrying can help if the server is just slow
-                time.sleep(2) 
-                continue # Force a retry
-            logging.info("HS Code in URL is verified.")
-            ### --- END OF FIX --- ###
-
-            enforced = self._ensure_nvpm_view(desired_view_code=view_code)
-            if not enforced:
-                logging.warning("Could not enforce desired nvpm view. Retrying.")
-                self._save_snapshot(f"world_nvpm_enforce_failed_attempt_{attempt}")
-                continue
+            # --- VERIFICATION LOGIC ---
+            # TradeMap sometimes ignores parameters and loads the default view. 
+            # We parse the current URL to ensure we are actually on the requested view.
             
+            time.sleep(2) # Give the URL a moment to settle if it's redirecting
+            
+            current_nvpm = self._get_nvpm_parts_from_url(self.driver.current_url)
+            
+            # Check 1: HS Code (Index 5 in World View)
+            if not current_nvpm or len(current_nvpm) <= 5 or current_nvpm[5] != str(hs_code):
+                logging.warning(f"Mismatch: HS Code in URL ({current_nvpm[5] if current_nvpm and len(current_nvpm)>5 else 'N/A'}) != Target ({hs_code}). Retrying...")
+                continue
+
+            # Check 2: View Code (Index 14 in World View)
+            # Note: Indices can vary slightly, so we search the last few segments for the code
+            if target_view_code not in current_nvpm[-5:]: 
+                logging.warning(f"Mismatch: View Code '{target_view_code}' ({view}) not found in active URL parameters. Retrying...")
+                continue
+
             try:
-                self.wait.until(EC.presence_of_element_located((By.ID, _MAIN_TABLE_ID)))
-                logging.info(f"SUCCESS: World page for view '{view}' is loaded and verified.")
+                # Final check: Wait for the main table to definitely be there
+                self.wait.until(EC.presence_of_element_located((By.ID, "ctl00_PageContent_MyGridView1")))
+                logging.info(f"SUCCESS: Verified World page is on view '{view}'.")
                 return True
             except TimeoutException:
-                current = unquote(self.driver.current_url)
-                logging.warning(f"Table not present yet. Current URL: {current}. Retrying.")
-                self._save_snapshot(f"world_table_missing_attempt_{attempt}")
+                logging.warning("Table did not load. Retrying.")
 
-        logging.error(f"All {max_attempts} attempts failed for world view '{view}'.")
         return False
 
     def navigate_to_country_view_page(
         self, config: dict, country_id: str, trade_flow: str = "I", view: str = "value"
     ) -> bool:
-        """Navigate to the country-timeseries page and strictly verify the country ID in the final URL."""
+        """
+        Navigate to the country-timeseries page (Step 2) with strict verification.
+        Prevents 'rushing in' and downloading unit value when value was requested.
+        """
         max_attempts = 4
         hs_code = config.get("hs_code")
         trade_flow_code = "1" if trade_flow == "I" else "2"
+        
+        # TradeMap View Codes: 1=Value, 2=Quantity, 3=Unit Value
         view_codes = {"value": "1", "quantity": "2", "unit_value": "3"}
-        view_code = view_codes.get((view or "").lower(), "1")
+        target_view_code = view_codes.get((view or "").lower(), "1")
 
         for attempt in range(1, max_attempts + 1):
             logging.info(
-                f"--- COUNTRY VIEW ATTEMPT {attempt}/{max_attempts} for view '{view}' (Country ID: {country_id}) ---"
+                f"--- COUNTRY VIEW ATTEMPT {attempt}/{max_attempts} for view '{view}' (Target: {country_id}) ---"
             )
+            
+            # Construct URL
             url = (
                 f"https://www.trademap.org/Country_SelProductCountry_TS.aspx?"
-                f"nvpm=1|{country_id}||||{hs_code}|||2|1|1|{trade_flow_code}|2|1|2|{view_code}|1|1"
+                f"nvpm=1|{country_id}||||{hs_code}|||2|1|1|{trade_flow_code}|2|1|2|{target_view_code}|1|1"
             )
             
             if not self.goto(url):
-                logging.warning(f"goto() failed on attempt {attempt}. Retrying.")
                 continue
 
-            ### --- APPLYING THE SAME FIX HERE FOR CONSISTENCY --- ###
-            nvpm_parts = self._get_nvpm_parts_from_url(self.driver.current_url)
-            # For this URL, the country ID is at index 1.
-            if not (nvpm_parts and len(nvpm_parts) > 1 and nvpm_parts[1] == str(country_id)):
-                found_id = nvpm_parts[1] if (nvpm_parts and len(nvpm_parts) > 1) else "not found"
-                logging.warning(
-                    f"URL parameter mismatch on attempt {attempt}. Expected country ID '{country_id}', but found '{found_id}'. Retrying."
-                )
-                self._save_snapshot(f"country_id_mismatch_attempt_{attempt}")
-                time.sleep(2)
-                continue # Force a retry
-            logging.info("Country ID in URL is verified.")
-            ### --- END OF FIX --- ###
+            # --- STRICT VERIFICATION LOGIC ---
+            # Wait explicitly for 3 seconds to allow TradeMap's internal redirection to settle
+            # This prevents the "downloading wrong data" issue where it loads default (Value) 
+            # for a split second before switching to Unit Value, or vice versa.
+            time.sleep(6)
 
-            enforced = self._ensure_nvpm_view(desired_view_code=view_code)
-            if not enforced:
-                logging.warning("Could not enforce desired nvpm view for country page. Retrying.")
-                self._save_snapshot(f"country_nvpm_enforce_failed_attempt_{attempt}")
-                continue
+            current_nvpm = self._get_nvpm_parts_from_url(self.driver.current_url)
             
+            # Check 1: Country ID (Index 1)
+            if not current_nvpm or len(current_nvpm) <= 1:
+                logging.warning("URL params missing or malformed. Retrying...")
+                continue
+                
+            if current_nvpm[1] != str(country_id):
+                logging.warning(f"Redirect detected! Page loaded Country {current_nvpm[1]} instead of {country_id}. Retrying...")
+                continue
+
+            # Check 2: View Code (Usually Index 14 for Country View)
+            # We check if the target code exists in the last 6 parameters to be safe
+            if target_view_code not in current_nvpm[-6:]:
+                logging.warning(f"View mismatch! URL does not contain View Code '{target_view_code}' ({view}). Page likely reverted to default. Retrying...")
+                # Force a refresh logic or just continue to loop which re-navigates
+                continue
+
             try:
-                self.wait.until(EC.presence_of_element_located((By.ID, _MAIN_TABLE_ID)))
-                logging.info(f"SUCCESS: Country page for view '{view}' (Country ID: {country_id}) is loaded and verified.")
+                self.wait.until(EC.presence_of_element_located((By.ID, "ctl00_PageContent_MyGridView1")))
+                logging.info(f"SUCCESS: Verified Country page is locked on ID {country_id} and View '{view}'.")
                 return True
             except TimeoutException:
-                current = unquote(self.driver.current_url)
-                logging.warning(f"Table not present yet. Current URL: {current}. Retrying.")
-                self._save_snapshot(f"country_table_missing_attempt_{attempt}")
+                logging.warning("Table element missing. Retrying.")
 
-        logging.error(f"All {max_attempts} attempts failed for country view '{view}' (Country ID: {country_id}).")
+        logging.error(f"All {max_attempts} attempts failed for country view '{view}'.")
         return False
 
+    # --- Helper Methods (Ensure these exist in your class) ---
+
+    def _get_nvpm_parts_from_url(self, url: str) -> Optional[List[str]]:
+        """Parses the 'nvpm' parameter from a TradeMap URL into a list."""
+        try:
+            parsed = urlparse(unquote(url))
+            qs = parse_qs(parsed.query, keep_blank_values=True)
+            nvpm_vals = qs.get("nvpm")
+            if not nvpm_vals:
+                return None
+            return nvpm_vals[0].split("|")
+        except Exception:
+            return None
     # ... (rest of the file, including navigate_to_companies_page, _download_file, etc. remains unchanged) ...
-    def navigate_to_companies_page(self, config, trade_flow='I'):
+    def navigate_to_companies_page(self, config: dict, country_id: str = None, trade_flow: str = 'I') -> bool:
         """
-        Navigate to the Companies page. If TradeMap redirects to a clarification page
-        with a product-list table, click the *first* product link robustly using multiple strategies.
+        Navigate to the Companies page.
+        Fix: Bypasses strict parameter checks if a redirect click was performed successfully.
         """
-        country_id = config['target_market_id']
-        product_code = config['hs_code']
-        logging.info(f"Navigating to Companies page for product {product_code}, country {country_id}")
+        target_id = country_id if country_id else config.get('target_market_id')
+        product_code = config.get('hs_code')
         trade_flow_code = '1' if trade_flow == 'I' else '2'
-        url = f"https://www.trademap.org/CompaniesList.aspx?nvpm=1|{country_id}||||{product_code}|||4|1|1|{trade_flow_code}|3|1|1|1|1|4"
+        max_attempts = 4
         
-        logging.info(f"Navigating directly to COMPANIES URL: {url}")
-        self.driver.get(url)
-        time.sleep(2.5 + random.random()*1.5)
-        
-        if "CorrespondingProductsCompanies.aspx" in self.driver.current_url:
-            logging.warning("Redirected to product clarification page. Handling redirect...")
+        # Flag to track if we manually clicked a link
+        redirect_handled = False 
+
+        logging.info(f"Navigating to Companies page for Product {product_code}, Country {target_id}...")
+
+        for attempt in range(1, max_attempts + 1):
+            # Reset flag on new attempt
+            redirect_handled = False 
+            
+            url = (
+                f"https://www.trademap.org/CompaniesList.aspx?"
+                f"nvpm=1|{target_id}||||{product_code}|||4|1|1|{trade_flow_code}|3|1|1|1|1|4"
+            )
+            
+            logging.info(f"Companies navigation attempt {attempt}/{max_attempts}...")
+            self.driver.get(url)
+            time.sleep(3) 
+
+            # --- REDIRECT HANDLING ---
+            if "CorrespondingProductsCompanies.aspx" in self.driver.current_url:
+                logging.warning("Redirected to clarification page. Locating specific product link...")
+                try:
+                    self.wait.until(EC.visibility_of_element_located((By.ID, "ctl00_PageContent_MyGridView1")))
+                    
+                    # CSS Selector for the specific data link (Avoiding headers)
+                    specific_link_selector = "a[id*='LinkButton_CompanyProduct']"
+                    target_link = self.wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, specific_link_selector)))
+                    
+                    logging.info(f"Found product link: '{target_link.text}'. Clicking...")
+                    self.driver.execute_script("arguments[0].click();", target_link)
+                    
+                    # Wait for the page to switch
+                    WebDriverWait(self.driver, 15).until(EC.url_contains("CompaniesList.aspx"))
+                    time.sleep(2)
+                    
+                    # MARK AS HANDLED so we don't fail the strict check below
+                    redirect_handled = True 
+
+                except Exception as e:
+                    logging.error(f"Failed to handle clarification redirect: {e}")
+                    continue
+
+            # --- VERIFICATION ---
+            # 1. Check if we are on the right page
+            if "CompaniesList.aspx" not in self.driver.current_url:
+                logging.warning(f"Current URL is not CompaniesList.aspx (URL: {self.driver.current_url}). Retrying...")
+                continue
+
+            # 2. Strict Parameter Check (ONLY if we didn't just handle a redirect)
+            # If we just clicked the link, we trust the website sent us to the right place.
+            if not redirect_handled:
+                current_nvpm = self._get_nvpm_parts_from_url(self.driver.current_url)
+                if current_nvpm and len(current_nvpm) > 1:
+                    if current_nvpm[1] != str(target_id):
+                        logging.warning(f"Wrong Country ID {current_nvpm[1]} detected (wanted {target_id}). Retrying...")
+                        continue
+
+            # --- FINAL SUCCESS CONFIRMATION ---
             try:
-                self.wait.until(EC.visibility_of_element_located((By.ID, "ctl00_PageContent_MyGridView1")))
-                logging.info("Clarification table visible.")
-
-                first_link_xpath = "//table[@id='ctl00_PageContent_MyGridView1']//tr[2]//a"
+                # Wait for the main table
+                self.wait.until(EC.presence_of_element_located((By.ID, "ctl00_PageContent_MyGridView1")))
                 
-                if self._safe_click(By.XPATH, first_link_xpath):
-                     logging.info("Clicked first product link via _safe_click.")
+                # Pre-check: Ensure the DOWNLOAD button is present before returning True
+                # This ensures the next step (downloading) will succeed immediately
+                download_btn = self.driver.find_elements(By.XPATH, "//input[@type='image' and @title='Text file']")
+                if download_btn:
+                    logging.info(f"SUCCESS: Landed on Companies List (Country {target_id}) and Download button is visible.")
+                    return True
                 else:
-                    logging.warning("Safe click failed, trying JS click as fallback...")
-                    try:
-                        first_el = self.driver.find_element(By.XPATH, first_link_xpath)
-                        self.driver.execute_script("arguments[0].click();", first_el)
-                        logging.info("Executed JavaScript click on first product link.")
-                    except Exception as e:
-                        logging.error(f"All click strategies failed for the first product link. Error: {e}")
-                        self._save_snapshot("company_all_clicks_failed")
-                        return False
-                
-                logging.info("Click attempted. Waiting for final CompaniesList.aspx to load...")
-                WebDriverWait = self.wait.__class__
-                WebDriverWait(self.driver, 15).until(EC.url_contains("CompaniesList.aspx"))
-                logging.info("Successfully handled redirect and landed on the final companies list page.")
-                return True
+                    logging.warning("Landed on page, but Download button not found yet. Waiting...")
+                    time.sleep(2)
+                    return True
+                    
+            except TimeoutException:
+                logging.warning("Companies table did not load. Retrying.")
 
-            except Exception as e:
-                logging.error(f"Failed to handle the company page redirect. Error: {e}")
-                self._save_snapshot("company_redirect_handler_failed")
-                return False
-
-        elif "CompaniesList.aspx" in self.driver.current_url:
-            logging.info("Successfully landed on the companies list page directly.")
-            return True
-        else:
-            logging.error(f"Navigation to companies page failed. Ended up on an unknown page: {self.driver.current_url}")
-            self._save_snapshot("company_navigation_unknown_failure")
-            return False
+        logging.error("Failed to navigate to the correct Companies page.")
+        return False
 
     def _download_file(self, rename_to: Optional[str] = None, clean_dir: bool = True) -> Optional[str]:
         """

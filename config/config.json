@@ -45,12 +45,15 @@
       "market_analysis.regional_suppliers": "competition_and_suppliers.regional_competitors",
       "potential_importers": "potential_importers",
       "world_comparison_data.world_unit_value_usd": "unit_values.world_avg_unit_value_usd",
+      
+      "market_analysis.world_unit_values": "unit_values.target_market_avg_unit_value_usd",
+      
       "market_analysis.years": "historical_data.years",
       "market_analysis.world_values_usd": "historical_data.target_market_import_values_usd"
     },
     "macmap": {
       "regulatory_requirements": "market_access_conditions.regulatory_requirements_details",
-      "tariffs": "market_access_conditions.customs_tariffs",
+      "customs_tariffs": "market_access_conditions.customs_tariffs",
       "trade_remedies": "market_access_conditions.trade_remedies_details"
     },
     "export_potential": {
