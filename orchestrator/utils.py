@@ -9,6 +9,9 @@ def setup_logging(log_file_path: str) -> logging.Logger:
     logger = logging.getLogger("Orchestrator")
     logger.setLevel(logging.INFO)
 
+    # --- FIX: Prevent double logging by stopping propagation to root logger ---
+    logger.propagate = False 
+
     # Prevent adding duplicate handlers if this function is called multiple times
     if logger.hasHandlers():
         logger.handlers.clear()
