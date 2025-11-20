@@ -1,31 +1,7 @@
-# --- Core Libraries ---
-# Last checked: November 2025
-# Selenium now requires Python 3.10+
-selenium>=4.18.0
-
-# BeautifulSoup supports Python 3.7+
-beautifulsoup4>=4.12.3
-
-# --- Scientific Stack ---
-# Compatible with Python 3.10-3.13 and each other.
-# NumPy 2.x is a major update; pinning to the latest stable 2.x is recommended.
-numpy>=2.1.0
-
-# SciPy now requires Python 3.11+ for the latest versions.
-scipy>=1.14.1
-
-# Pandas has improved compatibility with NumPy 2.x in recent versions.
-pandas>=2.2.3
-
-# Matplotlib maintains broad compatibility with the scientific stack.
-matplotlib>=3.8.0
-
-# --- Flask Dependencies ---
-# Flask 3.x now requires Python 3.9+
-Flask>=3.0.0
-
-# Flask-Compress supports Python 3.9+
-Flask-Compress>=1.15
-
-# Flask-Cors supports Python 3.9+
-Flask-Cors>=4.0.0
+selenium>=4.10.0
+pandas>=1.5.0
+openpyxl>=3.1.0
+lxml>=4.9.0
+matplotlib>=3.7.0
+python-docx>=0.8.11
+pycountry-convert>=0.7.2
