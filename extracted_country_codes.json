@@ -1,0 +1,1358 @@
+[
+    {
+        "country": "Afghanistan",
+        "code": "4",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:18:43.721715"
+    },
+    {
+        "country": "Albania",
+        "code": "8",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:18:58.448295"
+    },
+    {
+        "country": "Algeria",
+        "code": null,
+        "status": "Not Found / Timeout",
+        "timestamp": "2025-11-20T10:19:09.569141"
+    },
+    {
+        "country": "American Samoa",
+        "code": "16",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:19:29.340331"
+    },
+    {
+        "country": "Andorra",
+        "code": "20",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:19:40.210398"
+    },
+    {
+        "country": "Angola",
+        "code": "24",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:19:51.051303"
+    },
+    {
+        "country": "Anguilla",
+        "code": "660",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:20:02.152696"
+    },
+    {
+        "country": "Antigua and Barbuda",
+        "code": "28",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:20:13.152457"
+    },
+    {
+        "country": "Argentina",
+        "code": "32",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:20:24.213896"
+    },
+    {
+        "country": "Armenia",
+        "code": "51",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:20:34.827749"
+    },
+    {
+        "country": "Aruba",
+        "code": "533",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:20:45.554458"
+    },
+    {
+        "country": "Australia",
+        "code": "36",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:20:56.221802"
+    },
+    {
+        "country": "Austria",
+        "code": "40",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:21:07.467250"
+    },
+    {
+        "country": "Azerbaijan",
+        "code": "31",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:21:18.503170"
+    },
+    {
+        "country": "Bahamas",
+        "code": "44",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:21:29.876881"
+    },
+    {
+        "country": "Bahrain",
+        "code": "48",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:21:40.711412"
+    },
+    {
+        "country": "Bangladesh",
+        "code": "50",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:21:51.718289"
+    },
+    {
+        "country": "Barbados",
+        "code": "52",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:22:02.720721"
+    },
+    {
+        "country": "Belarus",
+        "code": "112",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:22:13.512734"
+    },
+    {
+        "country": "Belgium",
+        "code": "56",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:22:24.380119"
+    },
+    {
+        "country": "Belize",
+        "code": "84",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:22:35.163610"
+    },
+    {
+        "country": "Benin",
+        "code": "204",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:22:46.798683"
+    },
+    {
+        "country": "Bermuda",
+        "code": "60",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:22:57.652654"
+    },
+    {
+        "country": "Bhutan",
+        "code": "64",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:23:08.514305"
+    },
+    {
+        "country": "Bolivia, Plurinational State of",
+        "code": "68",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:23:19.191391"
+    },
+    {
+        "country": "Bonaire, Sint Eustatius and Saba",
+        "code": "535",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:23:30.328550"
+    },
+    {
+        "country": "Bosnia and Herzegovina",
+        "code": "70",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:23:41.451509"
+    },
+    {
+        "country": "Botswana",
+        "code": "72",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:23:52.547243"
+    },
+    {
+        "country": "Brazil",
+        "code": "76",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:24:10.268445"
+    },
+    {
+        "country": "British Indian Ocean Territory",
+        "code": "86",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:24:21.549616"
+    },
+    {
+        "country": "British Virgin Islands",
+        "code": "92",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:24:40.287417"
+    },
+    {
+        "country": "Brunei Darussalam",
+        "code": "96",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:24:51.325482"
+    },
+    {
+        "country": "Bulgaria",
+        "code": "100",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:25:02.511315"
+    },
+    {
+        "country": "Burkina Faso",
+        "code": "854",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:25:14.240169"
+    },
+    {
+        "country": "Burundi",
+        "code": "108",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:25:27.434186"
+    },
+    {
+        "country": "Cabo Verde",
+        "code": "132",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:25:38.384679"
+    },
+    {
+        "country": "Cambodia",
+        "code": "116",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:25:50.010457"
+    },
+    {
+        "country": "Cameroon",
+        "code": "120",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:26:01.782342"
+    },
+    {
+        "country": "Canada",
+        "code": "124",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:26:22.521365"
+    },
+    {
+        "country": "Cayman Islands",
+        "code": "136",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:26:33.575408"
+    },
+    {
+        "country": "Central African Republic",
+        "code": "140",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:26:58.671879"
+    },
+    {
+        "country": "Chad",
+        "code": "148",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:27:09.369851"
+    },
+    {
+        "country": "Chile",
+        "code": "152",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:27:20.788235"
+    },
+    {
+        "country": "China",
+        "code": "156",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:27:32.799362"
+    },
+    {
+        "country": "Christmas Island",
+        "code": "162",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:27:43.861930"
+    },
+    {
+        "country": "Cocos (Keeling) Islands",
+        "code": "166",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:27:58.884767"
+    },
+    {
+        "country": "Colombia",
+        "code": "170",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:28:10.182228"
+    },
+    {
+        "country": "Comoros",
+        "code": "174",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:28:21.263634"
+    },
+    {
+        "country": "Congo",
+        "code": "178",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:28:32.174011"
+    },
+    {
+        "country": "Congo, Democratic Republic of the",
+        "code": "180",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:28:43.578765"
+    },
+    {
+        "country": "Cook Islands",
+        "code": "184",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:28:54.679526"
+    },
+    {
+        "country": "Costa Rica",
+        "code": "188",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:29:06.006965"
+    },
+    {
+        "country": "Côte d'Ivoire",
+        "code": null,
+        "status": "Error: Message: Given xpath expression \"//app-country-list[@type='exporters']//div[contains(@class, 'clickable') and @title='Côte d'Ivoire']\" is invalid: SyntaxError: Document.evaluate: The expression is not a legal expression; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#invalidselectorexception\nStacktrace:\nRemoteError@chrome://remote/content/shared/RemoteError.sys.mjs:8:8\nWebDriverError@chrome://remote/content/shared/webdriver/Errors.sys.mjs:202:5\nInvalidSelectorError@chrome://remote/content/shared/webdriver/Errors.sys.mjs:455:5\nfind_@chrome://remote/content/shared/DOM.sys.mjs:170:11\n",
+        "timestamp": "2025-11-20T10:29:17.438487"
+    },
+    {
+        "country": "Croatia",
+        "code": "191",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:29:25.884577"
+    },
+    {
+        "country": "Cuba",
+        "code": "192",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:29:38.669721"
+    },
+    {
+        "country": "Curaçao",
+        "code": "531",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:29:51.828587"
+    },
+    {
+        "country": "Cyprus",
+        "code": "196",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:30:03.022766"
+    },
+    {
+        "country": "Czechia",
+        "code": "203",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:30:15.033645"
+    },
+    {
+        "country": "Denmark",
+        "code": "208",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:30:26.748978"
+    },
+    {
+        "country": "Djibouti",
+        "code": "262",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:30:42.467765"
+    },
+    {
+        "country": "Dominica",
+        "code": "212",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:31:01.329534"
+    },
+    {
+        "country": "Dominican Republic",
+        "code": "214",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:31:12.962848"
+    },
+    {
+        "country": "Ecuador",
+        "code": "218",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:31:24.052500"
+    },
+    {
+        "country": "Egypt",
+        "code": "818",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:31:35.504719"
+    },
+    {
+        "country": "El Salvador",
+        "code": "222",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:31:47.609868"
+    },
+    {
+        "country": "Equatorial Guinea",
+        "code": "226",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:31:58.864300"
+    },
+    {
+        "country": "Eritrea",
+        "code": "232",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:32:10.812818"
+    },
+    {
+        "country": "Estonia",
+        "code": "233",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:32:21.428160"
+    },
+    {
+        "country": "Eswatini",
+        "code": "748",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:32:32.082640"
+    },
+    {
+        "country": "Ethiopia",
+        "code": "231",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:32:42.661863"
+    },
+    {
+        "country": "Falkland Islands (Malvinas)",
+        "code": "238",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:32:53.345315"
+    },
+    {
+        "country": "Faroe Islands",
+        "code": "234",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:33:04.146706"
+    },
+    {
+        "country": "Fiji",
+        "code": "242",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:33:14.813040"
+    },
+    {
+        "country": "Finland",
+        "code": "246",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:33:25.399514"
+    },
+    {
+        "country": "France",
+        "code": "251",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:33:36.196235"
+    },
+    {
+        "country": "French Polynesia",
+        "code": "258",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:33:47.304648"
+    },
+    {
+        "country": "French Southern and Antarctic Territories",
+        "code": "260",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:33:59.876026"
+    },
+    {
+        "country": "Gabon",
+        "code": "266",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:34:10.555653"
+    },
+    {
+        "country": "Gambia",
+        "code": "270",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:34:21.338221"
+    },
+    {
+        "country": "Georgia",
+        "code": "268",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:34:32.022466"
+    },
+    {
+        "country": "Germany",
+        "code": "276",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:34:42.624579"
+    },
+    {
+        "country": "Ghana",
+        "code": "288",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:34:53.339940"
+    },
+    {
+        "country": "Gibraltar",
+        "code": "292",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:35:04.603922"
+    },
+    {
+        "country": "Greece",
+        "code": "300",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:35:15.341658"
+    },
+    {
+        "country": "Greenland",
+        "code": "304",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:35:26.457369"
+    },
+    {
+        "country": "Grenada",
+        "code": "308",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:35:37.894735"
+    },
+    {
+        "country": "Guatemala",
+        "code": "320",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:35:48.998798"
+    },
+    {
+        "country": "Guinea",
+        "code": "324",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:35:59.551124"
+    },
+    {
+        "country": "Guinea-Bissau",
+        "code": "624",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:36:10.259463"
+    },
+    {
+        "country": "Guyana",
+        "code": "328",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:36:20.964077"
+    },
+    {
+        "country": "Haiti",
+        "code": "332",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:36:31.621759"
+    },
+    {
+        "country": "Honduras",
+        "code": "340",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:36:42.686277"
+    },
+    {
+        "country": "Hong Kong SAR",
+        "code": "344",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:36:53.520545"
+    },
+    {
+        "country": "Hungary",
+        "code": "348",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:37:04.375236"
+    },
+    {
+        "country": "Iceland",
+        "code": "352",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:37:15.413430"
+    },
+    {
+        "country": "India",
+        "code": "699",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:37:26.305910"
+    },
+    {
+        "country": "Indonesia",
+        "code": "360",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:37:37.094935"
+    },
+    {
+        "country": "Iran, Islamic Republic of",
+        "code": "364",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:37:48.665775"
+    },
+    {
+        "country": "Iraq",
+        "code": "368",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:37:59.757976"
+    },
+    {
+        "country": "Ireland",
+        "code": "372",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:38:10.646488"
+    },
+    {
+        "country": "Israel",
+        "code": "376",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:38:21.547431"
+    },
+    {
+        "country": "Italy",
+        "code": "381",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:38:32.198489"
+    },
+    {
+        "country": "Jamaica",
+        "code": "388",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:38:42.921501"
+    },
+    {
+        "country": "Japan",
+        "code": "392",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:38:57.745341"
+    },
+    {
+        "country": "Jordan",
+        "code": "400",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:39:08.315305"
+    },
+    {
+        "country": "Kazakhstan",
+        "code": "398",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:39:21.305715"
+    },
+    {
+        "country": "Kenya",
+        "code": "404",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:39:31.992787"
+    },
+    {
+        "country": "Kiribati",
+        "code": "296",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:39:42.928216"
+    },
+    {
+        "country": "Korea, Democratic People's Republic of",
+        "code": null,
+        "status": "Error: Message: Given xpath expression \"//app-country-list[@type='exporters']//div[contains(@class, 'clickable') and @title='Korea, Democratic People's Republic of']\" is invalid: SyntaxError: Document.evaluate: The expression is not a legal expression; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#invalidselectorexception\nStacktrace:\nRemoteError@chrome://remote/content/shared/RemoteError.sys.mjs:8:8\nWebDriverError@chrome://remote/content/shared/webdriver/Errors.sys.mjs:202:5\nInvalidSelectorError@chrome://remote/content/shared/webdriver/Errors.sys.mjs:455:5\nfind_@chrome://remote/content/shared/DOM.sys.mjs:170:11\n",
+        "timestamp": "2025-11-20T10:39:53.789085"
+    },
+    {
+        "country": "Korea, Republic of",
+        "code": "410",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:40:02.090533"
+    },
+    {
+        "country": "Kuwait",
+        "code": "414",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:40:13.528696"
+    },
+    {
+        "country": "Kyrgyzstan",
+        "code": "417",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:40:25.180153"
+    },
+    {
+        "country": "Lao People's Democratic Republic",
+        "code": null,
+        "status": "Error: Message: Given xpath expression \"//app-country-list[@type='exporters']//div[contains(@class, 'clickable') and @title='Lao People's Democratic Republic']\" is invalid: SyntaxError: Document.evaluate: The expression is not a legal expression; For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#invalidselectorexception\nStacktrace:\nRemoteError@chrome://remote/content/shared/RemoteError.sys.mjs:8:8\nWebDriverError@chrome://remote/content/shared/webdriver/Errors.sys.mjs:202:5\nInvalidSelectorError@chrome://remote/content/shared/webdriver/Errors.sys.mjs:455:5\nfind_@chrome://remote/content/shared/DOM.sys.mjs:170:11\n",
+        "timestamp": "2025-11-20T10:40:36.278209"
+    },
+    {
+        "country": "Latvia",
+        "code": "428",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:40:45.035531"
+    },
+    {
+        "country": "Lebanon",
+        "code": "422",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:40:56.003548"
+    },
+    {
+        "country": "Lesotho",
+        "code": "426",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:41:06.828888"
+    },
+    {
+        "country": "Liberia",
+        "code": "430",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:41:17.733096"
+    },
+    {
+        "country": "Libya",
+        "code": "434",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:41:28.624583"
+    },
+    {
+        "country": "Lithuania",
+        "code": "440",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:41:39.157446"
+    },
+    {
+        "country": "Luxembourg",
+        "code": "442",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:41:50.094803"
+    },
+    {
+        "country": "Macao, China",
+        "code": "446",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:42:01.583922"
+    },
+    {
+        "country": "Macedonia, North",
+        "code": "807",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:42:12.384917"
+    },
+    {
+        "country": "Madagascar",
+        "code": "450",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:42:23.055132"
+    },
+    {
+        "country": "Malawi",
+        "code": "454",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:42:34.179717"
+    },
+    {
+        "country": "Malaysia",
+        "code": "458",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:42:45.222815"
+    },
+    {
+        "country": "Maldives",
+        "code": "462",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:42:56.003739"
+    },
+    {
+        "country": "Mali",
+        "code": "466",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:43:07.611857"
+    },
+    {
+        "country": "Malta",
+        "code": "470",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:43:18.573261"
+    },
+    {
+        "country": "Marshall Islands",
+        "code": "584",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:43:29.711367"
+    },
+    {
+        "country": "Mauritania",
+        "code": "478",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:43:40.661045"
+    },
+    {
+        "country": "Mauritius",
+        "code": "480",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:43:51.787864"
+    },
+    {
+        "country": "Mexico",
+        "code": "484",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:44:02.943431"
+    },
+    {
+        "country": "Micronesia, Federated States of",
+        "code": "583",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:44:15.351652"
+    },
+    {
+        "country": "Moldova, Republic of",
+        "code": "498",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:44:30.498985"
+    },
+    {
+        "country": "Mongolia",
+        "code": "496",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:44:41.241492"
+    },
+    {
+        "country": "Montenegro",
+        "code": "499",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:44:51.936780"
+    },
+    {
+        "country": "Montserrat",
+        "code": "500",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:45:02.745720"
+    },
+    {
+        "country": "Morocco",
+        "code": "504",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:45:13.530857"
+    },
+    {
+        "country": "Mozambique",
+        "code": "508",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:45:24.478435"
+    },
+    {
+        "country": "Myanmar",
+        "code": "104",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:45:35.157820"
+    },
+    {
+        "country": "Namibia",
+        "code": "516",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:45:46.104577"
+    },
+    {
+        "country": "Nauru",
+        "code": "520",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:45:56.953502"
+    },
+    {
+        "country": "Nepal",
+        "code": "524",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:46:07.586648"
+    },
+    {
+        "country": "Netherlands",
+        "code": "528",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:46:18.482018"
+    },
+    {
+        "country": "New Caledonia",
+        "code": "540",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:46:29.783801"
+    },
+    {
+        "country": "New Zealand",
+        "code": "554",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:46:42.418925"
+    },
+    {
+        "country": "Nicaragua",
+        "code": "558",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:46:53.645957"
+    },
+    {
+        "country": "Niger",
+        "code": "562",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:47:04.510134"
+    },
+    {
+        "country": "Nigeria",
+        "code": "566",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:47:15.270427"
+    },
+    {
+        "country": "Niue",
+        "code": "570",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:47:26.345738"
+    },
+    {
+        "country": "Norfolk Island",
+        "code": "574",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:47:37.467773"
+    },
+    {
+        "country": "Northern Mariana Islands",
+        "code": "580",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:47:48.458191"
+    },
+    {
+        "country": "Norway",
+        "code": "579",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:47:59.289477"
+    },
+    {
+        "country": "Oman",
+        "code": "512",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:48:10.405904"
+    },
+    {
+        "country": "Pakistan",
+        "code": "586",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:48:21.600442"
+    },
+    {
+        "country": "Palau",
+        "code": "585",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:48:32.908162"
+    },
+    {
+        "country": "Palestine, State of",
+        "code": "275",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:48:43.805843"
+    },
+    {
+        "country": "Panama",
+        "code": "591",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:48:54.761107"
+    },
+    {
+        "country": "Papua New Guinea",
+        "code": "598",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:49:06.839660"
+    },
+    {
+        "country": "Paraguay",
+        "code": "600",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:49:17.839834"
+    },
+    {
+        "country": "Peru",
+        "code": "604",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:49:29.046539"
+    },
+    {
+        "country": "Philippines",
+        "code": "608",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:49:40.076098"
+    },
+    {
+        "country": "Pitcairn",
+        "code": "612",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:49:51.201300"
+    },
+    {
+        "country": "Poland",
+        "code": "616",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:50:02.334836"
+    },
+    {
+        "country": "Portugal",
+        "code": "620",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:50:13.567425"
+    },
+    {
+        "country": "Qatar",
+        "code": "634",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:50:25.836814"
+    },
+    {
+        "country": "Romania",
+        "code": "642",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:51:08.194362"
+    },
+    {
+        "country": "Russian Federation",
+        "code": "643",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:51:35.059844"
+    },
+    {
+        "country": "Rwanda",
+        "code": "646",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:51:56.223476"
+    },
+    {
+        "country": "Saint Helena",
+        "code": "654",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:52:11.077289"
+    },
+    {
+        "country": "Saint Kitts and Nevis",
+        "code": "659",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:52:21.895575"
+    },
+    {
+        "country": "Saint Lucia",
+        "code": "662",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:52:32.773387"
+    },
+    {
+        "country": "Saint Pierre and Miquelon",
+        "code": "666",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:52:43.760851"
+    },
+    {
+        "country": "Saint Vincent and the Grenadines",
+        "code": "670",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:52:55.106139"
+    },
+    {
+        "country": "Samoa",
+        "code": "882",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:53:06.400435"
+    },
+    {
+        "country": "Sao Tome and Principe",
+        "code": "678",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:53:17.300208"
+    },
+    {
+        "country": "Saudi Arabia",
+        "code": "682",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:53:28.555255"
+    },
+    {
+        "country": "Senegal",
+        "code": "686",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:53:39.461458"
+    },
+    {
+        "country": "Serbia",
+        "code": "688",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:53:50.416569"
+    },
+    {
+        "country": "Seychelles",
+        "code": "690",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:54:01.318186"
+    },
+    {
+        "country": "Sierra Leone",
+        "code": "694",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:54:12.626715"
+    },
+    {
+        "country": "Singapore",
+        "code": "702",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:54:23.584820"
+    },
+    {
+        "country": "Sint Maarten (Dutch part)",
+        "code": "534",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:54:34.779730"
+    },
+    {
+        "country": "Slovakia",
+        "code": "703",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:54:45.783343"
+    },
+    {
+        "country": "Slovenia",
+        "code": "705",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:54:57.023475"
+    },
+    {
+        "country": "Solomon Islands",
+        "code": "90",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:55:08.371264"
+    },
+    {
+        "country": "Somalia",
+        "code": "706",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:55:19.319123"
+    },
+    {
+        "country": "South Africa",
+        "code": "710",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:55:30.561792"
+    },
+    {
+        "country": "South Sudan",
+        "code": "728",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:55:41.405408"
+    },
+    {
+        "country": "Spain",
+        "code": "724",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:55:52.526793"
+    },
+    {
+        "country": "Sri Lanka",
+        "code": "144",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:56:03.877747"
+    },
+    {
+        "country": "Sudan",
+        "code": "729",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:56:15.187883"
+    },
+    {
+        "country": "Suriname",
+        "code": "740",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:56:26.266131"
+    },
+    {
+        "country": "Sweden",
+        "code": "752",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:56:36.973746"
+    },
+    {
+        "country": "Switzerland",
+        "code": "757",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:56:48.110233"
+    },
+    {
+        "country": "Syrian Arab Republic",
+        "code": "760",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:56:59.458298"
+    },
+    {
+        "country": "Taipei, Chinese",
+        "code": "490",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:57:11.295881"
+    },
+    {
+        "country": "Tajikistan",
+        "code": "762",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:57:22.242792"
+    },
+    {
+        "country": "Tanzania, United Republic of",
+        "code": "834",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:57:35.049394"
+    },
+    {
+        "country": "Thailand",
+        "code": "764",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:57:46.180289"
+    },
+    {
+        "country": "Timor-Leste",
+        "code": "626",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:57:57.336572"
+    },
+    {
+        "country": "Togo",
+        "code": "768",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:58:08.764323"
+    },
+    {
+        "country": "Tokelau",
+        "code": "772",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:58:19.859846"
+    },
+    {
+        "country": "Tonga",
+        "code": "776",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:58:31.075795"
+    },
+    {
+        "country": "Trinidad and Tobago",
+        "code": "780",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:58:42.226422"
+    },
+    {
+        "country": "Tunisia",
+        "code": "788",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:58:53.075733"
+    },
+    {
+        "country": "Türkiye",
+        "code": "792",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:59:04.191101"
+    },
+    {
+        "country": "Turkmenistan",
+        "code": "795",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:59:14.893857"
+    },
+    {
+        "country": "Turks and Caicos Islands",
+        "code": "796",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:59:25.758973"
+    },
+    {
+        "country": "Tuvalu",
+        "code": "798",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:59:36.562443"
+    },
+    {
+        "country": "Uganda",
+        "code": "800",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:59:47.408467"
+    },
+    {
+        "country": "Ukraine",
+        "code": "804",
+        "status": "Success",
+        "timestamp": "2025-11-20T10:59:58.274476"
+    },
+    {
+        "country": "United Arab Emirates",
+        "code": "784",
+        "status": "Success",
+        "timestamp": "2025-11-20T11:00:09.284974"
+    },
+    {
+        "country": "United Kingdom",
+        "code": "826",
+        "status": "Success",
+        "timestamp": "2025-11-20T11:00:20.586340"
+    },
+    {
+        "country": "United States",
+        "code": "842",
+        "status": "Success",
+        "timestamp": "2025-11-20T11:00:31.599225"
+    },
+    {
+        "country": "United States Minor Outlying Islands",
+        "code": "849",
+        "status": "Success",
+        "timestamp": "2025-11-20T11:00:43.264520"
+    },
+    {
+        "country": "Uruguay",
+        "code": "858",
+        "status": "Success",
+        "timestamp": "2025-11-20T11:00:55.247668"
+    },
+    {
+        "country": "Uzbekistan",
+        "code": "860",
+        "status": "Success",
+        "timestamp": "2025-11-20T11:01:06.223633"
+    },
+    {
+        "country": "Vanuatu",
+        "code": "548",
+        "status": "Success",
+        "timestamp": "2025-11-20T11:01:16.969939"
+    },
+    {
+        "country": "Venezuela, Bolivarian Republic of",
+        "code": "862",
+        "status": "Success",
+        "timestamp": "2025-11-20T11:01:28.019514"
+    },
+    {
+        "country": "Viet Nam",
+        "code": "704",
+        "status": "Success",
+        "timestamp": "2025-11-20T11:01:39.263490"
+    },
+    {
+        "country": "Wallis and Futuna Islands",
+        "code": "876",
+        "status": "Success",
+        "timestamp": "2025-11-20T11:01:50.188143"
+    },
+    {
+        "country": "Western Sahara",
+        "code": "732",
+        "status": "Success",
+        "timestamp": "2025-11-20T11:02:01.781685"
+    },
+    {
+        "country": "Yemen",
+        "code": "887",
+        "status": "Success",
+        "timestamp": "2025-11-20T11:02:12.965133"
+    },
+    {
+        "country": "Zambia",
+        "code": "894",
+        "status": "Success",
+        "timestamp": "2025-11-20T11:02:23.825554"
+    },
+    {
+        "country": "Zimbabwe",
+        "code": "716",
+        "status": "Success",
+        "timestamp": "2025-11-20T11:02:34.918805"
+    }
+]

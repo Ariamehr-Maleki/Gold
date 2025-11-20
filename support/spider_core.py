@@ -1,4 +1,4 @@
-# support/spider_core.py
+# support/spider_core.py (Fixed: Correct Verification Elements)
 
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
@@ -106,7 +106,7 @@ class TradeSpider(object):
             except Exception as e:
                 last_exception = e
             time.sleep(sleep_between)
-        logging.error(f"_safe_click failed for {by}={locator} after {attempts.attempts} attempts. Last exception: {last_exception}")
+        logging.error(f"_safe_click failed for {by}={locator} after {attempts} attempts. Last exception: {last_exception}")
         return False
 
     def goto(self, url):
@@ -136,9 +136,6 @@ class TradeSpider(object):
         return False
 
     def login(self, ac, pw):
-        """
-        Robust login handling using a polling loop to detect Success, Failure, or Captcha.
-        """
         url = "https://www.trademap.org/Country_SelProduct_TS.aspx"
         if not self.goto(url): return False
         
@@ -156,56 +153,70 @@ class TradeSpider(object):
             self._save_snapshot("login_input_fail")
             return False
             
-        logging.info("Login submitted. Polling for outcome (Success, CAPTCHA, or Failure)...")
-        
-        # Poll for outcome to avoid sticking if one specific event is missed
-        end_time = time.time() + 30  # 30 seconds timeout for login processing
-        
-        while time.time() < end_time:
+        try:
+            logging.info("Login submitted. Waiting for outcome (Success, CAPTCHA, or Failure)...")
+            logging.debug(f"[DEBUG] Current URL before outcome wait: {self.driver.current_url}")
+            
+            username_input_locator = (By.ID, "Username")
+            login_error_locator = (By.ID, "ValidationSummary1") 
+            
+            # --- ATOMIC WAIT ---
+            # 1. Username input disappears (Success)
+            # 2. Captcha URL appears (Captcha)
+            # 3. Error element appears (Failure)
+            WebDriverWait(self.driver, 20).until(EC.any_of(
+                EC.invisibility_of_element_located(username_input_locator),
+                EC.url_contains("stCaptcha.aspx"),
+                EC.presence_of_element_located(login_error_locator)
+            ))
+
+            # --- OUTCOME ANALYSIS ---
+            current_url = self.driver.current_url
+            logging.info(f"[DEBUG] Outcome detection finished. Current URL: {current_url}")
+
+            # 1. Check for Failure
             try:
-                current_url = self.driver.current_url
-                
-                # 1. Check for CAPTCHA (Highest Priority)
-                if "stCaptcha.aspx" in current_url:
-                    logging.warning("ACTION REQUIRED: CAPTCHA detected. Please solve it. Waiting up to 5 minutes.")
-                    try:
-                        WebDriverWait(self.driver, 300).until_not(EC.url_contains("stCaptcha.aspx"))
-                        logging.info("CAPTCHA page is gone. Continuing...")
-                        # Reset timeout slightly to allow page load after captcha
-                        end_time = time.time() + 20 
-                        continue
-                    except TimeoutException:
-                        logging.error("Timed out waiting for manual CAPTCHA solution.")
-                        return False
-
-                # 2. Check for Success (Logout button visible)
-                # Using find_elements to avoid throwing exception if not found immediately
-                if self.driver.find_elements(By.ID, "ctl00_MenuControl_marmenu_logout"):
-                    logging.info("Login successful: Logout button detected.")
-                    return True
-
-                # 3. Check for Failure (Error Message)
-                error_elements = self.driver.find_elements(By.ID, "ValidationSummary1")
-                if error_elements and error_elements[0].is_displayed():
-                    error_text = error_elements[0].text.strip().replace('\n', ' ')
+                error_element = self.driver.find_element(*login_error_locator)
+                if error_element.is_displayed():
+                    error_text = error_element.text.strip().replace('\n', ' ')
                     logging.error(f"LOGIN FAILED. Site reported an error: '{error_text}'")
                     self._save_snapshot("login_explicit_fail")
                     return False
+            except NoSuchElementException:
+                pass 
 
-                # 4. Check for fallback Success (Login button GONE and Dashboard element present)
-                # If we are still on the same URL but logged in, the login button should be gone
-                if not self.driver.find_elements(By.ID, "ctl00_MenuControl_marmenu_login"):
-                     # Double check we aren't just on a blank page/loading
-                     if self.driver.find_elements(By.ID, "ctl00_PageContent_Panel1"):
-                         logging.info("Login successful: Login button gone and Dashboard panel present.")
-                         return True
-
-                time.sleep(1)
+            # 2. Check for CAPTCHA
+            if "stCaptcha.aspx" in current_url:
+                logging.warning("ACTION REQUIRED: CAPTCHA detected. Please solve it. Waiting up to 5 minutes.")
+                WebDriverWait(self.driver, 300).until_not(EC.url_contains("stCaptcha.aspx"))
+                logging.info("CAPTCHA page is gone. Verifying final destination...")
             
-            except Exception as e:
-                logging.warning(f"Error during login polling (retrying): {e}")
-                time.sleep(1)
+            # 3. Success Path
+            else:
+                 logging.info("[DEBUG] No CAPTCHA found and Login form disappeared. Proceeding as successful login.")
 
-        logging.error("Login verification timed out. No clear Success, Failure, or Captcha state detected.")
-        self._save_snapshot("post_login_timeout")
-        return False
+            # --- FINAL VERIFICATION (Fixed using IDs from your HTML) ---
+            logging.info("Verifying destination page is fully loaded and interactive...")
+            
+            self.wait.until(EC.any_of(
+                # The main data table
+                EC.presence_of_element_located((By.ID, "ctl00_PageContent_MyGridView1")),
+                # The user name label (visible when logged in)
+                EC.presence_of_element_located((By.ID, "ctl00_MenuControl_Label_Login")),
+                # The product dropdown
+                EC.presence_of_element_located((By.ID, "ctl00_NavigationControl_DropDownList_Product"))
+            ))
+
+            self._wait_for_ready_state(5)
+            logging.info("Login process complete and destination page is verified.")
+            return True
+
+        except TimeoutException:
+            logging.error("Verification failed. Timed out waiting for page elements (MyGridView1, Label_Login, etc). Saving snapshot...")
+            logging.error(f"[DEBUG] Final stuck URL: {self.driver.current_url}")
+            self._save_snapshot("post_login_timeout_or_fail")
+            return False
+        except Exception as e:
+            logging.error(f"An unexpected error occurred during login verification: {e}")
+            self._save_snapshot("post_login_unexpected_error")
+            return False
