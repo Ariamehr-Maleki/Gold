@@ -1,5 +1,3 @@
-# support/spider_core.py (Fixed: Correct Verification Elements)
-
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.firefox.service import Service
@@ -9,15 +7,37 @@ from selenium.common.exceptions import (
     TimeoutException,
     WebDriverException,
     NoSuchElementException,
+    ElementNotInteractableException
 )
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
 import time
 import random
 import logging
 import os
 from datetime import datetime
+from io import BytesIO
+from collections import Counter  # <--- NEW IMPORT FOR VOTING
 
-# Basic logging configuration
+# --- IMPORTS FOR IMAGE PROCESSING ---
+from PIL import Image, ImageFilter, ImageEnhance, ImageOps
+import ddddocr 
+
+import PIL.Image
+
+# --- MONKEY PATCH FOR DDDDOCR COMPATIBILITY ---
+if not hasattr(PIL.Image, 'ANTIALIAS'):
+    PIL.Image.ANTIALIAS = PIL.Image.LANCZOS
+# ----------------------------------------------
+
+try:
+    import pytesseract
+    # POINT THIS TO YOUR INSTALLATION PATH
+    pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+except ImportError:
+    pytesseract = None
+    print("WARNING: 'pytesseract' python package not installed.")
+
 try:
     from setlog import setlog
 except ImportError:
@@ -109,6 +129,109 @@ class TradeSpider(object):
         logging.error(f"_safe_click failed for {by}={locator} after {attempts} attempts. Last exception: {last_exception}")
         return False
 
+    def _generate_image_variants(self, original_image):
+        """
+        Generates a list of processed images with different settings (Thresholds, Inversion, Filters).
+        """
+        variants = []
+        
+        # Convert to Grayscale
+        base_gray = original_image.convert('L')
+        
+        # Upscale 3x (Crucial for Tesseract)
+        width, height = base_gray.size
+        base_large = base_gray.resize((width * 3, height * 3), Image.Resampling.LANCZOS)
+        
+        # Strategy 1: Standard Thresholds (120 - 160)
+        # We try different "darkness" levels. If the text is faint, low threshold helps. If noisy, high helps.
+        thresholds = [125, 140, 155]
+        
+        for thresh in thresholds:
+            # Variant A: Standard
+            img = base_large.point(lambda x: 0 if x < thresh else 255, '1')
+            variants.append(img)
+            
+            # Variant B: Median Filter (Removes dots) + Sharpen
+            img_med = base_large.filter(ImageFilter.MedianFilter(size=3))
+            img_med = img_med.filter(ImageFilter.SHARPEN)
+            img_med = img_med.point(lambda x: 0 if x < thresh else 255, '1')
+            variants.append(img_med)
+
+        # Strategy 2: Inverted Colors (White text on black background)
+        # Often works better for thin lines/strikethroughs
+        base_inverted = ImageOps.invert(base_large)
+        
+        for thresh in [110, 135]:
+            # Variant C: Inverted Standard
+            img = base_inverted.point(lambda x: 0 if x < thresh else 255, '1')
+            variants.append(img)
+            
+            # Variant D: Inverted Morphological (Erosion to eat lines)
+            # Since it's inverted (white text), we use MinFilter to erode white pixels (noise)
+            img_erode = base_inverted.filter(ImageFilter.MinFilter(3))
+            img_erode = img_erode.point(lambda x: 0 if x < thresh else 255, '1')
+            variants.append(img_erode)
+
+        return variants
+
+    def _solve_captcha(self):
+        """Attempts to read the CAPTCHA using ddddocr."""
+        # Ensure ddddocr is imported at the top of your file, 
+        # or import it inside the method if you prefer lazy loading.
+        try:
+            import ddddocr
+        except ImportError:
+            logging.error("ddddocr not installed. Run: pip install ddddocr")
+            return False
+
+        logging.info("Attempting to solve CAPTCHA with ddddocr...")
+        try:
+            # 1. Find the CAPTCHA image element
+            # TradeMap uses a class 'div_captchaImg' or similar structure
+            img_element = self.wait.until(EC.presence_of_element_located(
+                (By.XPATH, "//div[@class='div_captchaImg']/img | //img[contains(@src, 'Captcha')]")
+            ))
+            
+            # 2. Get the image as raw bytes directly from the browser
+            img_bytes = img_element.screenshot_as_png
+
+            # 3. Initialize ddddocr (FIXED: removed show_ad=False)
+            ocr = ddddocr.DdddOcr()
+            
+            # 4. Solve
+            res = ocr.classification(img_bytes)
+            
+            # 5. Clean the result (TradeMap is alphanumeric, usually 5 chars)
+            final_answer = ''.join(e for e in res if e.isalnum())
+            logging.info(f"ddddocr Result: '{final_answer}'")
+
+            if not final_answer:
+                logging.warning("ddddocr returned empty string.")
+                return False
+
+            # 6. Input Text
+            input_box = self.driver.find_element(By.ID, "ctl00_PageContent_CaptchaAnswer")
+            input_box.clear()
+            input_box.send_keys(final_answer)
+            
+            # Short pause to mimic human speed
+            time.sleep(1)
+
+            # 7. Submit
+            # Try clicking via JS first as it's often more reliable
+            try:
+                submit_btn = self.driver.find_element(By.ID, "ctl00_PageContent_ButtonvalidateCaptcha")
+                self.driver.execute_script("arguments[0].click();", submit_btn)
+            except Exception:
+                # Fallback to Enter key
+                input_box.send_keys(Keys.RETURN)
+            
+            return True
+
+        except Exception as e:
+            logging.error(f"ddddocr solving process failed: {e}")
+            return False
+
     def goto(self, url):
         max_attempts = 4
         target_page_filename = url.split('?')[0].split('/')[-1]
@@ -154,56 +277,64 @@ class TradeSpider(object):
             return False
             
         try:
-            logging.info("Login submitted. Waiting for outcome (Success, CAPTCHA, or Failure)...")
-            logging.debug(f"[DEBUG] Current URL before outcome wait: {self.driver.current_url}")
-            
-            username_input_locator = (By.ID, "Username")
-            login_error_locator = (By.ID, "ValidationSummary1") 
-            
-            # --- ATOMIC WAIT ---
-            # 1. Username input disappears (Success)
-            # 2. Captcha URL appears (Captcha)
-            # 3. Error element appears (Failure)
+            logging.info("Login submitted. Waiting for detection of next state...")
+
+            captcha_indicator = (By.ID, "ctl00_PageContent_CaptchaAnswer") 
+            success_indicator = (By.ID, "ctl00_MenuControl_Label_Login")   
+            error_indicator = (By.ID, "ValidationSummary1")                
+
             WebDriverWait(self.driver, 20).until(EC.any_of(
-                EC.invisibility_of_element_located(username_input_locator),
-                EC.url_contains("stCaptcha.aspx"),
-                EC.presence_of_element_located(login_error_locator)
+                EC.presence_of_element_located(captcha_indicator), 
+                EC.url_contains("stCaptcha.aspx"),                 
+                EC.presence_of_element_located(success_indicator), 
+                EC.presence_of_element_located(error_indicator)    
             ))
+            
+            time.sleep(1.5) 
 
             # --- OUTCOME ANALYSIS ---
-            current_url = self.driver.current_url
-            logging.info(f"[DEBUG] Outcome detection finished. Current URL: {current_url}")
-
-            # 1. Check for Failure
-            try:
-                error_element = self.driver.find_element(*login_error_locator)
-                if error_element.is_displayed():
-                    error_text = error_element.text.strip().replace('\n', ' ')
-                    logging.error(f"LOGIN FAILED. Site reported an error: '{error_text}'")
-                    self._save_snapshot("login_explicit_fail")
-                    return False
-            except NoSuchElementException:
-                pass 
-
-            # 2. Check for CAPTCHA
-            if "stCaptcha.aspx" in current_url:
-                logging.warning("ACTION REQUIRED: CAPTCHA detected. Please solve it. Waiting up to 5 minutes.")
-                WebDriverWait(self.driver, 300).until_not(EC.url_contains("stCaptcha.aspx"))
-                logging.info("CAPTCHA page is gone. Verifying final destination...")
             
-            # 3. Success Path
-            else:
-                 logging.info("[DEBUG] No CAPTCHA found and Login form disappeared. Proceeding as successful login.")
+            is_captcha_url = "stCaptcha.aspx" in self.driver.current_url
+            has_captcha_input = len(self.driver.find_elements(*captcha_indicator)) > 0
 
-            # --- FINAL VERIFICATION (Fixed using IDs from your HTML) ---
-            logging.info("Verifying destination page is fully loaded and interactive...")
+            if is_captcha_url or has_captcha_input:
+                logging.warning("CAPTCHA detected. Engaging Ensemble Auto-Solver...")
+                
+                solved = False
+                for i in range(3):
+                    # Try to solve
+                    if not self._solve_captcha():
+                        logging.warning(f"Solver internal error on attempt {i+1}")
+                    
+                    logging.info("Waiting for page response (6s)...")
+                    time.sleep(6) 
+                    
+                    if "stCaptcha.aspx" not in self.driver.current_url:
+                        if len(self.driver.find_elements(*success_indicator)) > 0:
+                            logging.info("CAPTCHA page bypassed successfully!")
+                            solved = True
+                            break
+                        else:
+                            logging.info("URL changed. Checking destination...")
+                    
+                    logging.warning(f"Captcha attempt {i+1} did not result in success. Retrying if attempts remain...")
+
+                if not solved:
+                    logging.error("Failed to solve CAPTCHA after 3 attempts.")
+                    self._save_snapshot("captcha_bypass_fail")
+                    return False
+
+            if len(self.driver.find_elements(*error_indicator)) > 0:
+                 error_el = self.driver.find_element(*error_indicator)
+                 if error_el.is_displayed():
+                    logging.error(f"LOGIN FAILED: {error_el.text}")
+                    return False
+
+            logging.info("Verifying destination page...")
             
             self.wait.until(EC.any_of(
-                # The main data table
                 EC.presence_of_element_located((By.ID, "ctl00_PageContent_MyGridView1")),
-                # The user name label (visible when logged in)
                 EC.presence_of_element_located((By.ID, "ctl00_MenuControl_Label_Login")),
-                # The product dropdown
                 EC.presence_of_element_located((By.ID, "ctl00_NavigationControl_DropDownList_Product"))
             ))
 
@@ -212,11 +343,11 @@ class TradeSpider(object):
             return True
 
         except TimeoutException:
-            logging.error("Verification failed. Timed out waiting for page elements (MyGridView1, Label_Login, etc). Saving snapshot...")
-            logging.error(f"[DEBUG] Final stuck URL: {self.driver.current_url}")
-            self._save_snapshot("post_login_timeout_or_fail")
+            logging.error("Verification failed. Timed out waiting for expected elements.")
+            logging.error(f"Final URL: {self.driver.current_url}")
+            self._save_snapshot("post_login_timeout")
             return False
         except Exception as e:
-            logging.error(f"An unexpected error occurred during login verification: {e}")
-            self._save_snapshot("post_login_unexpected_error")
+            logging.error(f"Unexpected error during login: {e}")
+            self._save_snapshot("post_login_error")
             return False
