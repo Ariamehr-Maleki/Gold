@@ -1,0 +1,838 @@
+{
+  "meta": {
+    "report_generated_utc": null,
+    "product_hs6": "847130",
+    "exporting_country": "Germany",
+    "importing_country": "China",
+    "orchestration_timestamp_utc": "2025-12-11T18:21:37.264658",
+    "run_metadata": {
+      "scraper_runs": [
+        {
+          "name": "export_potential",
+          "status": "SUCCESS",
+          "duration": 39.83,
+          "output_path": "D:\\sal\\itc\\itcScrapper\\runs\\jobs\\20251211_214815\\export_potential_output.json"
+        },
+        {
+          "name": "macmap",
+          "status": "SUCCESS",
+          "duration": 57.52,
+          "output_path": "D:\\sal\\itc\\itcScrapper\\runs\\jobs\\20251211_214815\\macmap_output.json"
+        },
+        {
+          "name": "eping",
+          "status": "SUCCESS",
+          "duration": 76.6,
+          "output_path": "D:\\sal\\itc\\itcScrapper\\runs\\jobs\\20251211_214815\\eping_output.json"
+        },
+        {
+          "name": "trademap",
+          "status": "SUCCESS",
+          "duration": 202.13,
+          "output_path": "D:\\sal\\itc\\itcScrapper\\runs\\jobs\\20251211_214815\\trademap_output.json"
+        }
+      ]
+    }
+  },
+  "summary": {
+    "your_country_total_exports_usd": 102187144.0,
+    "target_market_world_rank": 29
+  },
+  "market_size_and_growth": {
+    "target_market_total_imports_usd": 49969257.0,
+    "target_market_growth_cagr_5y_pct": -0.82,
+    "target_market_growth_last_year_pct": 7.95,
+    "world_total_imports_usd": 176347449,
+    "world_market_growth_cagr_5y_pct": -0.2,
+    "unrealized_export_potential_usd": "$5 bn"
+  },
+  "competition_and_suppliers": {
+    "hhi_index": 5131.64,
+    "concentration_level": "concentrated",
+    "all_suppliers": [
+      {
+        "rank": 1,
+        "name": "China",
+        "value_usd": 33059491.0,
+        "market_share_pct": 66.16,
+        "gained_share_over_5_years": false,
+        "quantity_latest": 74417296,
+        "unit_value_latest": 444.0,
+        "growth_cagr_pct": -8.77,
+        "growth_last_year_pct": -7.87
+      },
+      {
+        "rank": 2,
+        "name": "Viet Nam",
+        "value_usd": 13552214.0,
+        "market_share_pct": 27.12,
+        "gained_share_over_5_years": true,
+        "quantity_latest": 21871542,
+        "unit_value_latest": 620.0,
+        "growth_cagr_pct": 78.98,
+        "growth_last_year_pct": 70.83
+      },
+      {
+        "rank": 3,
+        "name": "Taipei, Chinese",
+        "value_usd": 2010655.0,
+        "market_share_pct": 4.02,
+        "gained_share_over_5_years": true,
+        "quantity_latest": 2092391,
+        "unit_value_latest": 961.0,
+        "growth_cagr_pct": 1.73,
+        "growth_last_year_pct": -3.9
+      },
+      {
+        "rank": 4,
+        "name": "Mexico",
+        "value_usd": 767433.0,
+        "market_share_pct": 1.54,
+        "gained_share_over_5_years": true,
+        "quantity_latest": 1057975,
+        "unit_value_latest": 725.0,
+        "growth_cagr_pct": 20.19,
+        "growth_last_year_pct": 608.41
+      },
+      {
+        "rank": 5,
+        "name": "Thailand",
+        "value_usd": 332776.0,
+        "market_share_pct": 0.67,
+        "gained_share_over_5_years": true,
+        "quantity_latest": 939830,
+        "unit_value_latest": 354.0,
+        "growth_cagr_pct": 152.09,
+        "growth_last_year_pct": 2676.84
+      },
+      {
+        "rank": 6,
+        "name": "Canada",
+        "value_usd": 29473.0,
+        "market_share_pct": 0.06,
+        "gained_share_over_5_years": true,
+        "quantity_latest": 77067,
+        "unit_value_latest": 382.0,
+        "growth_cagr_pct": 4.9,
+        "growth_last_year_pct": -21.94
+      },
+      {
+        "rank": 7,
+        "name": "Korea, Republic of",
+        "value_usd": 27513.0,
+        "market_share_pct": 0.06,
+        "gained_share_over_5_years": false,
+        "quantity_latest": 83382,
+        "unit_value_latest": 330.0,
+        "growth_cagr_pct": -4.7,
+        "growth_last_year_pct": 27.82
+      },
+      {
+        "rank": 8,
+        "name": "United Arab Emirates",
+        "value_usd": 23649.0,
+        "market_share_pct": 0.05,
+        "gained_share_over_5_years": true,
+        "quantity_latest": 118542,
+        "unit_value_latest": 199.0,
+        "growth_cagr_pct": 68.62,
+        "growth_last_year_pct": 122.22
+      },
+      {
+        "rank": 9,
+        "name": "Malaysia",
+        "value_usd": 22756.0,
+        "market_share_pct": 0.05,
+        "gained_share_over_5_years": false,
+        "quantity_latest": 45678,
+        "unit_value_latest": 498.0,
+        "growth_cagr_pct": -15.76,
+        "growth_last_year_pct": -36.81
+      },
+      {
+        "rank": 10,
+        "name": "Germany",
+        "value_usd": 21180.0,
+        "market_share_pct": 0.04,
+        "gained_share_over_5_years": false,
+        "quantity_latest": 23210,
+        "unit_value_latest": 913.0,
+        "growth_cagr_pct": -4.32,
+        "growth_last_year_pct": -15.12
+      }
+    ],
+    "suppliers_gaining_share": [
+      "Viet Nam",
+      "Taipei, Chinese",
+      "Mexico",
+      "Thailand",
+      "Canada",
+      "United Arab Emirates",
+      "India",
+      "Denmark",
+      "Costa Rica",
+      "Switzerland"
+    ],
+    "regional_competitors": [
+      {
+        "rank": 13,
+        "name": "Poland",
+        "value_usd": 12106.0,
+        "market_share_pct": 0.02,
+        "gained_share_over_5_years": false,
+        "quantity_latest": 8614,
+        "unit_value_latest": 1405.0,
+        "growth_cagr_pct": 6.44,
+        "growth_last_year_pct": 37.87
+      },
+      {
+        "rank": 15,
+        "name": "United Kingdom",
+        "value_usd": 8864.0,
+        "market_share_pct": 0.02,
+        "gained_share_over_5_years": false,
+        "quantity_latest": 12435,
+        "unit_value_latest": 713.0,
+        "growth_cagr_pct": -4.74,
+        "growth_last_year_pct": -33.83
+      },
+      {
+        "rank": 17,
+        "name": "Italy",
+        "value_usd": 4677.0,
+        "market_share_pct": 0.01,
+        "gained_share_over_5_years": false,
+        "quantity_latest": 5604,
+        "unit_value_latest": 835.0,
+        "growth_cagr_pct": 3.05,
+        "growth_last_year_pct": -25.95
+      },
+      {
+        "rank": 18,
+        "name": "Denmark",
+        "value_usd": 4654.0,
+        "market_share_pct": 0.01,
+        "gained_share_over_5_years": true,
+        "quantity_latest": 4756,
+        "unit_value_latest": 979.0,
+        "growth_cagr_pct": 25.96,
+        "growth_last_year_pct": -0.62
+      },
+      {
+        "rank": 20,
+        "name": "Switzerland",
+        "value_usd": 3200.0,
+        "market_share_pct": 0.01,
+        "gained_share_over_5_years": true,
+        "quantity_latest": 17306,
+        "unit_value_latest": 185.0,
+        "growth_cagr_pct": 25.55,
+        "growth_last_year_pct": 10.5
+      },
+      {
+        "rank": 22,
+        "name": "Netherlands",
+        "value_usd": 2474.0,
+        "market_share_pct": 0.0,
+        "gained_share_over_5_years": false,
+        "quantity_latest": 4009,
+        "unit_value_latest": 617.0,
+        "growth_cagr_pct": 6.31,
+        "growth_last_year_pct": -28.83
+      },
+      {
+        "rank": 23,
+        "name": "France",
+        "value_usd": 2407.0,
+        "market_share_pct": 0.0,
+        "gained_share_over_5_years": false,
+        "quantity_latest": 7211,
+        "unit_value_latest": 334.0,
+        "growth_cagr_pct": -7.53,
+        "growth_last_year_pct": 29.13
+      },
+      {
+        "rank": 25,
+        "name": "Sweden",
+        "value_usd": 1965.0,
+        "market_share_pct": 0.0,
+        "gained_share_over_5_years": false,
+        "quantity_latest": 2087,
+        "unit_value_latest": 942.0,
+        "growth_cagr_pct": -0.7,
+        "growth_last_year_pct": -34.24
+      },
+      {
+        "rank": 28,
+        "name": "Spain",
+        "value_usd": 1316.0,
+        "market_share_pct": 0.0,
+        "gained_share_over_5_years": false,
+        "quantity_latest": 1255,
+        "unit_value_latest": 1049.0,
+        "growth_cagr_pct": 6.11,
+        "growth_last_year_pct": -15.21
+      },
+      {
+        "rank": 30,
+        "name": "Belgium",
+        "value_usd": 1166.0,
+        "market_share_pct": 0.0,
+        "gained_share_over_5_years": false,
+        "quantity_latest": 734,
+        "unit_value_latest": 1589.0,
+        "growth_cagr_pct": 35.59,
+        "growth_last_year_pct": 5.23
+      }
+    ],
+    "your_country_specifics": {
+      "rank_in_target_market": null,
+      "market_share_pct": null,
+      "growth_cagr_pct": null
+    }
+  },
+  "potential_importers": [
+    {
+      "name": "Beijing Csa Computer Sciences Technology Co., Ltd. - Beijing Csa Computer Sciences Technology Co., Ltd. Shanghai Branch",
+      "city": "Shanghai"
+    },
+    {
+      "name": "Beijing Founder Electronics Co., Ltd. - Beijing Beida Fangzheng Electronics Co.,ltd. Inner Mongolia Branch Company",
+      "city": "Huhehaote"
+    },
+    {
+      "name": "Beijing Founder Electronics Co., Ltd. - Beijing Beida Founder Electronic Co., Ltd. Guangzhou Branch",
+      "city": "Guangzhou"
+    },
+    {
+      "name": "Beijing Founder Electronics Co., Ltd. - Beijing Beida Founder Electronics Co., Ltd. Taiyuan Co.",
+      "city": "Taiyuan"
+    },
+    {
+      "name": "Dalian Zeus Entertainment Co., Ltd. - Zeus",
+      "city": "Beijing"
+    },
+    {
+      "name": "Dongguan New Sunlink Electronic Co.,Ltd",
+      "city": "Dongguan"
+    },
+    {
+      "name": "Dynabook Technology (Hangzhou) Inc.",
+      "city": "Hangzhou"
+    },
+    {
+      "name": "Fuji Xerox (China) Co., Ltd. Chengdu Branch",
+      "city": "Chengdu"
+    },
+    {
+      "name": "Hengda Real Estate Group Luoyang Co., Ltd.",
+      "city": "Luoyang"
+    },
+    {
+      "name": "Hewlett-Packard Enterprise (China) Co., Ltd. - China Hewlett-Packard Co., Ltd. Chengdu Branch",
+      "city": "Chengdu"
+    }
+  ],
+  "unit_values": {
+    "target_market_avg_unit_value_usd": [
+      422.0,
+      440.0,
+      480.0,
+      457.0,
+      493.0
+    ],
+    "world_avg_unit_value_usd": null,
+    "your_country_unit_value_usd": null
+  },
+  "historical_data": {
+    "years": [
+      2020,
+      2021,
+      2022,
+      2023,
+      2024
+    ],
+    "target_market_import_values_usd": [
+      51636353,
+      60789833.0,
+      54530352.0,
+      46287585.0,
+      49969257.0
+    ]
+  },
+  "market_access_conditions": {
+    "customs_tariffs": [
+      {
+        "Tariff regime  A tariff regime is the tariff-setting system of a country or territory on imports from one or many of its trade partners. Tariffs on a given product can be set either on an MFN, a general (non-MFN) or a preferential basis.": "MFN duties (Applied)",
+        "Applied Tariff  Customs duty that is actually charged on imports. Please also note that when a TRQ mechanism is applicable the customs duty shown below is the outside-quota tariff.": "0%",
+        "AVE  AVE stands for Ad Valorem Equivalent. It is an estimation in the form of a percentage of a non-ad valorem tariff.": "0%",
+        "Note": "",
+        "Unnamed: 4": ""
+      },
+      {
+        "Tariff regime  A tariff regime is the tariff-setting system of a country or territory on imports from one or many of its trade partners. Tariffs on a given product can be set either on an MFN, a general (non-MFN) or a preferential basis.": "",
+        "Applied Tariff  Customs duty that is actually charged on imports. Please also note that when a TRQ mechanism is applicable the customs duty shown below is the outside-quota tariff.": "",
+        "AVE  AVE stands for Ad Valorem Equivalent. It is an estimation in the form of a percentage of a non-ad valorem tariff.": "",
+        "Note": "",
+        "Unnamed: 4": ""
+      },
+      {
+        "Tariff regime  A tariff regime is the tariff-setting system of a country or territory on imports from one or many of its trade partners. Tariffs on a given product can be set either on an MFN, a general (non-MFN) or a preferential basis.": "",
+        "Applied Tariff  Customs duty that is actually charged on imports. Please also note that when a TRQ mechanism is applicable the customs duty shown below is the outside-quota tariff.": "",
+        "AVE  AVE stands for Ad Valorem Equivalent. It is an estimation in the form of a percentage of a non-ad valorem tariff.": "",
+        "Note": "",
+        "Unnamed: 4": ""
+      }
+    ],
+    "trade_remedies_details": [
+      {
+        "subject": "Section 232 tariff on Automobiles and Autoparts",
+        "remedy_type": "Other duties",
+        "remedy_status": "Definitive measure",
+        "start_date": "03/05/25",
+        "end_date": "Not specified",
+        "details": [
+          {
+            "exporting_firm": "All Exporters",
+            "measure": "Ad-valorem duty 25.00%",
+            "note": "All imports of automobiles and automobile parts articles shall be subject to a 25% ad valorem tariff and shall continue in effect, unless such actions are expressly reduced, modified, or terminated."
+          }
+        ]
+      },
+      {
+        "subject": "China IEEPA",
+        "remedy_type": "Other duties",
+        "remedy_status": "Definitive measure",
+        "start_date": "10/11/25",
+        "end_date": "Not specified",
+        "details": [
+          {
+            "exporting_firm": "All Exporters",
+            "measure": "Ad-valorem duty 10.00%",
+            "note": "The U.S. applies a 10% additional tariffs on all Products from the People's Republic of China to address the Synthetic Opioid Supply Chain."
+          }
+        ]
+      },
+      {
+        "subject": "Reciprocal Tariffs",
+        "remedy_type": "Other duties",
+        "remedy_status": "Forth revision",
+        "start_date": "10/11/25",
+        "end_date": "Not specified",
+        "details": [
+          {
+            "exporting_firm": "All Exporters",
+            "measure": "Ad-valorem duty 10.00%",
+            "note": "The United States will continue to be suspended until 12:01 a.m. eastern standard time on November 10, 2026. Covered imported products of China, including covered products of Hong Kong and Macau, that are entered for consumption, or withdrawn from warehouse for consumption prior to 12:01 a.m. eastern standard time on November 10, 2026 will continue be subject to a reciprocal tariff of 10% ad valorem in accordance with Executive Order 14257 of April 2, 2025 (Regulating Imports With a Reciprocal Tariff to Rectify Trade Practices That Contribute to Large and Persistent Annual United States Goods Trade Deficits), as amended. However, products and articles subject to Section 232 (Automobiles and Auto parts) are not subject to Reciprocal tariffs."
+          }
+        ]
+      }
+    ],
+    "regulatory_requirements_details": {
+      "Import requirements applied to this product": [
+        {
+          "code_and_desc": "B190 -  Import authorization/licensing related to TBT n.e.s. ",
+          "count": "1",
+          "details": []
+        },
+        {
+          "code_and_desc": "B310 -  Labelling requirements ",
+          "count": "1",
+          "details": []
+        },
+        {
+          "code_and_desc": "B320 -  Marking requirements ",
+          "count": "1",
+          "details": []
+        },
+        {
+          "code_and_desc": "B330 -  Packaging requirements ",
+          "count": "1",
+          "details": []
+        },
+        {
+          "code_and_desc": "B410 -  TBT regulations on production processes ",
+          "count": "1",
+          "details": []
+        },
+        {
+          "code_and_desc": "B420 -  TBT regulations on transport and storage ",
+          "count": "1",
+          "details": []
+        },
+        {
+          "code_and_desc": "B700 -  Product quality, safety or performance requirement ",
+          "count": "3",
+          "details": []
+        },
+        {
+          "code_and_desc": "B820 -  Testing requirement ",
+          "count": "1",
+          "details": []
+        },
+        {
+          "code_and_desc": "B830 -  Certification requirement ",
+          "count": "2",
+          "details": []
+        },
+        {
+          "code_and_desc": "B840 -  Inspection requirement ",
+          "count": "1",
+          "details": []
+        }
+      ],
+      "Import requirements applied to all goods": [
+        {
+          "code_and_desc": "A510 -  Cold/heat treatment ",
+          "count": "1",
+          "details": []
+        },
+        {
+          "code_and_desc": "A530 -  Fumigation ",
+          "count": "3",
+          "details": []
+        },
+        {
+          "code_and_desc": "E320 -  Prohibition for non-economic reasons ",
+          "count": "1",
+          "details": []
+        }
+      ]
+    }
+  },
+  "regulatory_alerts": {
+    "source_url": "https://www.epingalert.org/en/Search/Index?countryIds=C643",
+    "notifications": [
+      {
+        "Notifying Member": "Russian Federation",
+        "Distribution date": "2025-12-09 00:00:00",
+        "Document symbol": NaN,
+        "Title": "Letter by the Federal Service for Veterinary and Phytosanitary Surveillance No. FS-ARe-7/6845-3 of 4 December 2025",
+        "Description": "This letter introduces temporary restrictions on imports of live sheep and goats and products derived thereof to the Russian Federation, as well as on the transit of animals susceptible to peste des petits ruminants (PPR) through the territory of the Russian Federation from Viet Nam due to the outbreak of PPR in the country indicated.",
+        "Products covered": "Live sheep and goats; genetic material of sheep and goats; products derived from sheep and goats that were not subject to the use of technologies providing destruction of PPR in accordance with the WOAH Terrestrial Animal Health Code (HS code(s): 0104; 0106; 0204; 0206; 0210; 0401; 0402; 0403; 0404; 0405; 0406; 0506; 0507; 051199; 1502; 1503; 1505; 1506; 151610; 1518; 1601; 1602; 1603; 190220)",
+        "HS code(s)": "0104 - Live sheep and goats; 1602 - Prepared or preserved meat, meat offal, blood or insects (excl. sausages and similar products, and meat extracts and juices); 1601 - Sausages and similar products, of meat, meat offal, blood or insects; food preparations based on these products.; 1518 - Animal, vegetable or microbial fats and oils and their fractions, boiled, oxidised, dehydrated, sulphurised, blown, polymerised by heat in vacuum or in inert gas or otherwise chemically modified, excluding those of heading 15.16; inedible mixtures or preparations of animal, vegetable or microbial fats or oils or of fractions of different fats or oils of this Chapter, not elsewhere specified or included.; 151610 - Animal fats and oils and their fractions, partly or wholly hydrogenated, inter-esterified, re-esterified or elaidinised, whether or not refined, but not further prepared; 1506 - Other animal fats and oils and their fractions, whether or not refined, but not chemically modified.; 1505 - Wool grease and fatty substances derived therefrom (including lanolin).; 1503 - Lard stearin, lard oil, oleostearin, oleo-oil and tallow oil, not emulsified or mixed or otherwise prepared.; 1502 - Fats of bovine animals, sheep or goats (excl. oil and oleostearin); 051199 - Products of animal origin, n.e.s., dead animals, unfit for human consumption (excl. fish, crustaceans, molluscs or other aquatic invertebrates); 0507 - Ivory, tortoiseshell, whalebone and whalebone hair, horns, antlers, hooves, nails, claws and beaks, unworked or simply prepared; powder and waste of these products (excl. cut to shape); 0506 - Bones and horn-cores and their powder and waste, unworked, defatted, simply prepared, treated with acid or degelatinised (excl. cut to shape); 0406 - Cheese and curd; 0405 - Butter, incl. dehydrated butter and ghee, and other fats and oils derived from milk; dairy spreads; 0404 - Whey, whether or not concentrated or containing added sugar or other sweetening matter; products consisting of natural milk constituents, whether or not containing added sugar or other sweetening matter, n.e.s.; 0401 - Milk and cream, not concentrated nor containing added sugar or other sweetening matter; 0403 - Buttermilk, curdled milk and cream, yogurt, kephir and other fermented or acidified milk and cream, whether or not concentrated or flavoured or containing added sugar or other sweetening matter, fruit, nuts or cocoa, and yogurt may additionally contain chocolate, spices, coffee, plants or cereals; 0402 - Milk and cream, concentrated or containing added sugar or other sweetening matter; 0210 - Meat and edible offal, salted, in brine, dried or smoked; edible flours and meals of meat or meat offal; 0206 - Edible offal of bovine animals, swine, sheep, goats, horses, asses, mules or hinnies, fresh, chilled or frozen; 0204 - Meat of sheep or goats, fresh, chilled or frozen; 0106 - Live animals (excl. horses, asses, mules, hinnies, bovine animals, swine, sheep, goats, poultry, fish, crustaceans, molluscs and other aquatic invertebrates, and microorganic cultures etc.); 1603 - Extracts and juices of meat, fish or crustaceans, molluscs or other aquatic invertebrates.; 190220 - Pasta, stuffed with meat or other substances, whether or not cooked or otherwise prepared",
+        "ICS code(s)": NaN,
+        "Objectives": "Animal health (SPS)",
+        "Keywords": "Animal health; Animal diseases",
+        "Specific regions or countries likely to be affected": "Viet Nam",
+        "Final date for comments": "NaT",
+        "Notification type": "Emergency notifications (SPS)",
+        "Notified document": "https://members.wto.org/crnattachments/2025/SPS/RUS/25_08815_00_x.pdf\nhttps://fsvps.gov.ru/files/ukazanie-rosselhoznadzora-ot-04-dekabrja-2025-goda-fs-arje-7-6845-3/",
+        "Link to notification(EN)": NaN,
+        "Link to notification(FR)": NaN,
+        "Link to notification(ES)": NaN,
+        "Technical Regulation (Article 2.9.2)": NaN,
+        "Technical Regulation - urgent (Article 2.10.1)": NaN,
+        "Conformity Assessment Procedure (Article 5.6.2)": NaN,
+        "Conformity Assessment Procedure - urgent  (Article 5.7.1)": NaN,
+        "Technical Regulation - local government (Article 3.2)": NaN,
+        "Conformity Assessment Procedure - local government (Article 7.2)": NaN,
+        "Other": NaN,
+        "Relevant documents": NaN,
+        "Codex Alimentarius Commision": "No",
+        "World Organization for Animal Health (OIE)": "Yes",
+        "International Plant Protection Convention": "No",
+        "None": "No",
+        "Does this proposed regulation conform to the relevant international standard?": "Yes",
+        "If no, describe, whenever possible how and why it deviates from the international standard": NaN
+      },
+      {
+        "Notifying Member": "Russian Federation",
+        "Distribution date": "2025-12-08 00:00:00",
+        "Document symbol": NaN,
+        "Title": "Draft Amendments No. 2 to the Technical Regulation of the Eurasian Economic Union \"On Safety of Packaged Potable Water Including Natural Mineral Water\" (TR EAEU 044/2017)",
+        "Description": "Draft Amendments No. 2 to TR EAEU 044/2017 - introduces a number of requirements for the labeling of natural mineral waters, natural and treated potable waters, and for confirming the compliance of labeling during the declaration or state registration of packaged potable waters, aiming to protect consumers from incomplete or unreliable information regarding the origin, safety, and properties of potable waters; - revises, based on many years of experience in using mineral potable waters, methods of their therapeutic and prophylactic application, toxicologicai studies, and taking into account the requirements of international, interstate, and national standards, the permissible levels of fluorides in natural mineral waters concerning table waters, manganese, and requirements for assessing radiation safety concerning therapeutic and therapeutic-table waters; - eliminates a number of editorial and technical inconsistencies.",
+        "Products covered": "Packaged Potable Water",
+        "HS code(s)": "2201 - Waters, incl. natural or artificial mineral waters and aerated waters, not containing added sugar, other sweetening matter or flavoured; ice and snow",
+        "ICS code(s)": "13.060.20 - Drinking water",
+        "Objectives": "Prevention of deceptive practices and consumer protection (TBT); Protection of human health or safety (TBT); Other (TBT)",
+        "Keywords": "Labelling; Human health",
+        "Specific regions or countries likely to be affected": NaN,
+        "Final date for comments": "2026-03-06 00:00:00",
+        "Notification type": "Regular notification",
+        "Notified document": NaN,
+        "Link to notification(EN)": NaN,
+        "Link to notification(FR)": NaN,
+        "Link to notification(ES)": NaN,
+        "Technical Regulation (Article 2.9.2)": "Yes",
+        "Technical Regulation - urgent (Article 2.10.1)": "No",
+        "Conformity Assessment Procedure (Article 5.6.2)": "No",
+        "Conformity Assessment Procedure - urgent  (Article 5.7.1)": "No",
+        "Technical Regulation - local government (Article 3.2)": "No",
+        "Conformity Assessment Procedure - local government (Article 7.2)": "No",
+        "Other": "No",
+        "Relevant documents": " Draft Amendments No. 2 to the Technical Regulation of the Eurasian Economic Union \"On Safety of Packaged Potable Water Including Natural Mineral Water\" (TR EAEU 044/2017) https://regulation.eaeunion.org/pd/3290/Technical Regulation of the Eurasian Economic Union \"On Safety of Packaged Potable Water Including Natural Mineral Water\" (TR EAEU 044/2017) https://eec.eaeunion.org/comission/department/deptexreg/tr/tr_EAEU_044-2017.php",
+        "Codex Alimentarius Commision": NaN,
+        "World Organization for Animal Health (OIE)": NaN,
+        "International Plant Protection Convention": NaN,
+        "None": NaN,
+        "Does this proposed regulation conform to the relevant international standard?": NaN,
+        "If no, describe, whenever possible how and why it deviates from the international standard": NaN
+      },
+      {
+        "Notifying Member": "Russian Federation",
+        "Distribution date": "2025-12-02 00:00:00",
+        "Document symbol": NaN,
+        "Title": "Draft amendments to the Decision of the Board of the Eurasian Economic Commission No. 100 of August 11, 2020 ",
+        "Description": "It is proposed to amend the Pharmacopoeia of the Eurasian Economic Union: to supplement it with general pharmacopoeial monographs on herbal medicinal products and biological_x000D_\nmedicinal products, and to adopt new versions of a number of general pharmacopoeial monographs harmonized with the texts of the Pharmacopoeial Discussion Group (PDG).",
+        "Products covered": "3003, 3004 (Pharmaceuticals)",
+        "HS code(s)": "3004 - Medicaments consisting of mixed or unmixed products for therapeutic or prophylactic uses, put up in measured doses \"incl. those for transdermal administration\" or in forms or packings for retail sale (excl. goods of heading 3002, 3005 or 3006); 3003 - Medicaments consisting of two or more constituents mixed together for therapeutic or prophylactic uses, not in measured doses or put up for retail sale (excl. goods of heading 3002, 3005 or 3006)",
+        "ICS code(s)": NaN,
+        "Objectives": "Other (TBT)",
+        "Keywords": "Human health",
+        "Specific regions or countries likely to be affected": NaN,
+        "Final date for comments": "2025-12-07 00:00:00",
+        "Notification type": "Regular notification",
+        "Notified document": "https://regulation.eaeunion.org/orv/3264/",
+        "Link to notification(EN)": NaN,
+        "Link to notification(FR)": NaN,
+        "Link to notification(ES)": NaN,
+        "Technical Regulation (Article 2.9.2)": "Yes",
+        "Technical Regulation - urgent (Article 2.10.1)": "No",
+        "Conformity Assessment Procedure (Article 5.6.2)": "No",
+        "Conformity Assessment Procedure - urgent  (Article 5.7.1)": "No",
+        "Technical Regulation - local government (Article 3.2)": "No",
+        "Conformity Assessment Procedure - local government (Article 7.2)": "No",
+        "Other": "No",
+        "Relevant documents": "The Draft am endm ents to the Decision of the Board of the Eurasian Economic Commission No. 100 of August 11, 2020_x000D_\nhttps://regulation.eaeunion.org/orv/3264/The Decision of the Board of the Eurasian Economic Commission No. 100 of August 11, 2020_x000D_\nhttps://docs.eaeunion.org/documents/247/5266/",
+        "Codex Alimentarius Commision": NaN,
+        "World Organization for Animal Health (OIE)": NaN,
+        "International Plant Protection Convention": NaN,
+        "None": NaN,
+        "Does this proposed regulation conform to the relevant international standard?": NaN,
+        "If no, describe, whenever possible how and why it deviates from the international standard": NaN
+      },
+      {
+        "Notifying Member": "Russian Federation",
+        "Distribution date": "2025-11-20 00:00:00",
+        "Document symbol": NaN,
+        "Title": "Draft Decision of the Council of the Eurasian Economic Commission on Amendment to the List of Regulated Products (Consignments, Materials, Goods) Subject to Quarantine Phytosanitary Control (Surveillance) at the Customs Border of the Eurasian Economic Union and in the Customs Territory of the Eurasian Economic Union",
+        "Description": "The draft Decision enables imports to, and transportation within the customs territory of  the Eurasian Economic Union (EAEU) of wood packaging and dunnage material without a phytosanitary certificate, if the goods indicated have been treated and marked in accordance with the Common Quarantine Phytosanitary Requirements for Regulated Products and Pests at the Customs Border and in the Customs Territory of the EAEU (approved by Decision of the Council of the Eurasian Economic Commission No. 157 of 30 November 2016).",
+        "Products covered": "Wood packaging and dunnage material (HS code(s): of Chapter 44)",
+        "HS code(s)": "44 - WOOD AND ARTICLES OF WOOD; WOOD CHARCOAL",
+        "ICS code(s)": NaN,
+        "Objectives": "Plant protection (SPS)",
+        "Keywords": "Plant health; Wood packaging",
+        "Specific regions or countries likely to be affected": NaN,
+        "Final date for comments": "2026-01-20 00:00:00",
+        "Notification type": "Regular notification",
+        "Notified document": "https://members.wto.org/crnattachments/2025/SPS/RUS/25_08100_00_x.pdf\nhttps://regulation.eaeunion.org/orv/3263/",
+        "Link to notification(EN)": NaN,
+        "Link to notification(FR)": NaN,
+        "Link to notification(ES)": NaN,
+        "Technical Regulation (Article 2.9.2)": NaN,
+        "Technical Regulation - urgent (Article 2.10.1)": NaN,
+        "Conformity Assessment Procedure (Article 5.6.2)": NaN,
+        "Conformity Assessment Procedure - urgent  (Article 5.7.1)": NaN,
+        "Technical Regulation - local government (Article 3.2)": NaN,
+        "Conformity Assessment Procedure - local government (Article 7.2)": NaN,
+        "Other": NaN,
+        "Relevant documents": NaN,
+        "Codex Alimentarius Commision": "No",
+        "World Organization for Animal Health (OIE)": "No",
+        "International Plant Protection Convention": "Yes",
+        "None": "No",
+        "Does this proposed regulation conform to the relevant international standard?": "Yes",
+        "If no, describe, whenever possible how and why it deviates from the international standard": NaN
+      },
+      {
+        "Notifying Member": "Russian Federation",
+        "Distribution date": "2025-11-20 00:00:00",
+        "Document symbol": NaN,
+        "Title": "Draft Decision of the Council of the Eurasian Economic Commission on Amendments to the Common Quarantine Phytosanitary Requirements for Regulated Products and Pests at the Customs Border and in the Customs Territory of the EAEU",
+        "Description": "The draft Decision withdraws the requirement for fresh or chilled tomatoes, peppers and aubergines (eggplants) to be free from Pepino mosaic virus (PepMV) as currently indicated in the Common Quarantine Phytosanitary Requirements for Regulated Products and Pests at the Customs Border and in the Customs Territory of the Eurasian Economic Union. ",
+        "Products covered": "Fresh or chilled tomatoes, aubergines (eggplants) and peppers (HS code(s): 0702; 070930; 070960)",
+        "HS code(s)": "0702 - Tomatoes, fresh or chilled.; 070930 - Fresh or chilled aubergines \"eggplants\"; 070960 - Fresh or chilled fruits of the genus Capsicum or Pimenta",
+        "ICS code(s)": NaN,
+        "Objectives": "Plant protection (SPS)",
+        "Keywords": "Plant health",
+        "Specific regions or countries likely to be affected": NaN,
+        "Final date for comments": "2026-01-24 00:00:00",
+        "Notification type": "Regular notification",
+        "Notified document": "https://members.wto.org/crnattachments/2025/SPS/RUS/25_08099_00_x.pdf\nhttps://regulation.eaeunion.org/orv/3275/",
+        "Link to notification(EN)": NaN,
+        "Link to notification(FR)": NaN,
+        "Link to notification(ES)": NaN,
+        "Technical Regulation (Article 2.9.2)": NaN,
+        "Technical Regulation - urgent (Article 2.10.1)": NaN,
+        "Conformity Assessment Procedure (Article 5.6.2)": NaN,
+        "Conformity Assessment Procedure - urgent  (Article 5.7.1)": NaN,
+        "Technical Regulation - local government (Article 3.2)": NaN,
+        "Conformity Assessment Procedure - local government (Article 7.2)": NaN,
+        "Other": NaN,
+        "Relevant documents": NaN,
+        "Codex Alimentarius Commision": "No",
+        "World Organization for Animal Health (OIE)": "No",
+        "International Plant Protection Convention": "Yes",
+        "None": "No",
+        "Does this proposed regulation conform to the relevant international standard?": "Yes",
+        "If no, describe, whenever possible how and why it deviates from the international standard": NaN
+      },
+      {
+        "Notifying Member": "Russian Federation",
+        "Distribution date": "2025-11-17 00:00:00",
+        "Document symbol": NaN,
+        "Title": "Draft amendments to the Rules of Good Manufacturing Practice in the Eurasian Economic Union",
+        "Description": "Supplementation of the Rules of Good Manufacturing Practice with Requirements for the production of high-tech medicines harmonized with the current version of the Rules of Good Manufacturing Practice of the European Union and relevant international standards to ensure stable quality of the production process of the specified group of drugs in order to promptly identify deviations in the production process, as a result of which the finished product will be recognized as substandard.",
+        "Products covered": "HS Code(s): 3003, 3004 (Pharmaceuticals)",
+        "HS code(s)": "3004 - Medicaments consisting of mixed or unmixed products for therapeutic or prophylactic uses, put up in measured doses \"incl. those for transdermal administration\" or in forms or packings for retail sale (excl. goods of heading 3002, 3005 or 3006); 3003 - Medicaments consisting of two or more constituents mixed together for therapeutic or prophylactic uses, not in measured doses or put up for retail sale (excl. goods of heading 3002, 3005 or 3006)",
+        "ICS code(s)": "11.120.10 - Medicaments",
+        "Objectives": "Protection of human health or safety (TBT); Other (TBT)",
+        "Keywords": "Human health",
+        "Specific regions or countries likely to be affected": NaN,
+        "Final date for comments": "2025-12-10 00:00:00",
+        "Notification type": "Regular notification",
+        "Notified document": NaN,
+        "Link to notification(EN)": NaN,
+        "Link to notification(FR)": NaN,
+        "Link to notification(ES)": NaN,
+        "Technical Regulation (Article 2.9.2)": "Yes",
+        "Technical Regulation - urgent (Article 2.10.1)": "No",
+        "Conformity Assessment Procedure (Article 5.6.2)": "No",
+        "Conformity Assessment Procedure - urgent  (Article 5.7.1)": "No",
+        "Technical Regulation - local government (Article 3.2)": "No",
+        "Conformity Assessment Procedure - local government (Article 7.2)": "No",
+        "Other": "No",
+        "Relevant documents": "The Draft amendments to the Rules of Good Manufacturing Practice in the Eurasian Economic Unionhttps://regulation.eaeunion.org/orv/3269/Decision of the Council of the Eurasian Economic Commission No.77 of November 3, 2016https://docs.eaeunion.org/documents/306/2586/",
+        "Codex Alimentarius Commision": NaN,
+        "World Organization for Animal Health (OIE)": NaN,
+        "International Plant Protection Convention": NaN,
+        "None": NaN,
+        "Does this proposed regulation conform to the relevant international standard?": NaN,
+        "If no, describe, whenever possible how and why it deviates from the international standard": NaN
+      },
+      {
+        "Notifying Member": "Russian Federation",
+        "Distribution date": "2025-11-14 00:00:00",
+        "Document symbol": NaN,
+        "Title": "Letter of the Federal Service for Veterinary and Phytosanitary Surveillance No. FS-ARe-7/6809-3 as of 12 November 2025",
+        "Description": "This letter introduces temporary restrictions on the imports of products mentioned in point 3 to the Russian Federation, as well as on the transit of cattle, small cattle and animals susceptible to bluetongue through the territory of the Russian Federation from Japan due to the registration of bluetongue disease outbreaks.",
+        "Products covered": "Cattle; small cattle; wild, zoo and circus animals susceptible to bluetongue, camels and other members of the camel family; sperm of bulls, sheep and goat-producers; cattle and small cattle embryos; meat of wild small ruminants (HS code(s): 0102; 0104; 0106; 051199)",
+        "HS code(s)": "0102 - Live bovine animals; 0104 - Live sheep and goats; 0106 - Live animals (excl. horses, asses, mules, hinnies, bovine animals, swine, sheep, goats, poultry, fish, crustaceans, molluscs and other aquatic invertebrates, and microorganic cultures etc.); 051199 - Products of animal origin, n.e.s., dead animals, unfit for human consumption (excl. fish, crustaceans, molluscs or other aquatic invertebrates)",
+        "ICS code(s)": NaN,
+        "Objectives": "Animal health (SPS)",
+        "Keywords": "Animal health; Animal diseases; Bluetongue",
+        "Specific regions or countries likely to be affected": "Japan",
+        "Final date for comments": "NaT",
+        "Notification type": "Emergency notifications (SPS)",
+        "Notified document": "https://members.wto.org/crnattachments/2025/SPS/RUS/25_07959_00_x.pdf\nhttps://fsvps.gov.ru/files/ukazanie-rosselhoznadzora-ot-12-nojabrja-2025-goda-fs-arje-7-6809-3/",
+        "Link to notification(EN)": NaN,
+        "Link to notification(FR)": NaN,
+        "Link to notification(ES)": NaN,
+        "Technical Regulation (Article 2.9.2)": NaN,
+        "Technical Regulation - urgent (Article 2.10.1)": NaN,
+        "Conformity Assessment Procedure (Article 5.6.2)": NaN,
+        "Conformity Assessment Procedure - urgent  (Article 5.7.1)": NaN,
+        "Technical Regulation - local government (Article 3.2)": NaN,
+        "Conformity Assessment Procedure - local government (Article 7.2)": NaN,
+        "Other": NaN,
+        "Relevant documents": NaN,
+        "Codex Alimentarius Commision": "No",
+        "World Organization for Animal Health (OIE)": "Yes",
+        "International Plant Protection Convention": "No",
+        "None": "No",
+        "Does this proposed regulation conform to the relevant international standard?": "Yes",
+        "If no, describe, whenever possible how and why it deviates from the international standard": NaN
+      },
+      {
+        "Notifying Member": "Russian Federation",
+        "Distribution date": "2025-11-13 00:00:00",
+        "Document symbol": NaN,
+        "Title": "Letter of the Federal Service for Veterinary and Phytosanitary Surveillance as of 5 November 2025 No. FS-KS-7/21811",
+        "Description": "This letter introduces temporary restrictions on the imports of live swine and products obtained thereof, hunting trophies and equipment to the Russian Federation, as well as on the transit of live swine through the territory of the Russian Federation from Chinese Taipei due to the registration of outbreaks of African swine fever (ASF) in Chinese Taipei. ",
+        "Products covered": "Live  swine;  meat  of  swine;  meat  and  edible  meat  offal;  swine embryos and boar semen; hunting trophies; maintenance, slaughter and processing equipment used (HS code(s): 0103; 0203; 020630; 020910; 0210; of 0502; of 0511; 1601*; 1602*; 843680; 843850; 970529)*  With  exception  of  prepared  heat-treated  goods  of  pork,  prepared  goods  containing  pork  or  raw materials  of  animal  origin  (from  pork)  for  the  production  of  feeds  for  non-productive  and  fur-producing animals with the use of technologies providing destruction of ASFV in accordance with the provisions of Chapter 15.1 of the OIE Terrestrial Animal Health Code.",
+        "HS code(s)": "0103 - Live swine; 0203 - Meat of swine, fresh, chilled or frozen; 020630 - Fresh or chilled edible offal of swine; 020910 - Pig fat, free of lean meat, not rendered or otherwise extracted, fresh, chilled, frozen, salted, in brine, dried or smoked; 0210 - Meat and edible offal, salted, in brine, dried or smoked; edible flours and meals of meat or meat offal; 0502 - Pigs', hogs' or boars' bristles and hair; badger hair and other brush making hair; waste of such bristles or hair; 0511 - Animal products n.e.s.; dead animals of all types, unfit for human consumption; 1601 - Sausages and similar products, of meat, meat offal, blood or insects; food preparations based on these products.; 1602 - Prepared or preserved meat, meat offal, blood or insects (excl. sausages and similar products, and meat extracts and juices); 843680 - Agricultural, horticultural, forestry or bee-keeping machinery, n.e.s.; 843850 - Machinery for the industrial preparation of meat or poultry (excl. cooking and other heating appliances and refrigerating or freezing equipment); 970529 - Collections and collectors’ pieces of zoological, botanical, mineralogical, anatomical or paleontological interest (excl. human specimens and parts thereof, and extinct or endangered species and parts thereof)",
+        "ICS code(s)": NaN,
+        "Objectives": "Animal health (SPS)",
+        "Keywords": "African swine fever (ASF); Animal diseases; Animal health",
+        "Specific regions or countries likely to be affected": "Chinese Taipei",
+        "Final date for comments": "NaT",
+        "Notification type": "Emergency notifications (SPS)",
+        "Notified document": "https://members.wto.org/crnattachments/2025/SPS/RUS/25_07934_00_x.pdf\nhttps://fsvps.gov.ru/files/ukazanie-rosselhoznadzora-ot-05-nojabrja-2025-goda-fs-ks-2-21811/",
+        "Link to notification(EN)": NaN,
+        "Link to notification(FR)": NaN,
+        "Link to notification(ES)": NaN,
+        "Technical Regulation (Article 2.9.2)": NaN,
+        "Technical Regulation - urgent (Article 2.10.1)": NaN,
+        "Conformity Assessment Procedure (Article 5.6.2)": NaN,
+        "Conformity Assessment Procedure - urgent  (Article 5.7.1)": NaN,
+        "Technical Regulation - local government (Article 3.2)": NaN,
+        "Conformity Assessment Procedure - local government (Article 7.2)": NaN,
+        "Other": NaN,
+        "Relevant documents": NaN,
+        "Codex Alimentarius Commision": "No",
+        "World Organization for Animal Health (OIE)": "Yes",
+        "International Plant Protection Convention": "No",
+        "None": "No",
+        "Does this proposed regulation conform to the relevant international standard?": "Yes",
+        "If no, describe, whenever possible how and why it deviates from the international standard": NaN
+      },
+      {
+        "Notifying Member": "Russian Federation",
+        "Distribution date": "2025-11-07 00:00:00",
+        "Document symbol": NaN,
+        "Title": "Order of the Ministry of Agriculture of the Russian Federation as of 15 May 2025 No. 335",
+        "Description": "This notification refers to general procedure for auditing foreign testing laboratories (centres) conducting laboratory research to determine the residual amount of active substances of pesticides and agrichemicals in plant-based products intended for imports into the Russian Federation as provided by Part 3 of Article 20.1  of Federal Law No. 109-FZ dated 19 July 1997 “On Safe Handling of Pesticides and Agrochemicals”.",
+        "Products covered": "Plant-based products",
+        "HS code(s)": NaN,
+        "ICS code(s)": NaN,
+        "Objectives": "Food safety (SPS)",
+        "Keywords": "Human health; Food safety; Maximum residue limits (MRLs)",
+        "Specific regions or countries likely to be affected": "Argentina; Brazil; Chile; China; Costa Rica; Côte d'Ivoire; Ecuador; Egypt; Ethiopia; Georgia; Ghana; India; Indonesia; Israel; Kenya; Morocco; Nigeria; Pakistan; Paraguay; Peru; Philippines; South Africa; Sri Lanka; Tajikistan; Thailand; Türkiye; United Arab Emirates; Viet Nam",
+        "Final date for comments": "NaT",
+        "Notification type": "Regular notification",
+        "Notified document": "https://members.wto.org/crnattachments/2025/SPS/RUS/25_07519_00_e.pdf\nhttps://members.wto.org/crnattachments/2025/SPS/RUS/25_07519_00_x.pdf\nhttps://fsvps.gov.ru/federalnyj-gosudarstvennyj-kontrol-nadzor-v-oblasti-bezopasnogo-obrashhenija-s-pesticidami-i-agrohimikatami-v-chasti-sobljudenija-reglamentov-primenenija-pesticidov-i-agrohimikatov-pri-proizvodstve-se/",
+        "Link to notification(EN)": NaN,
+        "Link to notification(FR)": NaN,
+        "Link to notification(ES)": NaN,
+        "Technical Regulation (Article 2.9.2)": NaN,
+        "Technical Regulation - urgent (Article 2.10.1)": NaN,
+        "Conformity Assessment Procedure (Article 5.6.2)": NaN,
+        "Conformity Assessment Procedure - urgent  (Article 5.7.1)": NaN,
+        "Technical Regulation - local government (Article 3.2)": NaN,
+        "Conformity Assessment Procedure - local government (Article 7.2)": NaN,
+        "Other": NaN,
+        "Relevant documents": NaN,
+        "Codex Alimentarius Commision": "Yes",
+        "World Organization for Animal Health (OIE)": "No",
+        "International Plant Protection Convention": "No",
+        "None": "No",
+        "Does this proposed regulation conform to the relevant international standard?": "Yes",
+        "If no, describe, whenever possible how and why it deviates from the international standard": NaN
+      },
+      {
+        "Notifying Member": "Russian Federation",
+        "Distribution date": "2025-10-23 00:00:00",
+        "Document symbol": NaN,
+        "Title": "Draft Decision of the Collegium of the Eurasian Economic Commission on Amendment to Section 1 of Chapter II of the Common Sanitary-Epidemiological and Hygienic Requirements for Products Subject to Sanitary-Epidemiological Supervision (Control)",
+        "Description": "The Draft Decision softens the requirements regarding maximum level for cadmium, contained in seeds of food poppy not intended for retail sale and used as an ingredient in bakery and confectionery products, compared to those currently applied as indicated in Section 1 of Chapter II of the Common Sanitary-Epidemiological and Hygienic Requirements for Products Subject to Sanitary-Epidemiological Supervision (Control). ",
+        "Products covered": "Seeds of food poppy not intended for retail sale and used as an ingredient in bakery and confectionery products (HS code(s): 120791)",
+        "HS code(s)": "120791 - Poppy seeds, whether or not broken",
+        "ICS code(s)": NaN,
+        "Objectives": "Food safety (SPS)",
+        "Keywords": "Human health; Food safety",
+        "Specific regions or countries likely to be affected": NaN,
+        "Final date for comments": "2025-12-16 00:00:00",
+        "Notification type": "Regular notification",
+        "Notified document": "https://members.wto.org/crnattachments/2025/SPS/RUS/25_07084_00_x.pdf\nhttps://members.wto.org/crnattachments/2025/SPS/RUS/25_07084_01_x.pdf\nhttps://regulation.eaeunion.org/orv/3242/",
+        "Link to notification(EN)": NaN,
+        "Link to notification(FR)": NaN,
+        "Link to notification(ES)": NaN,
+        "Technical Regulation (Article 2.9.2)": NaN,
+        "Technical Regulation - urgent (Article 2.10.1)": NaN,
+        "Conformity Assessment Procedure (Article 5.6.2)": NaN,
+        "Conformity Assessment Procedure - urgent  (Article 5.7.1)": NaN,
+        "Technical Regulation - local government (Article 3.2)": NaN,
+        "Conformity Assessment Procedure - local government (Article 7.2)": NaN,
+        "Other": NaN,
+        "Relevant documents": NaN,
+        "Codex Alimentarius Commision": "No",
+        "World Organization for Animal Health (OIE)": "No",
+        "International Plant Protection Convention": "No",
+        "None": "Yes",
+        "Does this proposed regulation conform to the relevant international standard?": "Not applicable",
+        "If no, describe, whenever possible how and why it deviates from the international standard": NaN
+      }
+    ]
+  }
+}

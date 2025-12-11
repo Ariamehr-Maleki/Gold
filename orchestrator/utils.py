@@ -30,6 +30,64 @@ def setup_logging(log_file_path: str) -> logging.Logger:
 
     return logger
 
+def setup_logging(log_file_path):
+    # (Existing logging setup code here)
+    logger = logging.getLogger(__name__)
+    logger.setLevel(logging.INFO)
+    
+    # Create file handler
+    fh = logging.FileHandler(log_file_path)
+    fh.setLevel(logging.INFO)
+    
+    # Create console handler
+    ch = logging.StreamHandler()
+    ch.setLevel(logging.INFO)
+    
+    # Create formatter and add it to the handlers
+    formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+    fh.setFormatter(formatter)
+    ch.setFormatter(formatter)
+    
+    # Add the handlers to the logger
+    logger.addHandler(fh)
+    logger.addHandler(ch)
+    
+    return logger
+
+def load_country_lookup(logger, json_path="m49-list-with-itc.json"):
+    """
+    Loads the country JSON and creates a mapping from country name to M49 code.
+    """
+    country_map = {}
+    try:
+        with open(json_path, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+            for country in data.get('countries', []):
+                name = country.get('name')
+                m49code = country.get('m49code')
+                
+                # We use the country name in all caps as the key for case-insensitive lookup
+                if name and m49code is not None:
+                    country_map[name.upper()] = str(m49code)
+
+        logger.info(f"Loaded {len(country_map)} country names for lookup.")
+    except FileNotFoundError:
+        logger.warning(f"Country code file not found at {json_path}. Name-to-code lookup disabled.")
+    except json.JSONDecodeError as e:
+        logger.error(f"Error decoding country JSON file: {e}")
+    except Exception as e:
+        logger.error(f"An unexpected error occurred while loading country data: {e}")
+
+    return country_map
+
+def get_country_code(country_name, country_map):
+    """
+    Translates a country name (case-insensitive) to its M49 code string.
+    """
+    if not country_name:
+        return None
+    return country_map.get(country_name.upper())
+
 def get_by_path(data: Dict[str, Any], path: str) -> Optional[Any]:
     """
     Access a nested value in a dictionary using a dot-separated path.
