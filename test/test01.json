@@ -1,0 +1,71 @@
+{
+    "factsheet": {
+        "Quantitative_Export_Factsheet": {
+            "Header": {
+                "Product": "080410",
+                "Target_Market": "India",
+                "Month_Year": "December 2025"
+            },
+            "Total_exports_from_Your_country_in_year_to_the_world": {
+                "Your_country": "Iran, Islamic Republic of",
+                "Year": "2024",
+                "USD_value": "USD 213,049,000",
+                "Rank_in_world": "1"
+            },
+            "Size_of_the_Market": {
+                "Year": "2024",
+                "Target_market": "India",
+                "Imports_from_world_USD": "USD 290,078,000",
+                "Share_of_world_imports_percent": "11.5 %",
+                "Imports_from_your_country_USD": "USD 41,443,000",
+                "Share_of_Target_market_imports_percent": "14.3 %"
+            },
+            "Growth_of_the_Market": {
+                "Five_year_growth_rate_percent": "6.0 %",
+                "Better_than_or_worse": "worse than",
+                "World_growth_rate_percent": "8.0 %",
+                "Target_market_share_trend": "decreasing",
+                "Market_growing_or_contracting": "growing",
+                "Recent_growth_rate_percent": "9.0 %",
+                "Imports_from_your_country_growth_rate_percent": "2.0 %",
+                "Market_share_gained_or_lost": "lost"
+            },
+            "Unit_Value": {
+                "Average_unit_value": "552 USD / Tons",
+                "Compare_to_world_average": "less than",
+                "World_unit_value": "1,287 USD / Tons",
+                "Target_Market_Trend_5y": "depreciating",
+                "World_Trend_5y": "appreciating",
+                "Unit_value_paid_to_your_country": "436 USD / Tons",
+                "Compare_YC_to_Market_Average": "lower",
+                "Your_Country_Trend_5y": "depreciated",
+                "Top5_Suppliers_Appreciating": "United Arab Emirates",
+                "Heterogeneity_Analysis": {
+                    "range_description": "wide",
+                    "highest_uv_country": "Israel",
+                    "highest_uv_value": "5,249",
+                    "lowest_uv_country": "Iraq",
+                    "lowest_uv_value": "360",
+                    "market_nature": "rather heterogeneous"
+                }
+            },
+            "Competition": {
+                "Market_concentration": "concentrated",
+                "Top_3_exporters": [
+                    {
+                        "name": "United Arab Emirates",
+                        "share": "47.1"
+                    },
+                    {
+                        "name": "Iraq",
+                        "share": "27.3"
+                    },
+                    {
+                        "name": "Iran, Islamic Republic of",
+                        "share": "14.3"
+                    }
+                ]
+            }
+        }
+    }
+}

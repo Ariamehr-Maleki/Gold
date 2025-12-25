@@ -234,34 +234,87 @@ class TradeSpider(object):
 
     def goto(self, url):
         max_attempts = 4
-        target_page_filename = url.split('?')[0].split('/')[-1]
+        # Get the base filename (e.g., Product_SelProductCountry)
+        base_filename = url.split('?')[0].split('/')[-1].replace('.aspx', '')
         
         for attempt in range(1, max_attempts + 1):
             logging.info(f"Navigating to {url} (Attempt {attempt}/{max_attempts})")
             try:
                 self.driver.get(url)
+                
+                # RELAXED CHECK: Check if current URL contains the base name 
+                # OR the "Rev" version of that name
                 WebDriverWait(self.driver, 15).until(
-                    EC.url_contains(target_page_filename)
+                    lambda d: base_filename in d.current_url or base_filename.replace('_', 'Rev_') in d.current_url
                 )
+                
                 self._wait_for_ready_state(10)
-                logging.info(f"Successfully loaded and verified URL for '{target_page_filename}' on attempt {attempt}.")
+                # Handle any immediate survey popups
+                self._handle_trademap_popup() 
+                
+                logging.info(f"Successfully loaded and verified page on attempt {attempt}.")
                 return True
             except TimeoutException:
                 logging.warning(
-                    f"Navigation timed out on attempt {attempt}. "
-                    f"Expected URL containing '{target_page_filename}', but current URL is '{self.driver.current_url}'. Retrying..."
+                    f"Navigation timed out. Target: {base_filename}, Actual: {self.driver.current_url}"
                 )
             except Exception as e:
-                logging.error(f"An unexpected error occurred during navigation on attempt {attempt}: {e}")
+                logging.error(f"Error during navigation: {e}")
         
-        logging.error(f"Failed to navigate to '{target_page_filename}' after {max_attempts} attempts.")
-        self._save_snapshot(f"goto_failed_{target_page_filename}")
         return False
+    
+    def _handle_trademap_popup(self, timeout=30):
+        """
+        Targeted handler for the ITC survey popup. 
+        Specifically clicks id='ctl00_MenuControl_button1'.
+        """
+        logging.info("Checking for TradeMap survey popup...")
+        container_id = "ctl00_MenuControl_Div_PopupNews"
+        button_id = "ctl00_MenuControl_button1"
 
+        try:
+            # 1. Wait for the container to exist
+            wait = WebDriverWait(self.driver, timeout)
+            
+            # Check if container is in DOM
+            containers = self.driver.find_elements(By.ID, container_id)
+            if not containers or not containers[0].is_displayed():
+                logging.debug("Popup container not visible. Skipping.")
+                return False
+
+            logging.info("Popup detected. Targeting 'Close' button...")
+
+            # 2. Wait for the specific Close button to be clickable
+            close_btn = wait.until(EC.element_to_be_clickable((By.ID, button_id)))
+
+            # 3. Click the button
+            # We use JavaScript click here because ITC's popups often have 
+            # invisible overlays that block standard Selenium clicks.
+            self.driver.execute_script("arguments[0].click();", close_btn)
+            logging.info("Clicked 'Close' button via JS.")
+
+            # 4. Wait for the popup container to disappear entirely
+            # This is the most important step to prevent "Element Intercepted" errors later
+            wait.until(EC.invisibility_of_element_located((By.ID, container_id)))
+            
+            # Brief pause to allow the site's backdrop (dimmed background) to fade out
+            time.sleep(2)
+            logging.info("Popup successfully cleared.")
+            return True
+
+        except TimeoutException:
+            logging.info("No popup appeared or it took too long. Proceeding anyway.")
+        except Exception as e:
+            logging.warning(f"Note: Popup handler encountered an issue: {e}")
+        
+        return False
+    
     def login(self, ac, pw):
-        url = "https://www.trademap.org/Country_SelProduct_TS.aspx"
+        url = "https://www.trademap.org/Country_SelProduct.aspx"
         if not self.goto(url): return False
         
+        self._handle_trademap_popup()
+
         time.sleep(random.uniform(2.0, 4.0))
         if not self._safe_click(By.ID, 'ctl00_MenuControl_marmenu_login'): return False
         
