@@ -1,0 +1,90 @@
+{
+    "Market_Access": {
+        "_note": "Developer note: Literal template mirror of the Market Access section.",
+        "Your_Country": "364",
+        "Target_Market": "699",
+        "Product": "080410",
+        "Your_Country_benefits_from_or_does_not_benefit_from_preferential_market_access_in_Target_Market_for_Product": "does not benefit from",
+        "Relevant_preferential_trade_agreements": "None identified",
+        "Tariff_Table": [
+            {
+                "National_tariff_line_code_in_Target_Market": "08041010",
+                "Product_Description": "",
+                "MFN_or_general_tariff": "30",
+                "Lowest_tariff_faced_by_Your_Country": "30.0",
+                "Lowest_tariff_faced_by_Competitor_A": "0.0 (784)",
+                "Lowest_tariff_faced_by_Competitor_B": "30.0 (368)",
+                "Lowest_tariff_faced_by_Competitor_C": "-"
+            },
+            {
+                "National_tariff_line_code_in_Target_Market": "08041020",
+                "Product_Description": "",
+                "MFN_or_general_tariff": "20",
+                "Lowest_tariff_faced_by_Your_Country": "20.0",
+                "Lowest_tariff_faced_by_Competitor_A": "0.0 (784)",
+                "Lowest_tariff_faced_by_Competitor_B": "20.0 (368)",
+                "Lowest_tariff_faced_by_Competitor_C": "-"
+            },
+            {
+                "National_tariff_line_code_in_Target_Market": "08041030",
+                "Product_Description": "",
+                "MFN_or_general_tariff": "20",
+                "Lowest_tariff_faced_by_Your_Country": "20.0",
+                "Lowest_tariff_faced_by_Competitor_A": "0.0 (784)",
+                "Lowest_tariff_faced_by_Competitor_B": "20.0 (368)",
+                "Lowest_tariff_faced_by_Competitor_C": "-"
+            },
+            {
+                "National_tariff_line_code_in_Target_Market": "08041090",
+                "Product_Description": "",
+                "MFN_or_general_tariff": "30",
+                "Lowest_tariff_faced_by_Your_Country": "30.0",
+                "Lowest_tariff_faced_by_Competitor_A": "0.0 (784)",
+                "Lowest_tariff_faced_by_Competitor_B": "30.0 (368)",
+                "Lowest_tariff_faced_by_Competitor_C": "-"
+            }
+        ],
+        "Short_analysis_of_tariffs_and_tariff_rate_quotas_if_applicable_for_example": "[364] does not have a distinct tariff advantage in [699] for this product. No TRQs identified.",
+        "your_country_has_or_does_not_have_a_preferential_tariff_advantage_over_key_competitors_in_target_market_for_product": "does not have",
+        "Apart_from_the_top_three_suppliers_other_top_five_suppliers_facing_preferential_tariffs_in_target_market_include": "[Requires separate Trade Statistics Data]",
+        "None_of_the_top_five_suppliers_has_preferential_market_access": "Verify with Trade Data.",
+        "Rules_of_Origin_and_Certificate_of_Origin_information": "To benefit from preferential market access to [699], exporters from [364] must comply with Rules of Origin.",
+        "Tariff_rate_quota": {
+            "Target_market_applies_a_tariff_rate_quota_on_imports_of_product": "No",
+            "Quota_volume": "N/A",
+            "Applied_period": "N/A",
+            "Outside_quota_tariff_rate": "N/A"
+        },
+        "Other_duties_applied_by_Target_market_to_imports_of_product_from_Your_country": "No trade remedies identified.",
+        "Mandatory_market_access_requirements_non_tariff_measures": {
+            "Summary_sentence": "To export [080410] to [699], exporters from [364] need to comply with mandatory market access requirements (non-tariff measures).",
+            "Requirements_list": [
+                "A140 - Special Authorization requirement for SPS reasons A requirement that importer should receive authorization, permit or approval from a relevant government agency of the destination country for SPS reasons: In order to obtain the authorization, importers may need to comply with other related regulations and conformity assessments. Example: An import authorization from the Ministry of Health is required. Learn more",
+                "A150 - Registration requirements for importers The requirement that importers should be registered before they can import certain products: To register, importers may need to comply with certain requirements, provide documentation and pay registration fees. Example: Importers of a certain food item need to be registered at the Ministry of Health Learn more",
+                "A210 - Tolerance limits for residues of or contamination by certain (non-microbiological) substances \"A measure that establishes a maximum residue limit (MRL) or \"\"tolerance limit\"\" of substances such as fertilisers, pesticides, and certains chemicals and metals in food and feed, which are used during their production process but are not their intended ingredients: It includes a permissible maximum level (ML) for non-microbiological contaminants. Measures related to microbiological contaminants are classified under A4 below. Example: a) MRL is established for insecticides, pesticides, heavy metals, veterinary drug residues, b) POPs and chemicals generated during processing; c) residues of \"\"dithianon\"\" in apples and hop.\" Learn more",
+                "A220 - Restricted use of certain substances in foods and feeds and their contact materials Restriction or prohibition on the use of certain substances contained in food and feed. It includes the restrictions on substances contained in the food-containers that might migrate to food. Example: a) Certain restrictions exist for food and feed additives used for colouring, preservation or sweeteners. b) For food containers made of polyvinyl chloride plastic, vinyl chloride monomer must not exceed 1 mg per kg. Learn more",
+                "A310 - Labelling requirements Measures defining the information directly related to food safety, which should be provided to the consumer: Labelling is any written, electronic, or graphic communication on the consumer packaging or on a separate but associated label. Example: a) Labels that must specify the storage conditions such as \"5 degree C maximum\"; b) potentially dangerous ingredients such as allergens, e.g. \"contains honey not suitable for children under one year of age\". Learn more",
+                "A330 - Packaging requirements Measures regulating the mode in which goods must be or cannot be packed, or defining the packaging materials to be used, which are directly related to food safety: Example: Use of PVC films for food packaging is restricted. Learn more",
+                "A410 - Microbiological criteria of the final product Statement of the microorganisms of concern and/or their toxins/metabolites and the reason for that concern, the analytical methods for their detection and/or quantification in the final product: Microbiological limits should take into consideration the risk associated with the microorganisms, and the conditions under which the food is expected to be handled and consumed. Microbiological limits should also take account of the likelihood of uneven distribution of microorganisms in the food and the inherent variability of the analytical procedure. Examples: Liquid eggs should be pasteurized or otherwise treated to destroy all viable Salmonella microorganisms. Learn more",
+                "A420 - Hygienic practices during production Requirements principally intended to give guidance on the establishment and application of microbiological criteria for foods at any point in the food chain from primary production to final consumption: The safety of foods is principally assured by control at the source, product design and process control, and the application of Good Hygienic Practices during production, processing (including labeling), handling, distribution, storage, sale, preparation and use. Examples: Milking equipment on the farm should be cleaned daily with a specified detergent. Learn more",
+                "A520 - Irradiation Requirement to kill or devitalize microorganisms, bacteria, viruses, or insects that might be present in food and feed products by using irradiated energy (ionizing radiation): Example: This technology may be applied on meat products, fresh fruits, spices and dried vegetable seasonings. Learn more",
+                "A610 - Plant growth processes Requirements on how a plant should be grown in terms of conditions related to temperature, light, spacing between plants, water, oxygen, mineral nutrients, etc.: Example: Seeding rate and row spacing of soybean plants are specified to reduce the risk of frogeye leaf spots Learn more",
+                "A640 - Storage and transport conditions Requirements on certain conditions under which food and feed, plants and animal should be stored and/or transported: Example: Certain foodstuffs should be stored in a dry place, or below certain temperature. Learn more",
+                "A690 - Other requirements on production or post-production processes, not elsewhere specified Learn more",
+                "A820 - Testing requirement A requirement for products to be tested against a given regulation, such as MRL: It includes sampling requirement. Example: A test on a sample of orange imports is required to check against the maximum residue level of pesticides Learn more",
+                "A830 - Certification requirement Certification of conformity with a given regulation: required by the importing country but may be issued in the exporting or the importing country. Example: Certificate of conformity for materials in contact with food (containers, papers, plastics, etc.) is required. Learn more",
+                "A840 - Inspection requirement Requirement for product inspection in the importing country: may be performed by public or private entities. It is similar to testing, but it does not include laboratory testing. Example: Animals or plant parts must be inspected before entry is allowed. Learn more",
+                "A853 - Distribution and location of products after delivery Disclosure of information on when and how the goods have been distributed from the time of their delivery to distributors until they reach the final consumer. Example: For rice, disclosure of information on the location of its temporary storage facility may be required. Learn more",
+                "A859 - Traceability requirements, not elsewhere specified. Learn more",
+                "B310 - Labelling requirements Measures regulating the kind, colour and size of printing on packages and labels and defining the information that should be provided to the consumer: Labelling is any written, electronic, or graphic communication on the packaging or on a separate but associated label, or on the product itself. It may include requirements on the official language to be used as well as technical information on the product, such as voltage, components, instruction on use, safety and security advises, etc. Example: Refrigerators need to carry a label indicating its size, weight as well as electricity consumption level. Learn more",
+                "B320 - Marking requirements \"Measures defining the information for transport and customs that the transport/distribution packaging of goods should carry:Example: Handling or storage conditions according to type of product, typically signs such as \"\"FRAGILE\"\" or \"\"THIS SIDE UP\"\" etc. must be marked on the transport container.\" Learn more",
+                "B330 - Packaging requirements Measures regulating the mode in which goods must be or cannot be packed, and defining the packaging materials to be used:Example: Palletized containers or special packages need to be used for the protection of sensitive or fragile products. Learn more",
+                "B600 - Product identity requirement Conditions to be satisfied in order to identify a product with a certain denomination (including biological or organic labels): Example: In order for a product to be identified as \"chocolate\", it must contain a minimum of 30% cocoa. Learn more",
+                "B700 - Product quality or performance requirement Conditions to be satisfied in terms of performance (e.g. durability, hardness) or quality (e.g. content of defined ingredients) Example: Door must resist certain minimum high temperature. Learn more",
+                "C300 - Requirement to pass through specified port of customs Obligation for imports to pass through a designated entry point and/or customs office for inspection, testing, etc: Example: DVD players need to be cleared at a designated customs office for inspection. Learn more",
+                "B150 - Registration requirement for importers for TBT reasons \"Requirement that importers should be registered in order to import certain products: To register, importers need to comply with certain requirements, documentation and registration fees. It also includes the registration of establishments producing certain products. Example: Importers of \"\"sensitive product\"\" such as medicines, drugs, explosives, firearms, alcohol, cigarettes, game machines, etc. may be required to be registered in the importing country.\" Learn more"
+            ],
+            "Web_links_to_further_sources": "Check MacMap or Local Ministry Website"
+        }
+    }
+}

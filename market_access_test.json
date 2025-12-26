@@ -1,0 +1,37 @@
+{
+    "source": "Market Access Map",
+    "url": "https://www.macmap.org/en/query/results?reporter=699&partner=364&product=080410&level=6",
+    "overview": {
+        "exporting_country": "Iran (Islamic Republic of)",
+        "importing_country": "India",
+        "product_description": "08041010 – Fresh or dried dates : Fresh (excluding wet dates)",
+        "avg_tariff": "30%"
+    },
+    "tariffs": {
+        "detailed_tariffs": [
+            {
+                "line_code": "",
+                "description": "",
+                "tariff_rate": "",
+                "regime_name": "",
+                "type": "Preferential"
+            },
+            {
+                "line_code": "",
+                "description": "",
+                "tariff_rate": "",
+                "regime_name": "",
+                "type": "Preferential"
+            },
+            {
+                "line_code": "",
+                "description": "",
+                "tariff_rate": "",
+                "regime_name": "",
+                "type": "Preferential"
+            }
+        ],
+        "trade_agreements_detected": []
+    },
+    "remedies": []
+}

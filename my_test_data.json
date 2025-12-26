@@ -1,0 +1,36 @@
+{
+    "meta": {
+        "source": "Market Access Map",
+        "reporter_id": "699",
+        "partner_id": "364",
+        "hs_code": "080410",
+        "url": "https://www.macmap.org/en/query/results?reporter=699&partner=364&product=080410&level=6"
+    },
+    "market_access_profile": {
+        "identified_agreements": [],
+        "trade_remedies": [],
+        "tariff_data": [
+            {
+                "national_line_code": "",
+                "description": "",
+                "regime": "",
+                "rate": "",
+                "type": "Preferential"
+            },
+            {
+                "national_line_code": "",
+                "description": "",
+                "regime": "",
+                "rate": "",
+                "type": "Preferential"
+            },
+            {
+                "national_line_code": "",
+                "description": "",
+                "regime": "",
+                "rate": "",
+                "type": "Preferential"
+            }
+        ]
+    }
+}
