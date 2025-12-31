@@ -172,6 +172,11 @@ if __name__ == '__main__':
     parser.add_argument("--competitor-ids", nargs='+', default=[])
     parser.add_argument("--output", default="market_access_filled.json")
     parser.add_argument("--headless", action='store_true')
+
+    # Name arguments (Added for compatibility with orchestrator)
+    parser.add_argument("--your-country-name", help="Ignored.")
+    parser.add_argument("--target-market-name", help="Ignored.")
+
     args = parser.parse_args()
 
     config = {
@@ -181,7 +186,8 @@ if __name__ == '__main__':
         "competitor_ids": args.competitor_ids
     }
 
-    print("🚀 Initializing MacMap Scraper...")
+    # REMOVED EMOJI TO PREVENT ENCODING ERROR
+    print("Initializing MacMap Scraper...")
     scraper = MacMapScraper(headless=args.headless, driver_path=r".\geckodriver.exe")
     
     try:
@@ -191,9 +197,11 @@ if __name__ == '__main__':
             if data:
                 with open(args.output, 'w', encoding='utf-8') as f:
                     json.dump(data, f, ensure_ascii=False, indent=4)
-                print(f"\n✅ SUCCESS! Data saved to: {os.path.abspath(args.output)}")
+                # REMOVED EMOJI
+                print(f"\nSUCCESS! Data saved to: {os.path.abspath(args.output)}")
             else:
-                print("\n❌ FAILED. No data extracted.")
+                # REMOVED EMOJI
+                print("\nFAILED. No data extracted.")
     except Exception as e:
         logging.critical(f"Critical Error: {e}")
         import traceback

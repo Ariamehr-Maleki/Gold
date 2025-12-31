@@ -1,13 +1,14 @@
-# support/data_downloader.py
-
 from typing import Optional
 from urllib.parse import urlparse, parse_qs, quote, unquote
 import time
 import os
 import glob
+import difflib  # Needed for name matching
+
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import Select
+# IMPORTANT: Add WebDriverWait here 👇
+from selenium.webdriver.support.ui import Select, WebDriverWait 
 from selenium.common.exceptions import (
     TimeoutException,
     NoSuchElementException,
@@ -241,10 +242,193 @@ class DataDownloader(TradeSpider):
         url = f"https://www.trademap.org/{path}?nvpm={quote(nvpm, safe='')}"
         return self._run_navigation_pipeline(url, hs_code, "Country_SelProduct", "Step 1.5: Global Imports")
 
+    def navigate_to_companies_page(self, config: dict, country_id: str = None, trade_flow: str = 'I') -> bool:
+        target_id = country_id if country_id else config.get('target_market_id')
+        product_code = config.get('hs_code')
+        trade_flow_code = '1' if trade_flow == 'I' else '2' 
+        max_attempts = 4
+        
+        logging.info(f"Navigating to Companies page ({'Importers' if trade_flow=='I' else 'Exporters'}) for {target_id}...")
+
+        for attempt in range(1, max_attempts + 1):
+            redirect_handled = False 
+            nvpm = f"1|{target_id}||||{product_code}|||4|1|1|{trade_flow_code}|3|1|1|1|1|4"
+            url = f"https://www.trademap.org/CompaniesList.aspx?nvpm={quote(nvpm, safe='')}"
+            
+            self.driver.get(url)
+            time.sleep(3) 
+
+            # --- REDIRECT HANDLING (CLARIFICATION PAGE) ---
+            if "CorrespondingProductsCompanies.aspx" in self.driver.current_url:
+                logging.warning("Redirected to clarification page. Resolving best product match...")
+                try:
+                    self.wait.until(EC.visibility_of_element_located((By.ID, _MAIN_TABLE_ID)))
+                    
+                    # 1. Identify Official Product Name from Dropdown
+                    official_name = ""
+                    try:
+                        # Direct XPath is faster than iterating options
+                        opt_xpath = f"//select[@id='ctl00_NavigationControl_DropDownList_Product']/option[@value='{product_code}']"
+                        option_elem = self.driver.find_element(By.XPATH, opt_xpath)
+                        raw_text = option_elem.text # e.g. "... ... 080410 - Fresh or dried dates"
+                        
+                        # Clean the text (Remove dots and code)
+                        # Split by " - " and take the last part usually
+                        if " - " in raw_text:
+                            official_name = raw_text.split(" - ", 1)[1].strip()
+                        else:
+                            official_name = raw_text.strip()
+                        
+                        logging.info(f"Identified official product name: '{official_name}'")
+                    except Exception:
+                        logging.warning(f"Could not find official name for HS {product_code} in dropdown.")
+
+                    # 2. Find all candidate links
+                    links = self.driver.find_elements(By.CSS_SELECTOR, "a[id*='LinkButton_CompanyProduct']")
+                    best_link = None
+                    highest_score = 0.0
+
+                    if links:
+                        # 3. Score links based on similarity to official name
+                        for link in links:
+                            link_text = link.text.strip()
+                            score = 0.0
+                            
+                            # A. Exact HS code match gets a huge boost
+                            if product_code in link_text:
+                                score += 0.5
+                            
+                            # B. String similarity match
+                            if official_name:
+                                sim_ratio = difflib.SequenceMatcher(None, official_name.lower(), link_text.lower()).ratio()
+                                score += sim_ratio
+                            
+                            logging.info(f"Candidate: '{link_text}' | Score: {score:.2f}")
+                            
+                            if score > highest_score:
+                                highest_score = score
+                                best_link = link
+                        
+                        # Fallback: If no scoring worked, take the first one
+                        if not best_link:
+                            best_link = links[0]
+
+                        logging.info(f"Clicking best match: '{best_link.text}'")
+                        self.driver.execute_script("arguments[0].click();", best_link)
+                        
+                        WebDriverWait(self.driver, 15).until(EC.url_contains("CompaniesList.aspx"))
+                        time.sleep(2)
+                        redirect_handled = True 
+                    else:
+                        logging.error("No product links found to click.")
+
+                except Exception as e:
+                    logging.error(f"Failed to handle clarification redirect: {e}")
+                    continue
+
+            # --- VERIFICATION ---
+            if "CompaniesList.aspx" not in self.driver.current_url:
+                logging.warning(f"Attempt {attempt}: Not on CompaniesList.aspx. Retrying...")
+                continue
+
+            if not redirect_handled:
+                current_nvpm = self._get_nvpm_parts_from_url(self.driver.current_url)
+                if current_nvpm and len(current_nvpm) > 1:
+                    # Note: TradeMap sometimes bugs out on country ID persistence, check strictly
+                    if current_nvpm[1] != str(target_id):
+                        logging.warning(f"Wrong Country ID {current_nvpm[1]} detected. Retrying...")
+                        continue
+
+            # --- SUCCESS CHECK ---
+            try:
+                self.wait.until(EC.presence_of_element_located((By.ID, _MAIN_TABLE_ID)))
+                logging.info(f"✅ Landed on Companies List (Country {target_id}).")
+                return True
+            except TimeoutException:
+                logging.warning("Companies table did not load yet.")
+
+        return False
+    
     # =========================================================================
     # IMPROVED DOWNLOAD LOGIC
     # =========================================================================
 
+    def _get_nvpm_parts_from_url(self, url: str) -> list:
+        try:
+            parsed = urlparse(unquote(url))
+            params = parse_qs(parsed.query)
+            nvpm = params.get('nvpm', [''])[0]
+            return nvpm.split('|') if nvpm else []
+        except:
+            return []
+        
+    # support/data_downloader.py
+
+    def download_companies_file(self, rename_to: str) -> str:
+        """
+        Downloads the companies list, prioritizing the Excel button.
+        """
+        # 1. Clear old files to prevent confusion
+        for pat in ["*.xls*", "*.txt", "*.csv"]:
+            for f in glob.glob(os.path.join(self.download_dir, pat)):
+                try: os.remove(f)
+                except: pass
+
+        # 2. Define Button Selectors (Prioritizing the user's provided Excel ID)
+        excel_btn_id = "ctl00_PageContent_GridViewPanelControl_ImageButton_ExportExcel"
+        text_btn_id = "ctl00_PageContent_GridViewPanelControl_ImageButton_ExportText"
+        
+        btn = None
+        try:
+            # Try finding the Excel button first
+            logging.info("Looking for Excel download button...")
+            btn = self.wait.until(EC.element_to_be_clickable((By.ID, excel_btn_id)))
+        except:
+            try:
+                # Fallback to Text button if Excel isn't there
+                logging.warning("Excel button not found. Looking for Text button...")
+                btn = self.wait.until(EC.element_to_be_clickable((By.ID, text_btn_id)))
+            except:
+                logging.error("❌ No download button found.")
+                return None
+
+        # 3. Click the button
+        try:
+            logging.info("Clicking download...")
+            self.driver.execute_script("arguments[0].click();", btn)
+            time.sleep(3)
+        except Exception as e:
+            logging.error(f"Click failed: {e}")
+            return None
+
+        # 4. Wait for the file (Supporting both .xls and .txt)
+        timeout = 60
+        start_time = time.time()
+        while time.time() - start_time < timeout:
+            files = []
+            for pat in ["*.xls*", "*.txt", "*.csv"]:
+                files.extend(glob.glob(os.path.join(self.download_dir, pat)))
+            
+            if files:
+                latest = max(files, key=os.path.getmtime)
+                # Ignore partial downloads
+                if not any(x in latest for x in ['.part', '.crdownload', '.tmp']):
+                    if os.path.getsize(latest) > 0:
+                        # Determine correct extension for rename
+                        ext = os.path.splitext(latest)[1]
+                        final_name = os.path.splitext(rename_to)[0] + ext
+                        
+                        new_path = os.path.join(self.download_dir, final_name)
+                        if os.path.exists(new_path): os.remove(new_path)
+                        os.rename(latest, new_path)
+                        
+                        logging.info(f"✅ Downloaded Company Data: {final_name}")
+                        return new_path
+            time.sleep(1)
+        
+        logging.error("❌ Download timed out.")
+        return None
+    
       # [RESTORE THIS METHOD]
     def navigate_to_country_snapshot_page(self, config: dict, country_id: str) -> bool:
         hs_code = config.get("hs_code")

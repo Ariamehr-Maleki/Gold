@@ -1,4 +1,6 @@
 # orchestrator/utils.py
+
+import json  # <--- Added this import
 import logging
 import os
 import sys
@@ -9,7 +11,7 @@ def setup_logging(log_file_path: str) -> logging.Logger:
     logger = logging.getLogger("Orchestrator")
     logger.setLevel(logging.INFO)
 
-    # --- FIX: Prevent double logging by stopping propagation to root logger ---
+    # Prevent double logging by stopping propagation to root logger
     logger.propagate = False 
 
     # Prevent adding duplicate handlers if this function is called multiple times
@@ -17,10 +19,13 @@ def setup_logging(log_file_path: str) -> logging.Logger:
         logger.handlers.clear()
 
     # File handler
-    file_handler = logging.FileHandler(log_file_path, mode='w', encoding='utf-8')
-    file_formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-    file_handler.setFormatter(file_formatter)
-    logger.addHandler(file_handler)
+    try:
+        file_handler = logging.FileHandler(log_file_path, mode='w', encoding='utf-8')
+        file_formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+        file_handler.setFormatter(file_formatter)
+        logger.addHandler(file_handler)
+    except Exception as e:
+        print(f"Warning: Could not set up file logging: {e}")
 
     # Console handler
     console_handler = logging.StreamHandler(sys.stdout)
@@ -30,49 +35,35 @@ def setup_logging(log_file_path: str) -> logging.Logger:
 
     return logger
 
-def setup_logging(log_file_path):
-    # (Existing logging setup code here)
-    logger = logging.getLogger(__name__)
-    logger.setLevel(logging.INFO)
-    
-    # Create file handler
-    fh = logging.FileHandler(log_file_path)
-    fh.setLevel(logging.INFO)
-    
-    # Create console handler
-    ch = logging.StreamHandler()
-    ch.setLevel(logging.INFO)
-    
-    # Create formatter and add it to the handlers
-    formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-    fh.setFormatter(formatter)
-    ch.setFormatter(formatter)
-    
-    # Add the handlers to the logger
-    logger.addHandler(fh)
-    logger.addHandler(ch)
-    
-    return logger
-
 def load_country_lookup(logger, json_path="m49-list-with-itc.json"):
     """
     Loads the country JSON and creates a mapping from country name to M49 code.
     """
     country_map = {}
     try:
+        if not os.path.exists(json_path):
+             logger.warning(f"Country code file not found at {json_path}. Name-to-code lookup disabled.")
+             return {}
+
         with open(json_path, 'r', encoding='utf-8') as f:
             data = json.load(f)
-            for country in data.get('countries', []):
-                name = country.get('name')
-                m49code = country.get('m49code')
+            # Support both structure types: direct list or dict with 'countries' key
+            if isinstance(data, dict) and 'countries' in data:
+                items = data['countries']
+            elif isinstance(data, list):
+                items = data
+            else:
+                items = []
+
+            for country in items:
+                name = country.get('name') or country.get('Name') or country.get('english')
+                m49code = country.get('m49code') or country.get('Code') or country.get('id')
                 
                 # We use the country name in all caps as the key for case-insensitive lookup
                 if name and m49code is not None:
                     country_map[name.upper()] = str(m49code)
 
         logger.info(f"Loaded {len(country_map)} country names for lookup.")
-    except FileNotFoundError:
-        logger.warning(f"Country code file not found at {json_path}. Name-to-code lookup disabled.")
     except json.JSONDecodeError as e:
         logger.error(f"Error decoding country JSON file: {e}")
     except Exception as e:
@@ -94,12 +85,23 @@ def get_by_path(data: Dict[str, Any], path: str) -> Optional[Any]:
     Example: get_by_path(data, "a.b.c")
     """
     keys = path.split('.')
+    current = data
     for key in keys:
-        if isinstance(data, dict) and key in data:
-            data = data[key]
+        if isinstance(current, dict) and key in current:
+            current = current[key]
+        elif isinstance(current, list):
+            # Try to handle list indices if path uses integer (e.g. "items.0.value")
+            try:
+                idx = int(key)
+                if 0 <= idx < len(current):
+                    current = current[idx]
+                else:
+                    return None
+            except ValueError:
+                return None
         else:
             return None
-    return data
+    return current
 
 def set_by_path(data: Dict[str, Any], path: str, value: Any):
     """

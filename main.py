@@ -1,11 +1,11 @@
 # main.py
+
 import argparse
 import json
 import os
 from datetime import datetime
 
 from orchestrator.engine import Orchestrator
-# Import the new functions from utils
 from orchestrator.utils import setup_logging, load_country_lookup, get_country_code 
 
 def run_orchestration(args):
@@ -37,47 +37,65 @@ def run_orchestration(args):
         return
     
     # --- 3. Load Country Code Lookup ---
+    # We pass this map to the Orchestrator later
     country_map = load_country_lookup(logger, args.country_list)
 
     # --- 4. Load Run Parameters & Apply Overrides ---
     run_params = {}
+    
+    # Attempt to load run_config, but do NOT crash if missing.
+    # This ensures CLI arguments can work standalone.
     if args.run_config:
-        try:
-            with open(args.run_config, 'r', encoding='utf-8') as f:
-                run_params = json.load(f)
-            logger.info(f"Loaded scraper run parameters from {args.run_config}")
-        except (FileNotFoundError, json.JSONDecodeError) as e:
-            logger.critical(f"Could not load or parse run config file: {e}")
-            return
-            
-    # --- Handle Name-to-ID Translation ---
-    # Attempt to convert country names (if provided) to M49 codes
-    your_country_id = args.your_country_id or get_country_code(args.your_country_name, country_map)
-    target_market_id = args.target_market_id or get_country_code(args.target_market_name, country_map)
+        if os.path.exists(args.run_config):
+            try:
+                with open(args.run_config, 'r', encoding='utf-8') as f:
+                    run_params = json.load(f)
+                logger.info(f"Loaded scraper run parameters from {args.run_config}")
+            except json.JSONDecodeError as e:
+                logger.error(f"Error parsing run config file: {e}. Proceeding with defaults.")
+        else:
+            logger.warning(f"Run config file '{args.run_config}' not found. Relying on CLI arguments.")
 
-    # Second, override with any specific command-line arguments
+    # --- Handle Name-to-ID Translation ---
+    # Priority: 
+    # 1. CLI Explicit ID (--your-country-id)
+    # 2. CLI Name Translation (--your-country-name -> Lookup)
+    # 3. Existing value in run_params (handled by update logic later)
+
+    resolved_your_id = args.your_country_id or get_country_code(args.your_country_name, country_map)
+    resolved_target_id = args.target_market_id or get_country_code(args.target_market_name, country_map)
+    
+    # Warning if name provided but ID not found
+    if args.your_country_name and not resolved_your_id:
+        logger.warning(f"Could not resolve ID for Your Country Name: '{args.your_country_name}'")
+    if args.target_market_name and not resolved_target_id:
+        logger.warning(f"Could not resolve ID for Target Market Name: '{args.target_market_name}'")
+
+    # Define overrides (None values are filtered out)
     cli_overrides = {
         'hs_code': args.hs_code,
-        # Use the translated ID if available, otherwise use the CLI ID
-        'your_country_id': your_country_id, 
+        'your_country_id': resolved_your_id, 
         'your_country_name': args.your_country_name,
-        'target_market_id': target_market_id,
+        'target_market_id': resolved_target_id,
         'target_market_name': args.target_market_name
     }
     
-    # Filter out None values and update the params
     active_overrides = {k: v for k, v in cli_overrides.items() if v is not None}
     
-    # Add a check for successful translation and log if a code was found
-    if args.your_country_name and your_country_id and your_country_id != args.your_country_id:
-        logger.info(f"Resolved 'Your Country' name '{args.your_country_name}' to ID '{your_country_id}'")
-    if args.target_market_name and target_market_id and target_market_id != args.target_market_id:
-        logger.info(f"Resolved 'Target Market' name '{args.target_market_name}' to ID '{target_market_id}'")
+    # Log successful resolutions for clarity
+    if args.your_country_name and resolved_your_id and str(resolved_your_id) != args.your_country_id:
+        logger.info(f"Resolved 'Your Country' name '{args.your_country_name}' to ID '{resolved_your_id}'")
+    if args.target_market_name and resolved_target_id and str(resolved_target_id) != args.target_market_id:
+        logger.info(f"Resolved 'Target Market' name '{args.target_market_name}' to ID '{resolved_target_id}'")
         
+    # APPLY OVERRIDES
     if active_overrides:
         logger.info(f"Overriding run config with CLI arguments: {active_overrides}")
-        run_params.setdefault('common_params', {}).update(active_overrides)
-
+        # Ensure common_params dict exists
+        if 'common_params' not in run_params:
+            run_params['common_params'] = {}
+        # Update (Overwrite) existing params with CLI values
+        run_params['common_params'].update(active_overrides)
 
     # --- 5. Initialize and Run the Orchestrator ---
     orchestrator = Orchestrator(
@@ -85,6 +103,7 @@ def run_orchestration(args):
         template=template,
         outdir=output_directory,
         run_params=run_params,
+        country_map=country_map,
         is_dry_run=args.dry_run,
         parallel=not args.sequential,
         timeout=args.timeout,
@@ -95,29 +114,21 @@ def run_orchestration(args):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Main orchestrator for the trade data scraping suite.")
-    
-    # --- Configuration for the run (file-based with CLI overrides) ---
-    parser.add_argument("--run-config", default="config/run_config.json", help="Path to the JSON file with run parameters (HS code, countries, etc.).")
-    
-    # NEW ARGUMENT: Path to the country list JSON
+    parser.add_argument("--run-config", default="config/run_config.json", help="Path to the JSON file with run parameters.")
     parser.add_argument("--country-list", default="m49-list-with-itc.json", help="Path to the JSON file containing country names and codes.")
     
-    # --- Optional Overrides for run-config (IDs are kept for direct use) ---
-    parser.add_argument("--hs-code", help="Override the HS code from the run-config file.")
-    parser.add_argument("--your-country-id", help="Override the exporting country ID from the run-config file.")
-    parser.add_argument("--target-market-id", help="Override the target market ID from the run-config file.")
-    
-    # NEW ARGUMENTS: For user-friendly input
-    parser.add_argument("--your-country-name", help="Override the exporting country name from the run-config file. This will be converted to an ID.")
-    parser.add_argument("--target-market-name", help="Override the target market name from the run-config file. This will be converted to an ID.")
+    parser.add_argument("--hs-code", help="Override HS code.")
+    parser.add_argument("--your-country-id", help="Override exporting country ID.")
+    parser.add_argument("--target-market-id", help="Override target market ID.")
+    parser.add_argument("--your-country-name", help="Override exporting country name.")
+    parser.add_argument("--target-market-name", help="Override target market name.")
 
-    # --- Orchestrator settings ---
-    parser.add_argument("--config", default="config/config.json", help="Path to the main JSON configuration file.")
-    parser.add_argument("--template", default="config/template.json", help="Path to the JSON template for the final output.")
-    parser.add_argument("--outdir", default="./runs", help="Directory to save all outputs, logs, and reports.")
-    parser.add_argument("--timeout", type=int, default=600, help="Timeout in seconds for each scraper subprocess.")
-    parser.add_argument("--dry-run", action='store_true', help="Run the orchestrator without executing scrapers. Used for testing mapping.")
-    parser.add_argument("--sequential", action='store_true', help="Force scrapers to run one by one instead of in parallel.")
+    parser.add_argument("--config", default="config/config.json", help="Main scraper config.")
+    parser.add_argument("--template", default="config/template.json", help="Output template.")
+    parser.add_argument("--outdir", default="./runs", help="Output directory.")
+    parser.add_argument("--timeout", type=int, default=600, help="Scraper timeout.")
+    parser.add_argument("--dry-run", action='store_true', help="Dry run.")
+    parser.add_argument("--sequential", action='store_true', help="Force sequential execution.")
     
     args = parser.parse_args()
     run_orchestration(args)

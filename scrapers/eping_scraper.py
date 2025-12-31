@@ -271,7 +271,12 @@ if __name__ == '__main__':
     parser.add_argument("--output", required=True, help="Output JSON file.")
     parser.add_argument("--headless", action='store_true', help="Headless mode.")
     parser.add_argument("--hs-code", help="HS code.")
+    
+    # ID arguments (Added for compatibility with orchestrator)
+    parser.add_argument("--your-country-id", help="Numeric ID (Ignored by this scraper).")
     parser.add_argument("--target-market-id", help="Numeric ID.")
+
+    # Name arguments
     parser.add_argument("--your-country-name", help="Your country.")
     parser.add_argument("--target-market-name", help="Target market.")
 

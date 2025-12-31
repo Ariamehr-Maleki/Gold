@@ -127,8 +127,22 @@ class TradeMapScraperRunner:
                         raw_data, 
                         f"List of importing markets for product exported by {self.config.get('your_country_name', 'ID ' + self.config['your_country_id'])}"
                     )
+# 5. Target Market Companies
+            logger.info("Step 5: Fetching Companies in Target Market...")
+            if self.scraper.navigate_to_companies_page(self.config, country_id=self.config['target_market_id'], trade_flow='I'):
+                # Request saving as .xls, but downloader will adjust extension if needed
+                path = self.scraper.download_companies_file("target_market_companies.xls")
+                
+                if path:
+                    from support.data_parser import parse_companies_list
+                    raw_data = parse_companies_list(path, out_dir)
+                    
+                    self.output_data["snapshots"]["target_market_companies"] = {
+                        "count": len(raw_data),
+                        "data": raw_data
+                    }
 
-            # 4. Generate Factsheet
+            # 5. Generate Factsheet
             logger.info("Generating Quantitative Factsheet JSON...")
             # Pass the Config which now has correct names
             generator = FactsheetGenerator(self.output_data, self.config)
@@ -140,13 +154,13 @@ class TradeMapScraperRunner:
                 json.dump(self.output_data, f, indent=4, ensure_ascii=False)
             
             logger.info(f"Process complete. Data saved to {self.args.output}")
-
+           
         except Exception as e:
             logger.critical(f"Runner failed: {e}", exc_info=True)
             sys.exit(1)
         finally:
             if self.scraper.driver: self.scraper.driver.quit()
-
+            
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", required=True)
@@ -154,5 +168,10 @@ if __name__ == '__main__':
     parser.add_argument("--hs-code")
     parser.add_argument("--your-country-id")
     parser.add_argument("--target-market-id")
+    
+    # Name arguments (Added for compatibility with orchestrator)
+    parser.add_argument("--your-country-name", help="Ignored.")
+    parser.add_argument("--target-market-name", help="Ignored.")
+    
     args = parser.parse_args()
     TradeMapScraperRunner(args).run()

@@ -142,33 +142,50 @@ class FactsheetGenerator:
 
         # C. Regional Competitors -> SUPPLIER X, Y, Z
         # Proxy: Find suppliers with similar "Average distance" to Your Country
+       # 1. Market Share Increasers (Top 10 Suppliers)
+        # Definition: A supplier increases share if their growth > total market growth
+        market_growth_5y = self.row_world_in_target.get("growth_value_5y_pct") if self.row_world_in_target else 0
+        top_10 = sorted_suppliers[:10]
+        
+        increasers_list = []
+        for s in top_10:
+            s_growth = s.get("growth_value_5y_pct")
+            # If supplier growth is defined and greater than market growth
+            if s_growth is not None and market_growth_5y is not None:
+                if s_growth > market_growth_5y:
+                    increasers_list.append(s.get("partner_country"))
+
+        # 2. Regional Competitors (Supplier X, Y, Z)
+        # Proxy: Find suppliers with "Average distance" similar to "Your Country"
         supplier_x, supplier_y, supplier_z = "N/A", "N/A", "N/A"
         
         yc_dist = self.row_yc_in_target.get("avg_distance_km")
+        
         if yc_dist:
-            # Filter: Not World, Not Your Country, Must have Distance
+            # Filter: Not 'Your Country', Must have Distance
             potential_neighbors = [
                 s for s in sorted_suppliers 
                 if s.get("partner_country") != self.config.get("your_country_name") 
                 and s.get("avg_distance_km") is not None
             ]
             
-            # Sort by how close their distance is to YOUR distance
-            # (Smallest difference = most likely in same region)
-            potential_neighbors.sort(key=lambda k: abs(k.get("avg_distance_km") - yc_dist))
+            # Sort by difference in distance (Smallest delta = closest geographically relative to target)
+            potential_neighbors.sort(key=lambda k: abs((k.get("avg_distance_km") or 0) - yc_dist))
             
             if len(potential_neighbors) > 0: supplier_x = potential_neighbors[0].get("partner_country")
             if len(potential_neighbors) > 1: supplier_y = potential_neighbors[1].get("partner_country")
             if len(potential_neighbors) > 2: supplier_z = potential_neighbors[2].get("partner_country")
+        else:
+            # Fallback if your country has no distance data (e.g. neighboring country with 0 distance or error)
+            supplier_x = "Distance data unavailable"
 
-
-        # 5. COMPETITION (Top 3 Market Share)
+        # 3. Top 3 Market Share (for text filling)
         top_3 = sorted_suppliers[:3]
-        top_3_list = []
+        top_3_details = []
         for s in top_3:
-            top_3_list.append({
+            top_3_details.append({
                 "name": s.get("partner_country"),
-                "share": self._format_pct(s.get("share_in_target_market_imports_pct"))
+                "share_pct": self._format_pct(s.get("share_in_target_market_imports_pct"))
             })
             
         sum_share = sum([s.get("share_in_target_market_imports_pct", 0) for s in top_3])
@@ -178,19 +195,18 @@ class FactsheetGenerator:
         # --- CONSTRUCT JSON ---
         factsheet = {
             "Quantitative_Export_Factsheet": {
+                # ... (Keep Header, Total_exports, Size, Growth, Unit_Value sections unchanged) ...
                 "Header": {
                     "Product": self.config.get("product_name"),
                     "Target_Market": self.config.get("target_market_name"),
                     "Month_Year": datetime.now().strftime("%B %Y")
                 },
-                
                 "Total_exports_from_Your_country_in_year_to_the_world": {
-                    "Your_country": self.config.get("your_country_name"),
-                    "Year": "2024",
-                    "USD_value": f"USD {self._format_usd(total_exports)}",
-                    "Rank_in_world": str(int(rank_val)) if isinstance(rank_val, (int, float)) else "N/A"
+                     "Your_country": self.config.get("your_country_name"),
+                     "Year": "2024",
+                     "USD_value": f"USD {self._format_usd(total_exports)}",
+                     "Rank_in_world": str(int(rank_val)) if isinstance(rank_val, (int, float)) else "N/A"
                 },
-
                 "Size_of_the_Market": {
                     "Year": "2024",
                     "Target_market": self.config.get("target_market_name"),
@@ -199,7 +215,6 @@ class FactsheetGenerator:
                     "Imports_from_your_country_USD": f"USD {self._format_usd(tm_imp_from_yc)}",
                     "Share_of_Target_market_imports_percent": f"{self._format_pct(yc_share_in_tm)} %"
                 },
-
                 "Growth_of_the_Market": {
                     "Five_year_growth_rate_percent": f"{self._format_pct(tm_growth_5y)} %",
                     "Better_than_or_worse": better_worse,
@@ -210,7 +225,6 @@ class FactsheetGenerator:
                     "Imports_from_your_country_growth_rate_percent": f"{self._format_pct(yc_growth_5y)} %",
                     "Market_share_gained_or_lost": gained_lost
                 },
-
                 "Unit_Value": {
                     "Average_unit_value": f"{self._format_usd(uv_tm)} USD / {unit_type}",
                     "Compare_to_world_average": uv_compare,
@@ -221,7 +235,6 @@ class FactsheetGenerator:
                     "Compare_YC_to_Market_Average": uv_yc_compare,
                     "Your_Country_Trend_5y": yc_trend_past,
                     "Top5_Suppliers_Appreciating": appreciating_suppliers_str,
-                    
                     "Heterogeneity_Analysis": {
                         "range_description": range_desc,
                         "Country_X_High": country_x,
@@ -232,17 +245,23 @@ class FactsheetGenerator:
                     }
                 },
 
+                # --- UPDATED COMPETITION SECTION ---
                 "Competition": {
-                    "Market_concentration": conc_text,
-                    "Top_3_exporters": top_3_list,
-                    "Regional_Competitors": {
-                         "Note": "Based on similar distance to target market",
+                    "Summary_Text_Data": {
+                        "Concentration_Label": conc_text,
+                        "Top_3_Suppliers": [s['name'] for s in top_3_details],
+                        "Top_3_Shares": [s['share_pct'] for s in top_3_details]
+                    },
+                    "Top_3_Exporters_Details": top_3_details,
+                    "Market_Share_Increasers_Top10": increasers_list,
+                    "Regional_Competitors_Similiar_Distance": {
+                         "Your_Country_Distance_km": yc_dist,
                          "Supplier_X": supplier_x,
                          "Supplier_Y": supplier_y,
                          "Supplier_Z": supplier_z
-                    },
-                    "Market_share_increasers": [s.get("partner_country") for s in sorted_suppliers[:10] if (s.get("growth_value_5y_pct") or 0) > 0]
+                    }
                 }
+                # -----------------------------------
             }
         }
         

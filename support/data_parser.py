@@ -52,7 +52,81 @@ def _get_table_df(file_path):
 # Specific Parsers
 # -------------------------
 
+# support/data_parser.py
 
+def parse_companies_list(file_path, out_dir=None):
+    """
+    Parses the Companies 'Excel' file (which is actually HTML).
+    Target Table ID: ctl00_PageContent_MyGridView1
+    """
+    if not os.path.exists(file_path): 
+        return []
+    
+    df = None
+    try:
+        # STRATEGY: Read as HTML, targeting the specific grid ID
+        # header=0 implies the first row of the table contains the column names
+        dfs = pd.read_html(
+            file_path, 
+            attrs={'id': 'ctl00_PageContent_MyGridView1'}, 
+            header=0,
+            encoding='utf-8' # or 'latin-1' if utf-8 fails
+        )
+        
+        if dfs:
+            df = dfs[0]
+        
+        # Validation
+        if df is None or df.empty:
+            logging.warning(f"No company data found in {file_path}")
+            return []
+
+        # CLEANUP: Normalize column names
+        # remove spaces, lowercase, remove parens
+        df.columns = [
+            str(c).strip().lower()
+            .replace(' ', '_')
+            .replace('(', '')
+            .replace(')', '') 
+            for c in df.columns
+        ]
+        
+        records = []
+        for _, row in df.iterrows():
+            # Extract Company Name
+            c_name = row.get("company_name")
+            if not c_name or str(c_name).lower() == 'nan': 
+                continue
+
+            # Extract details based on your HTML headers
+            record = {
+                "company_name": str(c_name).strip(),
+                "country": str(row.get("country", "")).strip(),
+                "city": str(row.get("city", "")).strip(),
+                "website": str(row.get("website", "")).strip(),
+                
+                # Numeric fields (handle NaNs)
+                "products_traded": _clean_num(row.get("number_of_product_or_service_categories_traded")),
+                "employees": _clean_num(row.get("number_of_employees")),
+                "turnover_usd": _clean_num(row.get("turnover_usd"))
+            }
+
+            # Basic cleanup for "nan" strings in text fields
+            for key in ["country", "city", "website"]:
+                if record[key].lower() == "nan":
+                    record[key] = ""
+
+            records.append(record)
+        
+        # Save parsed version
+        _save_csv(records, file_path, out_dir)
+        logging.info(f"Successfully parsed {len(records)} companies.")
+        return records
+
+    except Exception as e:
+        logging.error(f"Error parsing companies HTML/Excel: {e}")
+        return []
+    
 def parse_base_country_exports(file_path, out_dir=None):
     """ Parses 'base_country_exports.html' """
     df = _get_table_df(file_path)
@@ -87,6 +161,15 @@ def parse_target_market_suppliers(file_path, out_dir=None):
     """ Parses 'target_market_suppliers.html' """
     df = _get_table_df(file_path)
     if df is None: return []
+
+    # --- ADDED: Dynamic column detection for Distance ---
+    dist_col_idx = -1
+    for idx, col_name in enumerate(df.columns):
+        if "distance" in str(col_name).lower():
+            dist_col_idx = idx
+            break
+    # ----------------------------------------------------
+
     records = []
     for _, row in df.iterrows():
         label = str(row.iloc[0]).strip()
@@ -106,6 +189,7 @@ def parse_target_market_suppliers(file_path, out_dir=None):
             "growth_value_1y_pct": _clean_num(row.iloc[9]),
             "ranking_in_world_exports": _clean_num(row.iloc[10]),
             "share_in_world_exports_pct": _clean_num(row.iloc[11]),
+            "avg_distance_km": _clean_num(row.iloc[dist_col_idx]) if dist_col_idx != -1 else None,
             "tariff_applied_pct": _clean_num(row.iloc[15]) if len(row) > 15 else None
         }
         records.append(record)
