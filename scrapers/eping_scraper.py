@@ -1,4 +1,4 @@
-# scrapers/eping_scraper.py (Corrected and Robust Version)
+# scrapers/eping_scraper.py
 
 import argparse
 import glob
@@ -7,6 +7,7 @@ import logging
 import os
 import sys
 import time
+import re
 from datetime import datetime
 
 import pandas as pd
@@ -20,46 +21,58 @@ from selenium.webdriver.firefox.service import Service
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
-# Add parent directories to path to allow importing from 'support' if needed
+# Add parent directories to path to allow importing from 'support'
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
+# --- Import Formatter ---
+try:
+    from support.eping_formatter import EPingReportBuilder
+except ImportError:
+    logging.warning("Could not import EPingReportBuilder. Output will be raw JSON.")
+    EPingReportBuilder = None
+
 # --- Logging Configuration ---
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - EPING - %(levelname)s - %(message)s')
 
 class EPingScraper:
-    """
-    Scrapes ePing by using the UI to filter by HS code, and then downloads the results.
-    This version uses robust interaction methods for the Vue.js components.
-    """
-
     def __init__(self, headless=False, driver_path='./geckodriver.exe'):
         self.driver = None
         self.wait = None
         self.headless = headless
         self.driver_path = driver_path
-        self.download_dir = os.path.join(os.getcwd(), "eping_downloads")
+        self.download_dir = os.path.abspath(os.path.join(os.getcwd(), "eping_downloads"))
 
     def _get_firefox_options(self):
         options = Options()
-        if self.headless: options.add_argument("--headless")
-        common_paths = [r"C:\Program Files\Mozilla Firefox\firefox.exe", r"C:\Program Files (x86)\Mozilla Firefox\firefox.exe"]
+        if self.headless: 
+            options.add_argument("--headless")
+            options.add_argument("--window-size=1920,1080")
+
+        # Attempt to find Firefox binary automatically
+        common_paths = [
+            r"C:\Program Files\Mozilla Firefox\firefox.exe", 
+            r"C:\Program Files (x86)\Mozilla Firefox\firefox.exe"
+        ]
         found_path = next((path for path in common_paths if os.path.exists(path)), None)
         if found_path:
             options.binary_location = found_path
             logging.info(f"Auto-detected Firefox at: {found_path}")
-        else:
-            logging.warning("Could not auto-detect Firefox. Letting Selenium try.")
+        
+        # Configure automatic downloads
         os.makedirs(self.download_dir, exist_ok=True)
         options.set_preference("browser.download.folderList", 2)
         options.set_preference("browser.download.dir", self.download_dir)
-        options.set_preference("browser.helperApps.neverAsk.saveToDisk", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel")
+        options.set_preference("browser.download.useDownloadDir", True)
+        options.set_preference("browser.helperApps.neverAsk.saveToDisk", 
+            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel")
         return options
 
     def start_browser(self):
         logging.info("Starting Firefox WebDriver...")
         try:
             self.driver = webdriver.Firefox(service=Service(executable_path=self.driver_path), options=self._get_firefox_options())
-            self.wait = WebDriverWait(self.driver, 20)
+            self.wait = WebDriverWait(self.driver, 45)
+            self.driver.maximize_window()
             return True
         except Exception as e:
             logging.error(f"FATAL: WebDriver failed to start. Error: {e}")
@@ -68,169 +81,222 @@ class EPingScraper:
     def handle_cookie_banner(self):
         try:
             short_wait = WebDriverWait(self.driver, 5)
-            accept_button = short_wait.until(EC.element_to_be_clickable((By.XPATH, "//button[.//span[contains(text(), 'Accept all')]]")))
+            accept_button = short_wait.until(EC.element_to_be_clickable((By.XPATH, "//button[contains(., 'Accept all') or contains(., 'I agree')]")))
             accept_button.click()
             logging.info("Accepted cookies.")
             time.sleep(1)
         except TimeoutException:
-            logging.info("No cookie banner was detected.")
+            pass
 
     def _filter_by_hs_code(self, hs_code_prefix):
-        """Robust HS-code selection for vue-treeselect component with fallback to keyboard selection."""
+        """
+        Filters by HS Code and closes the dropdown using the ESCAPE key.
+        """
         try:
-            logging.info("Opening advanced search fields...")
-            self.wait.until(EC.element_to_be_clickable((By.XPATH, "//button[contains(., 'Search more fields')]"))).click()
-            self.wait.until(EC.element_to_be_clickable((By.XPATH, "//div[@data-text='Select HS code(s)']"))).click()
-            logging.info("Clicked HS code placeholder.")
+            logging.info("--- START HS CODE FILTER ---")
+            logging.info("⏳ Waiting 5s for page stability...")
+            time.sleep(5)
 
+            # --- STEP 1: Find and Click Placeholder ---
+            placeholder_xpath = "//div[@data-text='Select HS code(s)']"
+            
             try:
-                hs_input = self.wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, ".vue-treeselect__input input")))
+                trigger_div = self.driver.find_element(By.XPATH, placeholder_xpath)
+                # If hidden, click 'Search more fields'
+                if not trigger_div.is_displayed():
+                    more_btn = self.wait.until(EC.element_to_be_clickable(
+                        (By.XPATH, "//button[contains(., 'Search more fields')]")
+                    ))
+                    self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", more_btn)
+                    more_btn.click()
+                    time.sleep(2)
+            except NoSuchElementException:
+                pass
+
+            logging.info("Clicking the HS Code placeholder...")
+            trigger_div = self.wait.until(EC.element_to_be_clickable((By.XPATH, placeholder_xpath)))
+            self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", trigger_div)
+            trigger_div.click()
+            time.sleep(1) 
+
+            # --- STEP 2: Find Input & Type ---
+            logging.info("Typing HS Code...")
+            container = self.driver.find_element(By.ID, "hs-tree-select-container")
+            hs_input = container.find_element(By.CSS_SELECTOR, "input.vue-treeselect__input")
+            
+            hs_input.send_keys(Keys.CONTROL + "a")
+            hs_input.send_keys(Keys.DELETE)
+            time.sleep(0.5)
+            
+            for char in hs_code_prefix:
+                hs_input.send_keys(char)
+                time.sleep(0.1)
+
+            # Force Vue to recognize input
+            self.driver.execute_script("arguments[0].dispatchEvent(new Event('input', { bubbles: true }));", hs_input)
+            time.sleep(3)
+
+            # --- STEP 3: Select Exact Code ---
+            suggestion_xpath = f"//div[contains(@class, 'vue-treeselect__label') and contains(., '{hs_code_prefix}')]"
+            
+            try:
+                suggestion = self.wait.until(EC.presence_of_element_located((By.XPATH, suggestion_xpath)))
+                self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", suggestion)
+                time.sleep(1)
+                
+                try:
+                    suggestion.click()
+                except ElementClickInterceptedException:
+                    self.driver.execute_script("arguments[0].click();", suggestion)
+                
+                logging.info("Suggestion selected.")
             except TimeoutException:
-                hs_input = self.wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, ".vue-treeselect__input")))
+                logging.warning("Exact suggestion not found, trying Enter key...")
+                hs_input.send_keys(Keys.ENTER)
 
-            logging.info(f"Setting HS code to '{hs_code_prefix}' by dispatching JS events...")
-            set_value_js = "arguments[0].value = arguments[1]; arguments[0].dispatchEvent(new Event('input', {bubbles: true}));"
-            self.driver.execute_script(set_value_js, hs_input, hs_code_prefix)
-            time.sleep(1) # Allow component to react
+            # --- STEP 4: Cleanup (Close the Flywheel) ---
+            try:
+                logging.info("Closing the flywheel/dropdown...")
+                time.sleep(1)
+                # FIX: Send ESCAPE to the input field to close the menu
+                hs_input.send_keys(Keys.ESCAPE)
+                time.sleep(0.5)
+                
+                # Fallback: Click on the body
+                self.driver.find_element(By.TAG_NAME, "body").click()
+            except Exception as e: 
+                logging.warning(f"Cleanup warning: {e}")
 
-            logging.info("Waiting for HS code suggestion to appear...")
-            suggestion_xpath = f"//div[contains(@class,'vue-treeselect__option')]//*[contains(text(), '{hs_code_prefix}')]"
-            suggestion = self.wait.until(EC.element_to_be_clickable((By.XPATH, suggestion_xpath)))
-            
-            logging.info("Suggestion found — clicking it via JS.")
-            self.driver.execute_script("arguments[0].click();", suggestion)
-            
-            self.wait.until(EC.element_to_be_clickable((By.XPATH, "//button[@title='Close']"))).click()
-            logging.info("Successfully filtered by HS code. Waiting for results to load...")
+            logging.info("✅ Filter sequence finished.")
             time.sleep(5)
             return True
 
         except Exception as e:
-            logging.error(f"Failed during HS code filtering: {e}", exc_info=True)
-            self.save_snapshot("eping_filter_fail")
+            logging.error(f"❌ Filter Error: {e}", exc_info=True)
+            self.save_snapshot("hs_filter_failed")
+            return False
+
+    def _check_results_count(self):
+        try:
+            count_elem = self.wait.until(EC.presence_of_element_located(
+                (By.XPATH, "//div[contains(text(), 'Showing') and contains(text(), 'of')]")
+            ))
+            text = count_elem.text.strip()
+            match = re.search(r'of\s+(\d+)', text)
+            if match and int(match.group(1)) > 0:
+                return True
+            return False
+        except:
             return False
             
     def _download_and_parse_excel(self):
-        """Downloads the excel file and waits for the download to stabilize before parsing."""
         try:
-            for f in glob.glob(os.path.join(self.download_dir, "*.xlsx")): os.remove(f)
+            # Clear old files
+            for f in glob.glob(os.path.join(self.download_dir, "*.xlsx")): 
+                try: os.remove(f)
+                except: pass
 
-            self.wait.until(EC.element_to_be_clickable((By.XPATH, "//button[contains(., 'Export search results')]"))).click()
+            logging.info("Clicking Export...")
+            export_btn = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//button[contains(., 'Export search results')]")))
+            export_btn.click()
             
-            try: # Handle the optional warning modal
+            # Handle modal
+            try:
                 WebDriverWait(self.driver, 5).until(EC.element_to_be_clickable((By.XPATH, "//div[contains(@class,'modal-card')]//button[contains(., 'OK')]"))).click()
-                logging.info("Download warning modal detected — clicking OK.")
-            except TimeoutException:
-                logging.info("No download modal detected.")
+            except TimeoutException: pass
 
-            # --- Robustly wait for download to complete by checking file size stabilization ---
+            # Wait for download
             end_time = time.time() + 90
-            downloaded_file_path = None
             while time.time() < end_time:
                 files = glob.glob(os.path.join(self.download_dir, "*.xlsx"))
                 if files:
-                    downloaded_file_path = files[0]
+                    f_path = files[0]
+                    # Check file size stability
                     last_size, stable_count = -1, 0
-                    # Check for size stability 3 times to be sure
-                    while time.time() < end_time and stable_count < 3:
+                    while stable_count < 3:
                         try:
-                            current_size = os.path.getsize(downloaded_file_path)
-                            if current_size > 0 and current_size == last_size:
-                                stable_count += 1
-                            else:
-                                stable_count = 0
-                            last_size = current_size
+                            curr = os.path.getsize(f_path)
+                            if curr == last_size and curr > 0: stable_count += 1
+                            else: stable_count = 0
+                            last_size = curr
                             time.sleep(1)
-                        except OSError:
-                            time.sleep(1)
-                    if stable_count >= 3:
-                        logging.info(f"Download complete and stable: {os.path.basename(downloaded_file_path)}")
-                        break
-                time.sleep(0.5)
-
-            if not downloaded_file_path: raise TimeoutException("Download timed out.")
-            
-            df = pd.read_excel(downloaded_file_path)
-            return df.to_dict('records')
-
+                        except: time.sleep(1)
+                    
+                    logging.info(f"✅ Download complete: {os.path.basename(f_path)}")
+                    df = pd.read_excel(f_path)
+                    df = df.where(pd.notnull(df), None)
+                    return df.to_dict('records')
+                time.sleep(1)
+            return None
         except Exception as e:
-            logging.error(f"Error during download/parsing: {e}", exc_info=True)
-            self.save_snapshot("eping_download_fail")
+            logging.error(f"Download Error: {e}")
             return None
 
     def scrape_notifications(self, config):
-        hs_code_prefix = config['hs_code'][:4]
-        country_code = config['target_market_id'] # Now expects "C842" directly from config
+        hs_code_prefix = config['hs_code'] 
+        country_code = config['target_market_id']
         url = f"https://www.epingalert.org/en/Search/Index?countryIds=C{country_code}"
 
         if not self.start_browser(): return None
         
-        self.driver.get(url)
-        self.handle_cookie_banner()
-        
-        if not self._filter_by_hs_code(hs_code_prefix):
-            self.quit()
-            return None
-
-        final_url = self.driver.current_url
-        
         try:
-            WebDriverWait(self.driver, 5).until(EC.presence_of_element_located((By.XPATH, "//div[contains(text(), 'Showing 0 - 0 of 0')]")))
-            logging.warning("No notifications found.")
-            return {"source_url": final_url, "status": "No notifications found", "notifications": []}
-        except TimeoutException:
-            logging.info("Results detected. Proceeding to download.")
-            data = self._download_and_parse_excel()
-            if data is not None:
-                return {"source_url": final_url, "status": "Success", "notifications": data}
+            logging.info(f"Navigating to {url}")
+            self.driver.get(url)
+            self.handle_cookie_banner()
+            
+            if not self._filter_by_hs_code(hs_code_prefix):
+                return {"status": "Filter Failed", "notifications": []}
+
+            if self._check_results_count():
+                data = self._download_and_parse_excel()
+                return {"status": "Success", "notifications": data or []}
             else:
-                return {"source_url": final_url, "status": "Error during download", "notifications": []}
+                return {"status": "No notifications found", "notifications": []}
+
+        except Exception as e:
+            logging.error(f"Scrape Loop Error: {e}")
+            self.save_snapshot("crash")
+            return {"status": "Crash", "notifications": []}
         finally:
-            self.quit()
+            if self.driver: self.driver.quit()
 
     def save_snapshot(self, label="snapshot"):
-        os.makedirs('debug_snapshots', exist_ok=True)
-        path = os.path.join('debug_snapshots', f"{label}_{datetime.now():%Y%m%d_%H%M%S}")
-        self.driver.save_screenshot(f"{path}.png")
-
-    def quit(self):
-        if self.driver: self.driver.quit()
+        try:
+            os.makedirs('debug_snapshots', exist_ok=True)
+            self.driver.save_screenshot(f"debug_snapshots/{label}_{datetime.now():%H%M%S}.png")
+        except: pass
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Scrape ePing notifications.")
-    parser.add_argument("--output", required=True, help="Path to save the output JSON file.")
-    parser.add_argument("--headless", action='store_true', help="Run in headless mode.")
-    # --- Add dynamic config arguments ---
-    parser.add_argument("--hs-code", help="HS code for the product.")
-    parser.add_argument("--target-market-id", help="Numeric ID for the target market.")
-    # Unused, but added for consistency with orchestrator
-    parser.add_argument("--your-country-id", help="Unused.")
-    parser.add_argument("--your-country-name", help="Unused.")
-    parser.add_argument("--target-market-name", help="Unused.")
+    parser.add_argument("--output", required=True, help="Output JSON file.")
+    parser.add_argument("--headless", action='store_true', help="Headless mode.")
+    parser.add_argument("--hs-code", help="HS code.")
+    parser.add_argument("--target-market-id", help="Numeric ID.")
+    parser.add_argument("--your-country-name", help="Your country.")
+    parser.add_argument("--target-market-name", help="Target market.")
 
     args = parser.parse_args()
 
-    # Default CONFIG
-    CONFIG = {
-        "hs_code": "847130",
-        "target_market_id": "842"
+    config = {
+        "hs_code": args.hs_code if args.hs_code else "847130",
+        "target_market_id": args.target_market_id if args.target_market_id else "842",
+        "your_country_name": args.your_country_name if args.your_country_name else "[Your Country]",
+        "target_market_name": args.target_market_name if args.target_market_name else "[Target Market]",
     }
-
-    # Override with command-line arguments if provided
-    if args.hs_code: CONFIG['hs_code'] = args.hs_code
-    if args.target_market_id: CONFIG['target_market_id'] = args.target_market_id
     
     scraper = EPingScraper(headless=args.headless, driver_path=r".\geckodriver.exe")
+    raw_result = scraper.scrape_notifications(config)
     
-    try:
-        data = scraper.scrape_notifications(CONFIG)
-        if data:
-            with open(args.output, 'w', encoding='utf-8') as f:
-                json.dump(data, f, ensure_ascii=False, indent=4, default=str)
-            logging.info(f"SUCCESS: ePing data saved to {args.output}")
+    if raw_result and raw_result.get("notifications"):
+        if EPingReportBuilder:
+            logging.info("Formatting report...")
+            builder = EPingReportBuilder(config, raw_result["notifications"])
+            final_data = builder.build()
         else:
-            logging.error("FAIL: ePing scraping could not be completed.")
-            sys.exit(1)
-    except Exception as e:
-        logging.critical(f"A critical error occurred during execution: {e}", exc_info=True)
-        sys.exit(1)
+            final_data = raw_result
+
+        with open(args.output, 'w', encoding='utf-8') as f:
+            json.dump(final_data, f, ensure_ascii=False, indent=4, default=str)
+        logging.info(f"SUCCESS: Data saved to {args.output}")
+    else:
+        logging.info("No notifications found or scraper failed.")

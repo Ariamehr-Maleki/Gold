@@ -1,0 +1,10 @@
+{
+    "Potential_new_non_tariff_measures": {
+        "_note": "Developer note: Literal template mirror. If no notifications exist, use the provided default sentence exactly as written.",
+        "Instruction": "[Use https://epingalert.org to identify possible new market access requirements to be applied. If available, provide web-links to further sources of specific information. Explain whether these requirements could be of concern / present difficulties for exporters from your country and why].",
+        "If_there_are_no_notifications_insert_sentence": "While there were no notifications pertaining to [847130] at the time of preparing this Export Opportunity Insight, exporters are advised to regularly check https://epingalert.org to identify possible new sanitary or phytosanitary measures (SPS) and technical barriers to trade (TBT) notified by [[Target Market]] to the World Trade Organisation (WTO).",
+        "Identified_potential_new_non_tariff_measures": [],
+        "Web_links_to_further_sources": [],
+        "Concern_or_difficulty_explanation": "[Explain whether these requirements could be of concern / present difficulties for exporters from your country and why (manual analysis required)]"
+    }
+}

@@ -112,18 +112,18 @@ class ExportPotentialAnalyzer:
             search_input = self.wait.until(EC.element_to_be_clickable((By.ID, "mat-input-0")))
             search_input.clear()
             search_input.send_keys(hs_code)
-            time.sleep(2.5)
+            time.sleep(7)
 
             try:
                 deselect_button = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//span[contains(text(), 'Deselect all')]")))
                 deselect_button.click()
-                time.sleep(0.5)
+                time.sleep(10)
             except TimeoutException:
                 logging.warning("'Deselect all' button not found.")
             
             product_checkbox_label = self.wait.until(EC.element_to_be_clickable((By.XPATH, f"//mat-checkbox[contains(., '{hs_code}')]//label")))
             product_checkbox_label.click()
-            time.sleep(4)
+            time.sleep(10)
             return True
         except Exception as e:
             logging.error(f"Failed to select the product: {e}", exc_info=True)
