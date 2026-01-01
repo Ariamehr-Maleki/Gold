@@ -5,10 +5,6 @@
     "your_country_name": "Iran",
     "target_market_id": "643",
     "target_market_name": "Russian Federation"
-  },
-  "scraper_specific_params": {
-    "eping": {
-      "target_market_id": "643"
-    }
   }
+
 }

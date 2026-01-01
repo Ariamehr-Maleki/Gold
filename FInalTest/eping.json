@@ -1,0 +1,13 @@
+{
+    "config": {
+        "hs_code": "847130",
+        "target_market_id": "276",
+        "your_country_name": "[Your Country]",
+        "target_market_name": "[Target Market]"
+    },
+    "data": {
+        "status": "No notifications found",
+        "notifications": []
+    },
+    "scraped_at": "2026-01-01T11:35:35.566825"
+}

@@ -38,6 +38,7 @@ class Orchestrator:
         os.makedirs(self.scraper_output_dir, exist_ok=True)
         
         self.run_metadata = {}
+        self._resolve_country_ids()
 
     def run(self):
         """Main execution flow."""
@@ -58,6 +59,81 @@ class Orchestrator:
         self._generate_reports(final_data, mapping_report)
         self.logger.info(f"Orchestration finished. All outputs are in: {self.outdir}")
 
+    def _resolve_country_ids(self):
+        """
+        Enriches the configuration by looking up numeric IDs (M49, ITC)
+        based on the human-readable country names provided in common_params.
+        """
+        common = self.config.get("common_params", {})
+        target_name = common.get("target_market_name")
+        origin_name = common.get("your_country_name")
+
+        if not target_name and not origin_name:
+            return
+
+        # 1. Load Country Codes Reference
+        # Adjust path 'assets/country_codes.json' to where your file actually lives
+        codes_path = os.path.join(os.getcwd(), "assets", "country_codes.json")
+        
+        if not os.path.exists(codes_path):
+            self.logger.warning(f"Country codes file not found at {codes_path}. skipping ID resolution.")
+            return
+
+        try:
+            with open(codes_path, 'r', encoding='utf-8') as f:
+                country_data = json.load(f)
+        except Exception as e:
+            self.logger.error(f"Failed to load country codes: {e}")
+            return
+
+        # 2. Helper to find country data
+        def find_country(name):
+            if not name: return None
+            # Case-insensitive search on 'english' key (or whatever key holds the name)
+            for c in country_data:
+                # Assuming your json uses "english" or "name"
+                if c.get("english", "").lower() == name.lower():
+                    return c
+            return None
+
+        # 3. Resolve Target Market
+        target_data = find_country(target_name)
+        if target_data:
+            self.logger.info(f"Resolved '{target_name}': M49={target_data.get('code')}, ITC={target_data.get('itcCode')}")
+            
+            # Ensure scraper_specific_params structure exists
+            if "scraper_specific_params" not in self.config:
+                self.config["scraper_specific_params"] = {}
+
+            # -- AUTOMATIC INJECTION FOR EPING (Needs M49/Standard Code) --
+            if "eping" not in self.config["scraper_specific_params"]:
+                self.config["scraper_specific_params"]["eping"] = {}
+            
+            # Start injecting:
+            # ePing usually needs the M49 code (key 'code' in your json)
+            self.config["scraper_specific_params"]["eping"]["target_market_id"] = target_data.get("code")
+            
+            # -- AUTOMATIC INJECTION FOR TRADEMAP (Needs ITC Code) --
+            if "trademap" not in self.config["scraper_specific_params"]:
+                self.config["scraper_specific_params"]["trademap"] = {}
+            
+            # TradeMap usually needs the ITC code
+            self.config["scraper_specific_params"]["trademap"]["target_market_id"] = target_data.get("itcCode")
+
+            # Update common params too just in case
+            self.config["common_params"]["target_market_m49"] = target_data.get("code")
+            self.config["common_params"]["target_market_iso"] = target_data.get("iso2")
+            self.config["common_params"]["target_market_itc"] = target_data.get("itcCode")
+
+        else:
+            self.logger.warning(f"Could not find ID for target market: '{target_name}'")
+
+        # 4. Resolve Origin Country (if needed by MacMap or others)
+        origin_data = find_country(origin_name)
+        if origin_data:
+             # Similar logic if scrapers need origin IDs
+             self.config["common_params"]["your_country_id"] = origin_data.get("code") # or itcCode based on need
+             
     def _run_scrapers_with_dependencies(self) -> List[Dict]:
         """
         Runs scrapers in phases.

@@ -237,7 +237,8 @@ class EPingScraper:
         country_code = config['target_market_id']
         url = f"https://www.epingalert.org/en/Search/Index?countryIds=C{country_code}"
 
-        if not self.start_browser(): return None
+        if not self.start_browser(): 
+             return {"status": "Driver Start Failed", "notifications": []}
         
         try:
             logging.info(f"Navigating to {url}")
@@ -265,16 +266,16 @@ class EPingScraper:
             os.makedirs('debug_snapshots', exist_ok=True)
             self.driver.save_screenshot(f"debug_snapshots/{label}_{datetime.now():%H%M%S}.png")
         except: pass
-
+        
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Scrape ePing notifications.")
     parser.add_argument("--output", required=True, help="Output JSON file.")
     parser.add_argument("--headless", action='store_true', help="Headless mode.")
-    parser.add_argument("--hs-code", help="HS code.")
+    parser.add_argument("--hs-code", help="HS code.", required=True)
     
-    # ID arguments (Added for compatibility with orchestrator)
+    # ID arguments 
     parser.add_argument("--your-country-id", help="Numeric ID (Ignored by this scraper).")
-    parser.add_argument("--target-market-id", help="Numeric ID.")
+    parser.add_argument("--target-market-id", help="Numeric ID.", required=True)
 
     # Name arguments
     parser.add_argument("--your-country-name", help="Your country.")
@@ -282,26 +283,46 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
+    # --- ADDED LOGGING ---
+    logging.info(f"CLI ARGS RECEIVED: HS Code={args.hs_code}, Target ID={args.target_market_id}")
+
     config = {
-        "hs_code": args.hs_code if args.hs_code else "847130",
-        "target_market_id": args.target_market_id if args.target_market_id else "842",
+        "hs_code": args.hs_code, 
+        "target_market_id": args.target_market_id,
         "your_country_name": args.your_country_name if args.your_country_name else "[Your Country]",
         "target_market_name": args.target_market_name if args.target_market_name else "[Target Market]",
     }
     
-    scraper = EPingScraper(headless=args.headless, driver_path=r".\geckodriver.exe")
-    raw_result = scraper.scrape_notifications(config)
-    
-    if raw_result and raw_result.get("notifications"):
-        if EPingReportBuilder:
-            logging.info("Formatting report...")
-            builder = EPingReportBuilder(config, raw_result["notifications"])
-            final_data = builder.build()
-        else:
-            final_data = raw_result
+    # Initialize result placeholder
+    raw_result = None
 
+    try:
+        scraper = EPingScraper(headless=args.headless, driver_path=r".\geckodriver.exe")
+        raw_result = scraper.scrape_notifications(config)
+    except Exception as e:
+        logging.error(f"Execution failed: {e}")
+        raw_result = {"status": "Execution Error", "error": str(e), "notifications": []}
+
+    # If raw_result ended up None (e.g. driver failed immediately)
+    if raw_result is None:
+        raw_result = {"status": "Unknown Failure", "notifications": []}
+
+    # Prepare final payload with config included
+    final_payload = {
+        "config": config,
+        "data": raw_result,
+        "scraped_at": datetime.now().isoformat()
+    }
+
+    # Write to File
+    try:
         with open(args.output, 'w', encoding='utf-8') as f:
-            json.dump(final_data, f, ensure_ascii=False, indent=4, default=str)
-        logging.info(f"SUCCESS: Data saved to {args.output}")
-    else:
-        logging.info("No notifications found or scraper failed.")
+            # default=str handles datetime/pandas objects serialization
+            json.dump(final_payload, f, indent=4, ensure_ascii=False, default=str)
+        logging.info(f"Successfully wrote output to {args.output}")
+        
+        # Also print to stdout for piping support
+        print(json.dumps(final_payload, indent=4, default=str))
+        
+    except Exception as e:
+        logging.error(f"Failed to write JSON output: {e}")
