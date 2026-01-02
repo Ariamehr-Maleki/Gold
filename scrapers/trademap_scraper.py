@@ -127,7 +127,7 @@ class TradeMapScraperRunner:
                         raw_data, 
                         f"List of importing markets for product exported by {self.config.get('your_country_name', 'ID ' + self.config['your_country_id'])}"
                     )
-# 5. Target Market Companies
+            # 5. Target Market Companies
             logger.info("Step 5: Fetching Companies in Target Market...")
             if self.scraper.navigate_to_companies_page(self.config, country_id=self.config['target_market_id'], trade_flow='I'):
                 # Request saving as .xls, but downloader will adjust extension if needed
@@ -141,6 +141,13 @@ class TradeMapScraperRunner:
                         "count": len(raw_data),
                         "data": raw_data
                     }
+
+            
+                # Save the detected official name into metadata
+                if self.scraper.official_product_name:
+                    self.output_data["meta"] = self.output_data.get("meta", {})
+                    self.output_data["meta"]["official_product_name"] = self.scraper.official_product_name
+                
 
             # 5. Generate Factsheet
             logger.info("Generating Quantitative Factsheet JSON...")

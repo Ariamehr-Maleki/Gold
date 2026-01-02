@@ -10,7 +10,7 @@ import re
 
 def _clean_num(x):
     """
-    Converts TradeMap formatted numbers (strings with spaces, units, 'No quantity') to float.
+    Converts TradeMap formatted numbers to float.
     Returns None if conversion fails.
     """
     if pd.isna(x) or x is None:
@@ -22,8 +22,7 @@ def _clean_num(x):
     if s.lower() in ['', '-', 'n.a.', 'na', 'no quantity', 'nan', 'no quantity']:
         return None
     
-    # Remove thousands separators (spaces, non-breaking spaces) and % signs
-    # TradeMap uses \xa0 (non-breaking space) often
+    # Remove thousands separators (spaces, non-breaking spaces, commas) and % signs
     s = s.replace('\xa0', '').replace(' ', '').replace(',', '').replace('%', '')
     
     try:
@@ -33,26 +32,57 @@ def _clean_num(x):
 
 def _get_table_df(file_path):
     """
-    Reads the HTML file and extracts the main data table (id: ctl00_PageContent_MyGridView1).
-    Uses header=1 because TradeMap uses the first row for grouping headers.
+    Reads the HTML file and extracts the main data table.
+    Attempts to locate the correct header row dynamically.
     """
     try:
-        # header=1 usually aligns with the metric names (Value, Quantity, etc.)
-        tables = pd.read_html(file_path, attrs={'id': 'ctl00_PageContent_MyGridView1'}, header=1)
-        if tables:
-            df = tables[0]
-            # Clean empty rows
-            df = df.dropna(how='all').reset_index(drop=True)
-            return df
+        # TradeMap exports are often HTML files with .xls extension.
+        # We read all tables looking for the specific grid ID.
+        dfs = pd.read_html(file_path, attrs={'id': 'ctl00_PageContent_MyGridView1'}, header=None)
+        
+        if not dfs:
+            return None
+        
+        raw_df = dfs[0]
+        
+        # Strategy: Find the row that contains "Value imported" or "Value exported" to use as header
+        header_idx = -1
+        for idx, row in raw_df.iterrows():
+            row_str = " ".join([str(val) for val in row.values]).lower()
+            if "value" in row_str and ("imported" in row_str or "exported" in row_str):
+                header_idx = idx
+                break
+        
+        if header_idx != -1:
+            # Set header from the found row
+            df = raw_df.iloc[header_idx+1:].copy()
+            df.columns = raw_df.iloc[header_idx]
+        else:
+            # Fallback to standard TradeMap layout (usually row 1 is header)
+            # Re-read with header=1
+            dfs = pd.read_html(file_path, attrs={'id': 'ctl00_PageContent_MyGridView1'}, header=1)
+            df = dfs[0]
+
+        # Clean empty rows and columns
+        df = df.dropna(how='all').reset_index(drop=True)
+        return df
+
     except Exception as e:
         logging.error(f"Error reading HTML table from {file_path}: {e}")
     return None
 
+def _find_col_idx(columns, keywords):
+    """Returns the index of the first column containing any of the keywords."""
+    for idx, col in enumerate(columns):
+        col_str = str(col).lower()
+        for kw in keywords:
+            if kw in col_str:
+                return idx
+    return -1
+
 # -------------------------
 # Specific Parsers
 # -------------------------
-
-# support/data_parser.py
 
 def parse_companies_list(file_path, out_dir=None):
     """
@@ -65,24 +95,21 @@ def parse_companies_list(file_path, out_dir=None):
     df = None
     try:
         # STRATEGY: Read as HTML, targeting the specific grid ID
-        # header=0 implies the first row of the table contains the column names
         dfs = pd.read_html(
             file_path, 
             attrs={'id': 'ctl00_PageContent_MyGridView1'}, 
             header=0,
-            encoding='utf-8' # or 'latin-1' if utf-8 fails
+            encoding='utf-8'
         )
         
         if dfs:
             df = dfs[0]
         
-        # Validation
         if df is None or df.empty:
             logging.warning(f"No company data found in {file_path}")
             return []
 
         # CLEANUP: Normalize column names
-        # remove spaces, lowercase, remove parens
         df.columns = [
             str(c).strip().lower()
             .replace(' ', '_')
@@ -93,32 +120,27 @@ def parse_companies_list(file_path, out_dir=None):
         
         records = []
         for _, row in df.iterrows():
-            # Extract Company Name
             c_name = row.get("company_name")
             if not c_name or str(c_name).lower() == 'nan': 
                 continue
 
-            # Extract details based on your HTML headers
             record = {
                 "company_name": str(c_name).strip(),
                 "country": str(row.get("country", "")).strip(),
                 "city": str(row.get("city", "")).strip(),
                 "website": str(row.get("website", "")).strip(),
                 
-                # Numeric fields (handle NaNs)
                 "products_traded": _clean_num(row.get("number_of_product_or_service_categories_traded")),
                 "employees": _clean_num(row.get("number_of_employees")),
                 "turnover_usd": _clean_num(row.get("turnover_usd"))
             }
 
-            # Basic cleanup for "nan" strings in text fields
             for key in ["country", "city", "website"]:
                 if record[key].lower() == "nan":
                     record[key] = ""
 
             records.append(record)
         
-        # Save parsed version
         _save_csv(records, file_path, out_dir)
         logging.info(f"Successfully parsed {len(records)} companies.")
         return records
@@ -126,202 +148,149 @@ def parse_companies_list(file_path, out_dir=None):
     except Exception as e:
         logging.error(f"Error parsing companies HTML/Excel: {e}")
         return []
-    
-def parse_base_country_exports(file_path, out_dir=None):
-    """ Parses 'base_country_exports.html' """
+
+def parse_target_market_suppliers(file_path, out_dir=None):
+    """ Parses 'target_market_suppliers.xls' (Imports by Country) """
     df = _get_table_df(file_path)
-    if df is None: return []
+    if df is None or df.empty: return []
+
+    # Map columns dynamically
+    cols = df.columns
+    idx_partner = 0 # Always first
+    idx_val = _find_col_idx(cols, ["value imported", "usd"])
+    idx_balance = _find_col_idx(cols, ["trade balance"])
+    idx_share = _find_col_idx(cols, ["share", "%"])
+    idx_qty = _find_col_idx(cols, ["quantity", "tons", "units"])
+    idx_unit = _find_col_idx(cols, ["unit"])
+    idx_unit_val = _find_col_idx(cols, ["unit value"])
+    idx_growth_5y = _find_col_idx(cols, ["growth", "per annum", "2019-2023", "2020-2024", "2021-2025"]) # Adjust years as needed
+    idx_growth_1y = _find_col_idx(cols, ["growth", "2022-2023", "2023-2024", "2024-2025"])
+    
+    idx_dist = _find_col_idx(cols, ["distance"])
+    idx_tariff = _find_col_idx(cols, ["tariff"])
+
     records = []
     for _, row in df.iterrows():
-        label = str(row.iloc[0]).strip()
-        # FIX: Keep Total/World, only skip strictly NaN/bad rows
-        if label.lower() in ['nan', '']: continue 
-        if label.lower() == 'total': label = 'World'
+        try:
+            # First column is usually the label
+            label = str(row.iloc[idx_partner]).strip()
+            if label.lower() in ['nan', '', 'total']: 
+                if label.lower() == 'total': label = 'World'
+                else: continue
 
-        record = {
-            "partner_country": label,
-            "value_exported_usd": _clean_num(row.iloc[1]) * 1000 if _clean_num(row.iloc[1]) is not None else None,
-            "trade_balance_usd": _clean_num(row.iloc[2]) * 1000 if _clean_num(row.iloc[2]) is not None else None,
-            "share_in_base_country_exports_pct": _clean_num(row.iloc[3]),
-            "quantity_exported": _clean_num(row.iloc[4]),
-            "quantity_unit": str(row.iloc[5]).strip(),
-            "unit_value_usd": _clean_num(row.iloc[6]),
-            "growth_value_5y_pct": _clean_num(row.iloc[7]),
-            "growth_qty_5y_pct": _clean_num(row.iloc[8]),
-            "growth_value_1y_pct": _clean_num(row.iloc[9]),
-            "ranking_in_world_imports": _clean_num(row.iloc[10]),
-            "share_in_world_imports_pct": _clean_num(row.iloc[11]),
-            "tariff_faced_pct": _clean_num(row.iloc[15]) if len(row) > 15 else None
-        }
-        records.append(record)
+            record = {
+                "partner_country": label,
+                "value_imported_usd": _clean_num(row.iloc[idx_val]) * 1000 if idx_val != -1 else None,
+                "trade_balance_usd": _clean_num(row.iloc[idx_balance]) * 1000 if idx_balance != -1 else None,
+                "share_in_target_market_imports_pct": _clean_num(row.iloc[idx_share]) if idx_share != -1 else None,
+                "quantity_imported": _clean_num(row.iloc[idx_qty]) if idx_qty != -1 else None,
+                "quantity_unit": str(row.iloc[idx_unit]).strip() if idx_unit != -1 else "",
+                "unit_value_usd": _clean_num(row.iloc[idx_unit_val]) if idx_unit_val != -1 else None,
+                "growth_value_5y_pct": _clean_num(row.iloc[idx_growth_5y]) if idx_growth_5y != -1 else None,
+                "growth_value_1y_pct": _clean_num(row.iloc[idx_growth_1y]) if idx_growth_1y != -1 else None,
+                "avg_distance_km": _clean_num(row.iloc[idx_dist]) if idx_dist != -1 else None,
+                "tariff_applied_pct": _clean_num(row.iloc[idx_tariff]) if idx_tariff != -1 else None
+            }
+            records.append(record)
+        except Exception:
+            continue
+
     _save_csv(records, file_path, out_dir)
     return records
 
-def parse_target_market_suppliers(file_path, out_dir=None):
-    """ Parses 'target_market_suppliers.html' """
+def parse_base_country_exports(file_path, out_dir=None):
+    """ Parses 'base_country_exports.xls' (Exports by Country) """
     df = _get_table_df(file_path)
-    if df is None: return []
+    if df is None or df.empty: return []
 
-    # --- ADDED: Dynamic column detection for Distance ---
-    dist_col_idx = -1
-    for idx, col_name in enumerate(df.columns):
-        if "distance" in str(col_name).lower():
-            dist_col_idx = idx
-            break
-    # ----------------------------------------------------
-
+    cols = df.columns
+    idx_partner = 0
+    idx_val = _find_col_idx(cols, ["value exported", "usd"])
+    idx_share = _find_col_idx(cols, ["share", "%"])
+    idx_growth_5y = _find_col_idx(cols, ["growth", "per annum"])
+    
     records = []
     for _, row in df.iterrows():
-        label = str(row.iloc[0]).strip()
-        if label.lower() in ['nan', '']: continue
-        if label.lower() == 'total': label = 'World'
+        try:
+            label = str(row.iloc[idx_partner]).strip()
+            if label.lower() in ['nan', '']: continue
+            if label.lower() == 'total': label = 'World'
 
-        record = {
-            "partner_country": label,
-            "value_imported_usd": _clean_num(row.iloc[1]) * 1000 if _clean_num(row.iloc[1]) is not None else None,
-            "trade_balance_usd": _clean_num(row.iloc[2]) * 1000 if _clean_num(row.iloc[2]) is not None else None,
-            "share_in_target_market_imports_pct": _clean_num(row.iloc[3]),
-            "quantity_imported": _clean_num(row.iloc[4]),
-            "quantity_unit": str(row.iloc[5]).strip(),
-            "unit_value_usd": _clean_num(row.iloc[6]),
-            "growth_value_5y_pct": _clean_num(row.iloc[7]),
-            "growth_qty_5y_pct": _clean_num(row.iloc[8]),
-            "growth_value_1y_pct": _clean_num(row.iloc[9]),
-            "ranking_in_world_exports": _clean_num(row.iloc[10]),
-            "share_in_world_exports_pct": _clean_num(row.iloc[11]),
-            "avg_distance_km": _clean_num(row.iloc[dist_col_idx]) if dist_col_idx != -1 else None,
-            "tariff_applied_pct": _clean_num(row.iloc[15]) if len(row) > 15 else None
-        }
-        records.append(record)
+            record = {
+                "partner_country": label,
+                "value_exported_usd": _clean_num(row.iloc[idx_val]) * 1000 if idx_val != -1 else None,
+                "share_in_base_country_exports_pct": _clean_num(row.iloc[idx_share]) if idx_share != -1 else None,
+                "growth_value_5y_pct": _clean_num(row.iloc[idx_growth_5y]) if idx_growth_5y != -1 else None
+            }
+            records.append(record)
+        except Exception:
+            continue
+
     _save_csv(records, file_path, out_dir)
     return records
 
 def parse_global_exports(file_path, out_dir=None):
-    """ 
-    Parses 'global_exports.html' (List of Exporters)
-    Formerly parse_world_snapshot
-    """
+    """ Parses 'global_exports.xls' (List of Exporters) """
     df = _get_table_df(file_path)
-    if df is None: return []
-    records = []
-    for _, row in df.iterrows():
-        label = str(row.iloc[0]).strip()
-        if label.lower() in ['nan', '']: continue
-        if label.lower() == 'total': label = 'World'
+    if df is None or df.empty: return []
 
-        record = {
-            "exporter_country": label,
-            "value_exported_usd": _clean_num(row.iloc[1]) * 1000 if _clean_num(row.iloc[1]) is not None else None,
-            "trade_balance_usd": _clean_num(row.iloc[2]) * 1000 if _clean_num(row.iloc[2]) is not None else None,
-            "quantity_exported": _clean_num(row.iloc[3]),
-            "quantity_unit": str(row.iloc[4]).strip(),
-            "unit_value_usd": _clean_num(row.iloc[5]),
-            "growth_value_5y_pct": _clean_num(row.iloc[6]),
-            "growth_qty_5y_pct": _clean_num(row.iloc[7]),
-            "growth_value_1y_pct": _clean_num(row.iloc[8]),
-            "share_in_world_exports_pct": _clean_num(row.iloc[9]),
-            "avg_distance_km": _clean_num(row.iloc[10]),
-            "concentration_index": _clean_num(row.iloc[11])
-        }
-        records.append(record)
-    _save_csv(records, file_path, out_dir)
-    return records
-
-def parse_global_imports(file_path, out_dir=None):
-    """
-    Parses 'global_imports.html' (List of Importers).
-    CORRECTED MAPPING based on HTML structure:
-    0: Importers
-    1: Value
-    2: Balance
-    3: Quantity (No Share column here)
-    4: Unit
-    5: Unit Value
-    6: Growth Val 5y
-    7: Growth Qty 5y
-    8: Growth Val 1y
-    9: Share in World
-    """
-    df = _get_table_df(file_path)
-    if df is None: return []
-
-    records = []
+    cols = df.columns
+    idx_exporter = 0
+    idx_val = _find_col_idx(cols, ["value exported", "usd"])
+    idx_share = _find_col_idx(cols, ["share", "%"])
+    idx_growth_5y = _find_col_idx(cols, ["growth", "per annum"])
     
-    for _, row in df.iterrows():
-        label = str(row.iloc[0]).strip()
-        
-        # Keep World/Total, skip nan
-        if label.lower() in ['nan', '']: continue
-        if label.lower() == 'total': label = 'World'
-
-        record = {
-            "importer_country": label,
-            "value_imported_usd": _clean_num(row.iloc[1]) * 1000 if _clean_num(row.iloc[1]) is not None else None,
-            "trade_balance_usd": _clean_num(row.iloc[2]) * 1000 if _clean_num(row.iloc[2]) is not None else None,
-            "quantity_imported": _clean_num(row.iloc[3]),
-            "quantity_unit": str(row.iloc[4]).strip(),
-            # [FIX] Unit Value is Index 5
-            "unit_value_usd": _clean_num(row.iloc[5]),
-            # [FIX] Growth Val 5y is Index 6
-            "growth_value_5y_pct": _clean_num(row.iloc[6]),
-            "growth_qty_5y_pct": _clean_num(row.iloc[7]),
-            "growth_value_1y_pct": _clean_num(row.iloc[8]),
-            "share_in_world_imports_pct": _clean_num(row.iloc[9]),
-            "avg_distance_km": _clean_num(row.iloc[10]) if len(row) > 10 else None,
-            "concentration_index": _clean_num(row.iloc[11]) if len(row) > 11 else None,
-            "tariff_faced_pct": _clean_num(row.iloc[12]) if len(row) > 12 else None
-        }
-        records.append(record)
-
-    _save_csv(records, file_path, out_dir)
-    return records
-
-def parse_global_imports(file_path, out_dir=None):
-    """
-    Parses global importers table from TradeMap HTML.
-    Matches real column order from the page.
-    """
-    df = _get_table_df(file_path)
-    if df is None or df.empty:
-        return []
-
     records = []
-
     for _, row in df.iterrows():
-        importer = str(row.iloc[0]).strip()
-        if not importer or importer.lower() == 'nan':
+        try:
+            label = str(row.iloc[idx_exporter]).strip()
+            if label.lower() in ['nan', '']: continue
+            if label.lower() == 'total': label = 'World'
+
+            record = {
+                "exporter_country": label,
+                "value_exported_usd": _clean_num(row.iloc[idx_val]) * 1000 if idx_val != -1 else None,
+                "share_in_world_exports_pct": _clean_num(row.iloc[idx_share]) if idx_share != -1 else None,
+                "growth_value_5y_pct": _clean_num(row.iloc[idx_growth_5y]) if idx_growth_5y != -1 else None
+            }
+            records.append(record)
+        except Exception:
             continue
 
-        record = {
-            "importer_country": importer,
+    _save_csv(records, file_path, out_dir)
+    return records
 
-            # USD thousand → USD
-            "value_imported_usd": (
-                _clean_num(row.iloc[1]) * 1000
-                if _clean_num(row.iloc[1]) is not None else None
-            ),
-            "trade_balance_usd": (
-                _clean_num(row.iloc[2]) * 1000
-                if _clean_num(row.iloc[2]) is not None else None
-            ),
+def parse_global_imports(file_path, out_dir=None):
+    """ Parses 'global_imports.xls' (List of Importers) """
+    df = _get_table_df(file_path)
+    if df is None or df.empty: return []
 
-            "quantity_imported": _clean_num(row.iloc[3]),
-            "quantity_unit": str(row.iloc[4]).strip(),
+    cols = df.columns
+    idx_importer = 0
+    idx_val = _find_col_idx(cols, ["value imported", "usd"])
+    idx_growth_5y = _find_col_idx(cols, ["growth", "per annum"])
+    idx_growth_1y = _find_col_idx(cols, ["growth", "2022-2023", "2023-2024", "2024-2025"])
+    idx_share = _find_col_idx(cols, ["share", "%"])
+    idx_unit_val = _find_col_idx(cols, ["unit value"])
 
-            "unit_value_usd": _clean_num(row.iloc[5]),
+    records = []
+    for _, row in df.iterrows():
+        try:
+            label = str(row.iloc[idx_importer]).strip()
+            if label.lower() in ['nan', '']: continue
+            if label.lower() == 'total': label = 'World'
 
-            "growth_value_5y_pct": _clean_num(row.iloc[6]),
-            "growth_qty_5y_pct": _clean_num(row.iloc[7]),
-            "growth_value_1y_pct": _clean_num(row.iloc[8]),
-
-            "share_in_world_imports_pct": _clean_num(row.iloc[9]),
-
-            "avg_distance_km": _clean_num(row.iloc[10]) if len(row) > 10 else None,
-            "concentration_index": _clean_num(row.iloc[11]) if len(row) > 11 else None,
-            "avg_tariff_pct": _clean_num(row.iloc[12]) if len(row) > 12 else None,
-        }
-
-        records.append(record)
+            record = {
+                "importer_country": label,
+                "value_imported_usd": _clean_num(row.iloc[idx_val]) * 1000 if idx_val != -1 else None,
+                "growth_value_5y_pct": _clean_num(row.iloc[idx_growth_5y]) if idx_growth_5y != -1 else None,
+                "growth_value_1y_pct": _clean_num(row.iloc[idx_growth_1y]) if idx_growth_1y != -1 else None,
+                "share_in_world_imports_pct": _clean_num(row.iloc[idx_share]) if idx_share != -1 else None,
+                "unit_value_usd": _clean_num(row.iloc[idx_unit_val]) if idx_unit_val != -1 else None
+            }
+            records.append(record)
+        except Exception:
+            continue
 
     _save_csv(records, file_path, out_dir)
     return records
@@ -351,7 +320,6 @@ def parse_snapshot_excel(file_path: str, out_dir: str = None) -> list:
         if "global_imports" in fname:
             return parse_global_imports(file_path, out_dir)
         elif "global_exports" in fname or "world_snapshot" in fname:
-            # Handle legacy name 'world_snapshot' as global exports
             return parse_global_exports(file_path, out_dir)
         elif "base_country" in fname:
             return parse_base_country_exports(file_path, out_dir)
@@ -362,14 +330,14 @@ def parse_snapshot_excel(file_path: str, out_dir: str = None) -> list:
         with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
             content = f.read(4000).lower()
 
-        if "list of importing markets for the product exported by" in content:
+        if "list of importing markets" in content:
             if "exported by world" in content: return parse_global_imports(file_path, out_dir)
             return parse_base_country_exports(file_path, out_dir)
-        elif "list of supplying markets for the product imported by" in content:
+        elif "list of supplying markets" in content:
             return parse_target_market_suppliers(file_path, out_dir)
-        elif "list of exporters for the selected product" in content:
+        elif "list of exporters" in content:
             return parse_global_exports(file_path, out_dir)
-        elif "list of importers for the selected product" in content:
+        elif "list of importers" in content:
             return parse_global_imports(file_path, out_dir)
 
         logging.error("Could not determine parser type.")

@@ -1,12 +1,11 @@
+# orchestrator/doc_generator.py
+
 import json
 import os
 import logging
 import re
-from datetime import datetime
-import matplotlib.pyplot as plt
 from docx import Document
-from docx.shared import Inches, Pt
-from docx.enum.text import WD_ALIGN_PARAGRAPH
+from docx.shared import Inches
 
 # Configuration
 logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
@@ -14,23 +13,10 @@ logger = logging.getLogger(__name__)
 
 class FactsheetGenerator:
     def __init__(self, json_path, output_dir):
+        # We now expect json_path to point to the Hierarchical 'factsheet_data.json'
         self.json_path = json_path
         self.output_dir = output_dir
         self.data = self._load_data()
-        
-        # Extract high-level sections for easier access
-        self.meta = self.data.get('meta', {})
-        self.summary = self.data.get('summary', {})
-        self.market = self.data.get('market_size_and_growth', {})
-        self.comp = self.data.get('competition_and_suppliers', {})
-        self.access = self.data.get('market_access_conditions', {})
-        self.history = self.data.get('historical_data', {})
-        
-        self.target_market = self.meta.get('importing_country', 'Target Market')
-        self.your_country = self.meta.get('exporting_country', 'Your Country')
-        self.hs_code = self.meta.get('product_hs6', 'N/A')
-        
-        # Prepare place to store calculated values
         self.replacements = {}
 
     def _load_data(self):
@@ -39,158 +25,83 @@ class FactsheetGenerator:
         with open(self.json_path, 'r', encoding='utf-8') as f:
             return json.load(f)
 
-    def safe_num(self, value, default=0.0):
-        """Converts value to float safely. Handles lists, strings, and None."""
-        if isinstance(value, list):
-            # If it's a list (like unit values), take the last non-null item
-            valid_items = [x for x in value if x is not None]
-            return float(valid_items[-1]) if valid_items else default
-        if value in [None, "N/A", "", "null"]:
-            return default
-        try:
-            # Remove non-numeric chars like '$' or ',' if present
-            clean_val = str(value).replace('$', '').replace(',', '').replace(' ', '')
-            return float(clean_val)
-        except (ValueError, TypeError):
-            return default
-
-    def _generate_charts(self):
-        """Generates and saves charts to the output directory."""
-        graphs_dir = os.path.join(self.output_dir, 'graphs')
-        os.makedirs(graphs_dir, exist_ok=True)
-        
-        # 1. Import History Line Chart
-        years = self.history.get('years', [])
-        values = self.history.get('target_market_import_values_usd', [])
-        line_path = os.path.join(graphs_dir, 'imports_line.png')
-
-        if years and values and len(years) == len(values):
-            plt.figure(figsize=(6, 3))
-            # Convert to Millions for readability
-            vals_m = [self.safe_num(v)/1000000 for v in values]
-            plt.plot(years, vals_m, marker='o', linestyle='-', color='#0056b3', linewidth=2)
-            plt.title(f"Imports of HS {self.hs_code} to {self.target_market}", fontsize=10)
-            plt.ylabel("Value (USD Million)", fontsize=8)
-            plt.grid(True, linestyle='--', alpha=0.5)
-            plt.xticks(years, rotation=0, fontsize=8)
-            plt.yticks(fontsize=8)
-            plt.tight_layout()
-            plt.savefig(line_path, dpi=150)
-            plt.close()
-        else:
-            line_path = None
-
-        # 2. Market Share Pie Chart
-        suppliers = self.comp.get('all_suppliers', [])
-        pie_path = os.path.join(graphs_dir, 'share_pie.png')
-        
-        if suppliers:
-            # Sort and take top 5
-            valid_s = [s for s in suppliers if self.safe_num(s.get('market_share_pct')) > 0]
-            top_5 = sorted(valid_s, key=lambda x: self.safe_num(x['market_share_pct']), reverse=True)[:5]
+    def _get(self, path, default="N/A"):
+        """Helper to navigate the Hierarchical JSON safely."""
+        keys = path.split('.')
+        val = self.data
+        for key in keys:
+            if isinstance(val, dict):
+                val = val.get(key)
+            elif isinstance(val, list):
+                try:
+                    val = val[int(key)]
+                except (IndexError, ValueError):
+                    return default
+            else:
+                return default
             
-            labels = [s['name'] for s in top_5]
-            sizes = [self.safe_num(s['market_share_pct']) for s in top_5]
-            
-            # Calculate "Others"
-            total_top = sum(sizes)
-            if total_top < 100:
-                labels.append("Others")
-                sizes.append(100 - total_top)
-            
-            colors = ['#4e79a7', '#f28e2b', '#e15759', '#76b7b2', '#59a14f', '#edc948']
-            plt.figure(figsize=(5, 3))
-            plt.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=140, colors=colors, textprops={'fontsize': 7})
-            plt.title(f"Market Share in {self.target_market}", fontsize=9)
-            plt.axis('equal')
-            plt.tight_layout()
-            plt.savefig(pie_path, dpi=150)
-            plt.close()
-        else:
-            pie_path = None
-
-        return line_path, pie_path
+            if val is None:
+                return default
+        return str(val)
 
     def build_mappings(self):
-        """Calculates all metrics and creates the dictionary for Word replacement."""
-        
-        # --- Data Extraction ---
-        tm_imports = self.safe_num(self.market.get('target_market_total_imports_usd'))
-        world_imports = self.safe_num(self.market.get('world_total_imports_usd')) or 1.0
-        
-        tm_cagr = self.safe_num(self.market.get('target_market_growth_cagr_5y_pct'))
-        world_cagr = self.safe_num(self.market.get('world_market_growth_cagr_5y_pct'))
-        tm_last_year_growth = self.safe_num(self.market.get('target_market_growth_last_year_pct'))
+        """
+        Maps the Hierarchical JSON keys to the specific Placeholders used in the Word Template.
+        """
+        # Shortcuts for cleaner code
+        h = "Header"
+        cov = "Cover"
+        intro = "Introduction"
+        size = "Size_of_the_Market"
+        growth = "Growth_of_the_Market"
+        uv = "Unit_Value"
+        comp = "Competition"
+        ma = "Market_Access"
 
-        # Find "Your Country" in supplier list
-        suppliers = self.comp.get('all_suppliers', [])
-        yc_data = next((s for s in suppliers if s.get('name') == self.your_country), {})
-        
-        yc_val = self.safe_num(yc_data.get('value_usd'))
-        yc_share = self.safe_num(yc_data.get('market_share_pct'))
-        yc_cagr = self.safe_num(yc_data.get('growth_cagr_pct'))
-        
-        # --- Unit Values (Handling Lists) ---
-        uv_data_raw = self.data.get('unit_values', {}).get('target_market_avg_unit_value_usd')
-        uv_market = self.safe_num(uv_data_raw) 
-        
-        uv_yc = self.safe_num(yc_data.get('unit_value_latest'))
-
-        # --- Logic & Text Generation ---
-        growth_compare = "higher" if tm_cagr > world_cagr else "lower"
-        share_trend = "increasing" if tm_cagr > world_cagr else "decreasing"
-        is_sustained = "sustained" if (tm_cagr > 0 and tm_last_year_growth > 0) else "not sustained"
-        last_year_trend = "growing" if tm_last_year_growth > 0 else "contracting"
-        yc_share_trend = "gained" if yc_cagr > tm_cagr else "lost"
-        uv_compare = "higher than" if uv_yc > uv_market else "lower than"
-        uv_trend = "appreciating" if tm_cagr > 0 else "fluctuating"
-        conc_level = self.comp.get('concentration_level', 'unknown')
-
-        # --- Dictionary Construction ---
         self.replacements = {
-            # Header Info
-            "[Name of Country]": self.target_market,
-            "[Target Market]": self.target_market,
-            "[Target market]": self.target_market,
-            "[Your country]": self.your_country,
-            "[Your Country]": self.your_country,
-            "[product]": f"HS {self.hs_code}",
-            "HS 281511": f"HS {self.hs_code}",
+            # --- Header & Intro ---
+            "[Name of Country]": self._get(f"{h}.Target_Market"),
+            "[Target Market]": self._get(f"{h}.Target_Market"),
+            "[Target market]": self._get(f"{h}.Target_Market"),
+            "[Your country]": self._get(f"{intro}.Your_Country"),
+            "[Your Country]": self._get(f"{intro}.Your_Country"),
+            "[product]": self._get(f"{intro}.Product_Name"),
+            "HS 281511": self._get(f"{intro}.HS_Code"), # Fallback for hardcoded template text
             
-            # Summary Section
-            "[world_rank]": str(self.summary.get('target_market_world_rank', 'N/A')),
-            "[capital_city]": "See Country Profile", 
-            "[population]": "See Country Profile",
-            "[currency]": "N/A",
+            # --- Summary (Derived from Trade Overview) ---
+            "[world_rank]": self._get(f"Trade_Overview.Rank_in_World_For_Imports_Of_This_Product"),
+            "[capital_city]": self._get(f"Opportunity_Summary.Capital_City"),
+            "[population]": self._get(f"Opportunity_Summary.Population"),
+            "[currency]": self._get(f"Opportunity_Summary.Currency"),
             
-            # Size
-            "[tm_total_imports]": f"{tm_imports:,.0f}",
-            "[tm_share_of_world]": f"{(tm_imports / world_imports * 100):.2f}",
-            "[imports_from_yc]": f"{yc_val:,.0f}",
-            "[yc_share_of_tm]": f"{yc_share:.2f}",
+            # --- Size ---
+            "[tm_total_imports]": self._get(f"{size}.Target_Market_Imported_Value_From_World_USD"),
+            "[tm_share_of_world]": self._get(f"{size}.World_Import_Share_Percent"),
+            "[imports_from_yc]": self._get(f"{size}.Target_Market_Imported_Value_From_Your_Country_USD"),
+            "[yc_share_of_tm]": self._get(f"{size}.Your_Country_Share_Of_Target_Imports_Percent"),
             
-            # Growth
-            "[tm_growth_cagr]": f"{tm_cagr:.2f}",
-            "[tm_vs_world_growth]": growth_compare,
-            "[world_growth_cagr]": f"{world_cagr:.2f}",
-            "[tm_share_trend]": share_trend,
-            "[sustained / not sustained]": is_sustained,
-            "[tm_last_year_trend]": last_year_trend,
-            "[tm_last_year_growth]": f"{tm_last_year_growth:.2f}",
-            "[yc_growth_cagr]": f"{yc_cagr:.2f}",
-            "[yc_share_change]": yc_share_trend,
+            # --- Growth ---
+            "[tm_growth_cagr]": self._get(f"{growth}.Five_Year_Growth_Rate_Target_Market_Percent"),
+            "[tm_vs_world_growth]": self._get(f"{growth}.Performance_Compared_To_World"),
+            "[world_growth_cagr]": self._get(f"{growth}.World_Imports_Growth_Rate_Percent"),
+            "[tm_share_trend]": self._get(f"{growth}.Target_Market_Share_Trend"),
+            "[sustained / not sustained]": self._get(f"{growth}.Recent_Growth_Sustained_or_Not"),
+            "[tm_last_year_trend]": self._get(f"{growth}.Recent_Growth_Direction"),
+            "[tm_last_year_growth]": self._get(f"{growth}.Recent_Growth_Rate_Percent"),
+            "[yc_growth_cagr]": self._get(f"{growth}.Five_Year_Growth_Rate_Your_Country_Percent"),
+            "[yc_share_change]": self._get(f"{growth}.Your_Country_Market_Share_Change"),
             
-            # Unit Values
-            "58,630 USD/ unit": f"{uv_market:,.0f} USD/unit",
-            "[more than/less than]": uv_compare,
-            "[appreciated/depreciated]": uv_trend,
-            "[country X]": suppliers[0]['name'] if len(suppliers) > 0 else "N/A",
-            "[country Y]": suppliers[-1]['name'] if len(suppliers) > 0 else "N/A",
-            "[rather heterogeneous/somewhat homogeneous]": "heterogeneous" if len(suppliers) > 10 else "homogeneous",
+            # --- Unit Values ---
+            "58,630 USD/ unit": f"{self._get(f'{uv}.Target_Market_Avg_Unit_Value.Value_USD')} {self._get(f'{uv}.Target_Market_Avg_Unit_Value.Unit')}",
+            "[more than/less than]": self._get(f"{uv}.Comparison_To_World_Unit_Value_Statement"),
+            "[appreciated/depreciated]": self._get(f"{uv}.Target_Market_Unit_Value_Trend"),
+            "[country X]": self._get(f"{uv}.Top_Ten_Suppliers_Unit_Value_Range.Highest_Unit_Value.Country"),
+            "[country Y]": self._get(f"{uv}.Top_Ten_Suppliers_Unit_Value_Range.Lowest_Unit_Value.Country"),
+            "[rather heterogeneous/somewhat homogeneous]": self._get(f"{uv}.Top_Ten_Suppliers_Unit_Value_Range.Market_Heterogeneity_Statement"),
             
-            # Competition
-            "[not concentrated / moderately concentrated / concentrated]": conc_level,
-            "[your_region]": "your region",
+            # --- Competition ---
+            "[not concentrated / moderately concentrated / concentrated]": self._get(f"{comp}.Market_Concentration_Level"),
+            "[your_region]": "your region", # Static placeholder
         }
 
     def _process_placeholders(self, doc):
@@ -198,6 +109,7 @@ class FactsheetGenerator:
         def replace_in_text(text):
             for key, val in self.replacements.items():
                 if key in text:
+                    # Robust replacement handling strings
                     text = text.replace(key, str(val))
             return text
 
@@ -213,22 +125,24 @@ class FactsheetGenerator:
                             p.text = replace_in_text(p.text)
 
     def _fill_tariff_table(self, doc):
-        """Fills the Market Access/Tariff table."""
+        """Fills the Tariff table from the Market Access section."""
         target_table = None
         for t in doc.tables:
             if not t.rows: continue
+            # Identify table by checking header for "tariff" or "code"
             header_text = t.rows[0].cells[0].text.lower()
             if "tariff" in header_text or "code" in header_text:
                 target_table = t
                 break
         
         if not target_table:
-            logger.warning("Tariff table not found in template.")
             return
 
-        tariffs = self.access.get('customs_tariffs', [])
+        tariffs = self.data.get("Market_Access", {}).get("Tariff_Table", [])
         
+        # We fill up to 5 rows, assuming row 0 is header
         for i in range(5):
+            # Add row if needed
             if i + 1 >= len(target_table.rows):
                 if i < len(tariffs): target_table.add_row()
                 else: break 
@@ -236,97 +150,47 @@ class FactsheetGenerator:
             row = target_table.rows[i + 1]
             if i < len(tariffs):
                 item = tariffs[i]
-                row.cells[0].text = self.hs_code
-                desc = self.meta.get('product_description', 'Product')
-                if len(row.cells) > 1: row.cells[1].text = desc[:50]
-                
-                rate = "N/A"
-                for k, v in item.items():
-                    if "Applied" in k or "MFN" in k:
-                        rate = str(v)
-                        break
-                if len(row.cells) > 2: row.cells[2].text = rate
-                for j in range(3, len(row.cells)):
-                    row.cells[j].text = "-"
+                row.cells[0].text = str(item.get("National_Tariff_Line_Code", ""))
+                if len(row.cells) > 1: row.cells[1].text = str(item.get("Product_Description", ""))[:50]
+                if len(row.cells) > 2: row.cells[2].text = str(item.get("MFN_or_General_Tariff", ""))
+                # Add other columns as needed matching template columns
             else:
+                # Clear unused rows
                 for cell in row.cells: cell.text = ""
-
-    def _fill_importers_table(self, doc):
-        """Fills the Potential Business Partners table."""
-        target_table = None
-        for t in doc.tables:
-            if not t.rows: continue
-            if "company" in t.rows[0].cells[0].text.lower():
-                target_table = t
-                break
-        
-        if not target_table: return
-
-        partners = self.data.get('potential_importers', [])
-        
-        for i in range(5):
-            if i + 1 >= len(target_table.rows):
-                if i < len(partners): target_table.add_row()
-                else: break
-            
-            row = target_table.rows[i+1]
-            if i < len(partners):
-                p = partners[i]
-                row.cells[0].text = p.get('name', 'N/A')
-                if len(row.cells) > 1: row.cells[1].text = p.get('city', 'N/A')
-                if len(row.cells) > 2: row.cells[2].text = p.get('website', 'N/A')
-            else:
-                for cell in row.cells: cell.text = ""
-
-    def _insert_images(self, doc, line_path, pie_path):
-        """Finds image placeholders and replaces them with generated graphs."""
-        placeholders = {
-            "[img_line_graph_placeholder]": line_path,
-            "[img_pie_chart_placeholder]": pie_path
-        }
-        
-        for p in doc.paragraphs:
-            for ph, path in placeholders.items():
-                if ph in p.text:
-                    p.text = ""
-                    if path and os.path.exists(path):
-                        run = p.add_run()
-                        run.add_picture(path, width=Inches(5.5))
-                    else:
-                        p.text = "[Graph Data Unavailable]"
 
     def process_document(self, template_path):
-        logger.info("Loading template...")
+        logger.info(f"Loading template from {template_path}...")
         doc = Document(template_path)
         
-        line_img, pie_img = self._generate_charts()
+        # 1. Build the mapping dictionary
         self.build_mappings()
         
-        # --- NEW: Save Mappings to JSON ---
-        json_data_path = os.path.join(self.output_dir, 'factsheet_data.json')
-        try:
-            with open(json_data_path, 'w', encoding='utf-8') as f:
-                json.dump(self.replacements, f, indent=4, ensure_ascii=False)
-            logger.info(f"Factsheet data (JSON) saved to: {json_data_path}")
-        except Exception as e:
-            logger.error(f"Failed to save factsheet JSON: {e}")
-
+        # 2. Replace simple placeholders
         self._process_placeholders(doc)
-        self._fill_tariff_table(doc)
-        self._fill_importers_table(doc)
-        self._insert_images(doc, line_img, pie_img)
         
-        output_filename = f"Factsheet_{self.hs_code}_{self.target_market}.docx"
-        output_filename = re.sub(r'[\\/*?:"<>|]', "", output_filename)
+        # 3. Fill specific tables
+        self._fill_tariff_table(doc)
+        # Note: You can add _fill_importers_table here similar to tariff table if needed
+        
+        # 4. Save
+        output_filename = f"Factsheet_{self._get('Header.Product')}_{self._get('Header.Target_Market')}.docx"
+        output_filename = re.sub(r'[\\/*?:"<>|]', "", output_filename) # Sanitize filename
         save_path = os.path.join(self.output_dir, output_filename)
         
         doc.save(save_path)
-        logger.info(f"Report saved to: {save_path}")
-
-    def print_report(self):
-        pass
+        logger.info(f"Report generated successfully: {save_path}")
 
 def run(json_path, template_path, output_dir):
+    # Important: We assume json_path passed here is the NEW factsheet_data.json
+    # If the orchestrator passes final_report.json, we swap it here.
+    
+    if "final_report.json" in json_path:
+        # Switch to the structured factsheet data file
+        factsheet_json_path = os.path.join(os.path.dirname(json_path), 'factsheet_data.json')
+        if os.path.exists(factsheet_json_path):
+            json_path = factsheet_json_path
+            logger.info(f"Switched input to structured data: {json_path}")
+
     gen = FactsheetGenerator(json_path, output_dir)
     gen.process_document(template_path)
 

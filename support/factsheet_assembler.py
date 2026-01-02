@@ -1,384 +1,298 @@
-"""
-Quantitative Export Factsheet Assembler
-
-Merges parsed snapshot data (world, target market, your country) 
-into a populated Factsheet JSON structure.
-
-Core idea: Only populate sections we CAN fill from the 3 Excels.
-Everything else remains empty/untouched.
-"""
-
-import json
-from typing import Dict, List, Optional, Any
-from support.spider_core import logging
-
+import math
+from datetime import datetime
+from typing import Dict, List, Any, Optional
 
 class FactsheetAssembler:
-    """Assembles a populated Factsheet JSON from parsed snapshot data."""
-    
+    """
+    Assembles the 'Quantitative_Export_Factsheet' section of the report
+    based on TradeMap data.
+    """
+
     def __init__(self, config: Dict[str, str]):
-        """
-        Args:
-            config: dict with keys:
-                - your_country: str (e.g., "Italy")
-                - target_market: str (e.g., "Germany")
-                - product_name: str (e.g., "Product X")
-                - hs_code: str (e.g., "123456")
-                - year: str (e.g., "2024")
-        """
         self.config = config
-        self.logger = logging
+        self.target_market = config.get("target_market_name", "Target Market")
+        self.your_country = config.get("your_country_name", "Your Country")
+        self.product_name = config.get("product_name", config.get("hs_code", ""))
+        self.hs_code = config.get("hs_code", "")
         
-    def build(
-        self,
-        world_data: List[Dict[str, Any]],
-        target_data: List[Dict[str, Any]],
-        your_country_data: List[Dict[str, Any]]
-    ) -> Dict[str, Any]:
+    def build(self, world_data: List[Dict], target_data: List[Dict], your_country_data: List[Dict], companies_data: List[Dict] = None) -> Dict[str, Any]:
         """
-        Build populated Factsheet JSON.
+        Main build method.
+        """
+        # --- Pre-calculate Lookups ---
+        # 1. World Row in Target Market Data (Target Market's imports from World)
+        row_tm_world = self._find_row(target_data, "partner_country", "World")
         
-        Args:
-            world_data: Parsed world imports (from world_snapshot.xls)
-            target_data: Parsed target market imports (from target_country.xls)
-            your_country_data: Parsed your country exports (from your_country_exports.xls)
-            
-        Returns:
-            Populated Factsheet JSON dict
-        """
+        # 2. Your Country Row in Target Market Data (Target Market's imports from You)
+        row_tm_yc = self._find_row(target_data, "partner_country", self.your_country)
+        
+        # 3. World Row in Global Imports (World's total imports)
+        row_global_world = self._find_row(world_data, "importer_country", "World")
+        
+        # 4. Target Market Row in Global Imports (Target Market's rank/share in world)
+        row_global_tm = self._find_row(world_data, "importer_country", self.target_market)
+
+        # 5. World Row in Your Country Exports (Your total exports to world)
+        row_yc_world_exports = self._find_row(your_country_data, "partner_country", "World")
+
         return {
-            "Quantitative_Export_Factsheet": {
-                "Header": self._build_header(),
-                "The_Product": self._build_the_product(),
-                "Target_Market_-_Name_of_Country": self._build_target_market(),
-                "Total_exports_from_Your_country_in_year_to_the_world": 
-                    self._build_total_exports(your_country_data),
-                "Rank_in_World_for_Imports_of_this_Product": 
-                    self._build_world_rank(world_data),
-                "Size_of_the_Market": 
-                    self._build_market_size(world_data, target_data),
-                "Growth_of_the_Market": 
-                    self._build_market_growth(world_data, target_data, your_country_data),
-                "Unit_Value": 
-                    self._build_unit_value(target_data, world_data),
-                "Competition": 
-                    self._build_competition(target_data),
-                "Data_sources": self._build_data_sources()
+            "Header": {
+                "Header_Logo": "", # Placeholder
+                "Product": self.hs_code,
+                "Target_Market": self.target_market,
+                "Month_Year": datetime.now().strftime("%B %Y")
+            },
+            "Cover": {
+                "Place_Your_Logo_Here_Repeat": "",
+                "Product_Section_Title": f"Product: {self.product_name}",
+                "Target_Market_Name": self.target_market
+            },
+            "Introduction": {
+                "Product_Name": self.product_name,
+                "HS_Code": self.hs_code,
+                "Your_Country": self.your_country,
+                "Target_Market": self.target_market
+            },
+            "Visuals": {
+                "Product_Image_Good_Quality": "", 
+                "World_or_Regional_Map_Highlighting_Target": ""
+            },
+            "Trade_Overview": self._build_trade_overview(row_yc_world_exports, row_global_tm),
+            "Opportunity_Summary": {
+                "Summary_Text": f"Opportunity analysis for {self.your_country} exporting {self.hs_code} to {self.target_market}.",
+                "Capital_City": "", # TradeMap doesn't provide this, leaving empty for template
+                "Population": "",
+                "GDP_Per_Capita": "",
+                "Currency": "",
+                "Languages": "",
+                "Country_Profile_Link": f"https://www.trademap.org/Country_SelProductCountry.aspx?nvpm=1|{self.config.get('target_market_id','')}"
+            },
+            "Size_of_the_Market": self._build_market_size(row_tm_world, row_global_world, row_tm_yc),
+            "Growth_of_the_Market": self._build_market_growth(row_tm_world, row_global_world, row_tm_yc),
+            "Growth_Visuals_and_Seasonality": {
+                "Line_Graph_Target_Market_Imports_5_10_Years": "[GRAPH_PLACEHOLDER]",
+                "Comments_On_Imports_Seasonality": "Seasonality data requires monthly timeseries analysis."
+            },
+            "Unit_Value": self._build_unit_value(row_tm_world, row_global_world, row_tm_yc, target_data),
+            "Competition": self._build_competition(target_data, row_tm_yc),
+            
+            # --- Placeholders for Other Scrapers ---
+            # These will be merged by the Orchestrator/Report Builder
+            "Market_Access": {}, 
+            "Non_Tariff_Measures": {},
+            
+            "Potential_Business_Partners": self._build_companies(companies_data),
+            "Other_Promising_Markets_By_2025": {
+                "Region_Name": "Global",
+                "Regional_Markets_List_And_Justification": ["Analysis required based on Export Potential Map"],
+                "Global_Markets_List_And_Justification": ["Analysis required based on Export Potential Map"]
+            },
+            "Key_Insights": {
+                "Final_Recommendations": "Review unit value competitiveness and market access requirements."
+            },
+            "Data_Sources": ["ITC Trade Map"],
+            "Contact_Information": {
+                "Organization_Website": "",
+                "Email_Address": "",
+                "Phone_Number": ""
+            },
+            "Footer": {
+                "Footer_Logo": ""
             }
         }
-    
-    # ========================================================================
-    # SECTION BUILDERS
-    # ========================================================================
-    
-    def _build_header(self) -> Dict[str, str]:
-        """Header from config."""
+
+    # --- Section Builders ---
+
+    def _build_trade_overview(self, yc_world_row, global_tm_row):
         return {
-            "Product": self.config.get("product_name", ""),
-            "Target_Market": self.config.get("target_market", ""),
-            "Month_Year": self.config.get("year", ""),
-            "Logo_1": "",
-            "Logo_2": ""
+            "Total_Exports_From_Your_Country_To_World": {
+                "Year": "2024", # Ideally dynamic
+                "USD_Value": self._fmt_usd(yc_world_row.get("value_exported_usd")) if yc_world_row else "N/A"
+            },
+            "Rank_in_World_For_Imports_Of_This_Product": str(int(global_tm_row.get("ranking_in_world_imports", 0))) if global_tm_row else "N/A"
         }
-    
-    def _build_the_product(self) -> Dict[str, str]:
-        """Product info from config."""
-        return {
-            "Product": self.config.get("product_name", ""),
-            "HS_Code": self.config.get("hs_code", "")
-        }
-    
-    def _build_target_market(self) -> Dict[str, str]:
-        """Target market name."""
-        return {
-            "Target_market": self.config.get("target_market", "")
-        }
-    
-    def _build_total_exports(self, your_country_data: List[Dict]) -> Dict[str, Any]:
-        """
-        Your country's total exports to the world.
-        
-        Finds "World" entry in your_country_data.
-        """
-        world_entry = self._find_world_entry(your_country_data)
+
+    def _build_market_size(self, tm_world, global_world, tm_yc):
+        tm_val = tm_world.get("value_imported_usd", 0) if tm_world else 0
+        global_val = global_world.get("value_imported_usd", 0) if global_world else 1 # Avoid div/0
+        yc_val = tm_yc.get("value_imported_usd", 0) if tm_yc else 0
         
         return {
-            "Your_country": self.config.get("your_country", ""),
-            "Year": self.config.get("year", ""),
-            "USD_value": self._format_usd(
-                world_entry["value_usd"] if world_entry else 0
-            )
+            "Year": "2024",
+            "Target_Market_Imported_Value_From_World_USD": self._fmt_usd(tm_val),
+            "World_Import_Share_Percent": f"{(tm_val / global_val * 100):.1f} %",
+            "Target_Market_Imported_Value_From_Your_Country_USD": self._fmt_usd(yc_val),
+            "Your_Country_Share_Of_Target_Imports_Percent": f"{tm_yc.get('share_in_target_market_imports_pct', 0):.1f} %" if tm_yc else "0.0 %"
         }
-    
-    def _build_world_rank(self, world_data: List[Dict]) -> Dict[str, Any]:
-        """
-        Your country's rank in world imports of this product.
-        
-        Finds target_market in world_data and extracts its rank.
-        """
-        target_in_world = self._find_country_in_data(
-            world_data, 
-            self.config.get("target_market", "")
-        )
-        
-        rank = None
-        if target_in_world:
-            rank = target_in_world.get("rank")
-            # Try to convert to int if possible
-            try:
-                rank = int(rank) if rank and str(rank).isdigit() else rank
-            except (ValueError, TypeError):
-                pass
+
+    def _build_market_growth(self, tm_world, global_world, tm_yc):
+        tm_growth_5y = tm_world.get("growth_value_5y_pct", 0) if tm_world else 0
+        world_growth_5y = global_world.get("growth_value_5y_pct", 0) if global_world else 0
+        tm_growth_1y = tm_world.get("growth_value_1y_pct", 0) if tm_world else 0
+        yc_growth_5y = tm_yc.get("growth_value_5y_pct", 0) if tm_yc else 0
         
         return {
-            "Rank": rank
+            "Five_Year_Growth_Rate_Target_Market_Percent": f"{tm_growth_5y} %",
+            "Performance_Compared_To_World": "better than" if tm_growth_5y > world_growth_5y else "worse than",
+            "World_Imports_Growth_Rate_Percent": f"{world_growth_5y} %",
+            "Target_Market_Share_Trend": "increasing" if tm_growth_5y > world_growth_5y else "decreasing",
+            "Most_Recent_Year_Period": "2023-2024",
+            "Recent_Growth_Sustained_or_Not": "sustained" if (tm_growth_5y > 0 and tm_growth_1y > 0) else "not sustained",
+            "Recent_Growth_Direction": "growing" if tm_growth_1y > 0 else "contracting",
+            "Recent_Growth_Rate_Percent": f"{tm_growth_1y} %",
+            "Five_Year_Growth_Rate_Your_Country_Percent": f"{yc_growth_5y} %",
+            "Your_Country_Market_Share_Change": "gained" if yc_growth_5y > tm_growth_5y else "lost"
         }
-    
-    def _build_market_size(
-        self, 
-        world_data: List[Dict], 
-        target_data: List[Dict]
-    ) -> Dict[str, Any]:
-        """
-        Size of target market:
-        - World imports of product
-        - Target market share of world
-        - Your country exports to target market
-        - Your country share in target market
-        """
-        world_total = self._find_world_entry(world_data)
-        target_total = self._find_world_entry(target_data)
-        your_in_target = self._find_country_in_data(
-            target_data,
-            self.config.get("your_country", "")
-        )
+
+    def _build_unit_value(self, tm_world, global_world, tm_yc, all_suppliers):
+        # 1. Basics
+        tm_uv = tm_world.get("unit_value_usd", 0) if tm_world else 0
+        world_uv = global_world.get("unit_value_usd", 0) if global_world else 0
+        yc_uv = tm_yc.get("unit_value_usd", 0) if tm_yc else 0
+        unit = tm_world.get("quantity_unit", "Unit") if tm_world else "Unit"
+
+        # 2. Trends
+        # Heuristic: if Value Growth > Qty Growth, UV is appreciating
+        def get_trend(row):
+            if not row: return "N/A"
+            val_g = row.get("growth_value_5y_pct", 0)
+            qty_g = row.get("growth_qty_5y_pct", 0)
+            return "appreciating" if val_g > qty_g else "depreciating"
+
+        tm_trend = get_trend(tm_world)
+        yc_trend = get_trend(tm_yc)
+
+        # 3. Top 5 Appreciating Suppliers
+        # Filter valid suppliers
+        suppliers = [s for s in all_suppliers if s.get("partner_country") not in ["World", "Total", "nan"]]
+        top_5_appreciating = []
+        for s in suppliers:
+             if get_trend(s) == "appreciating":
+                 top_5_appreciating.append(s.get("partner_country"))
+             if len(top_5_appreciating) >= 5: break
+
+        # 4. Heterogeneity (Range Analysis of Top 10)
+        top_10 = sorted(suppliers, key=lambda x: x.get("value_imported_usd", 0), reverse=True)[:10]
+        valid_uvs = [s for s in top_10 if s.get("unit_value_usd")]
         
-        target_market_name = self.config.get("target_market", "")
-        your_country_name = self.config.get("your_country", "")
+        highest_s = max(valid_uvs, key=lambda x: x["unit_value_usd"]) if valid_uvs else {}
+        lowest_s = min(valid_uvs, key=lambda x: x["unit_value_usd"]) if valid_uvs else {}
         
-        # Find target market's share in world
-        target_in_world = self._find_country_in_data(world_data, target_market_name)
-        target_share_world = target_in_world.get("share_pct", 0) if target_in_world else 0
+        is_hetero = False
+        if highest_s and lowest_s:
+            if lowest_s["unit_value_usd"] > 0:
+                ratio = highest_s["unit_value_usd"] / lowest_s["unit_value_usd"]
+                is_hetero = ratio > 2.0
         
         return {
-            "Year": self.config.get("year", ""),
-            "Target_market": target_market_name,
-            "Product": self.config.get("product_name", ""),
-            "Imports_from_world_USD": self._format_usd(
-                world_total["value_usd"] if world_total else 0
-            ),
-            "Share_of_world_imports_percent": self._format_percentage(target_share_world),
-            "Imports_from_your_country_USD": self._format_usd(
-                your_in_target["value_usd"] if your_in_target else 0
-            ),
-            "Your_country": your_country_name,
-            "Share_of_Target_market_imports_percent": self._format_percentage(
-                your_in_target.get("share_pct", 0) if your_in_target else 0
-            )
+            "Year": "2024",
+            "Target_Market_Avg_Unit_Value": {
+                "Value_USD": f"{tm_uv:,.0f}",
+                "Unit": unit
+            },
+            "Comparison_To_World_Unit_Value_Statement": "more than" if tm_uv > world_uv else "less than",
+            "World_Unit_Value": {
+                "Value_USD": f"{world_uv:,.0f}",
+                "Unit": unit
+            },
+            "Target_Market_Unit_Value_Trend": tm_trend,
+            "Your_Country_Unit_Value_Paid_By_Target": {
+                 "Value_USD": f"{yc_uv:,.0f}",
+                 "Unit": unit
+            },
+            "Your_Country_Unit_Value_Position_Statement": "higher" if yc_uv > tm_uv else "lower",
+            "Your_Country_Unit_Value_Trend": yc_trend,
+            "Top_Five_Suppliers_With_Appreciating_Unit_Value": top_5_appreciating,
+            "Top_Ten_Suppliers_Unit_Value_Range": {
+                "Range_Descriptor": "wide" if is_hetero else "narrow",
+                "Highest_Unit_Value": {
+                    "Value_USD": f"{highest_s.get('unit_value_usd',0):,.0f}",
+                    "Unit": unit,
+                    "Country": highest_s.get("partner_country", "N/A")
+                },
+                "Lowest_Unit_Value": {
+                    "Value_USD": f"{lowest_s.get('unit_value_usd',0):,.0f}",
+                    "Unit": unit,
+                    "Country": lowest_s.get("partner_country", "N/A")
+                },
+                "Market_Heterogeneity_Statement": "rather heterogeneous" if is_hetero else "somewhat homogeneous"
+            },
+            "Unit_Value_Note": "Unit values are implied from trade value and quantity."
         }
-    
-    def _build_market_growth(
-        self,
-        world_data: List[Dict],
-        target_data: List[Dict],
-        your_country_data: List[Dict]
-    ) -> Dict[str, Any]:
-        """
-        Market growth rates:
-        - Target market's 5-year and recent growth
-        - Your country's exports growth to target market
-        """
-        target_in_world = self._find_country_in_data(
-            world_data,
-            self.config.get("target_market", "")
-        )
-        your_in_target = self._find_country_in_data(
-            target_data,
-            self.config.get("your_country", "")
-        )
-        
-        return {
-            "Target_market": self.config.get("target_market", ""),
-            "Five_year_growth_rate_percent": self._format_percentage(
-                target_in_world.get("growth_5y_pct", 0) if target_in_world else 0
-            ),
-            "Recent_growth_rate_percent": self._format_percentage(
-                target_in_world.get("growth_last_year_pct", 0) if target_in_world else 0
-            ),
-            "Your_country": self.config.get("your_country", ""),
-            "Imports_from_your_country_growth_rate_percent": self._format_percentage(
-                your_in_target.get("growth_5y_pct", 0) if your_in_target else 0
-            )
-        }
-    
-    def _build_unit_value(
-        self,
-        target_data: List[Dict],
-        world_data: List[Dict]
-    ) -> Dict[str, Any]:
-        """
-        Unit value comparison:
-        - Target market's unit value for this product
-        - World average unit value
-        - Is target's unit value higher or lower?
-        """
-        target_world = self._find_world_entry(target_data)
-        global_world = self._find_world_entry(world_data)
-        
-        target_uv = target_world.get("unit_value", 0) if target_world else 0
-        global_uv = global_world.get("unit_value", 0) if global_world else 0
-        
-        comparison = ""
-        if global_uv and target_uv:
-            comparison = "more than" if target_uv > global_uv else "less than"
-        
-        return {
-            "Target_market": self.config.get("target_market", ""),
-            "Year": self.config.get("year", ""),
-            "Average_unit_value": self._format_unit_value(target_uv),
-            "World_unit_value": self._format_unit_value(global_uv),
-            "More_than_or_less_than_world": comparison
-        }
-    
-    def _build_competition(self, target_data: List[Dict]) -> Dict[str, Any]:
-        """
-        Competition landscape:
-        - Top 3 suppliers to target market
-        - Market concentration level
-        """
-        # Filter out "World" and "Total"
-        competitors = [
-            item for item in target_data
-            if item.get("label", "").lower() not in ["world", "total", "aggregation"]
+
+    def _build_competition(self, all_suppliers, tm_yc):
+        # Filter exclusions
+        valid_suppliers = [
+            s for s in all_suppliers 
+            if s.get("partner_country") not in ["World", "Total", "nan"]
+            and s.get("value_imported_usd") is not None
         ]
         
-        # Sort by share, get top 3
-        top_suppliers = sorted(
-            competitors,
-            key=lambda x: x.get("share_pct", 0),
-            reverse=True
-        )[:3]
+        # Sort by Share
+        sorted_s = sorted(valid_suppliers, key=lambda x: x.get("share_in_target_market_imports_pct", 0), reverse=True)
+        top_3 = sorted_s[:3]
         
-        # Determine market concentration
-        concentration = self._assess_concentration(top_suppliers)
-        
-        top_3 = {}
-        for idx, supplier in enumerate(top_suppliers, 1):
-            top_3[f"Supplier_{idx}"] = {
-                "Name": supplier.get("label", ""),
-                "Market_share_percent": self._format_percentage(
-                    supplier.get("share_pct", 0)
-                )
-            }
+        # Concentration
+        top3_share_sum = sum(s.get("share_in_target_market_imports_pct", 0) for s in top_3)
+        conc_label = "concentrated" if top3_share_sum > 60 else "moderately concentrated" if top3_share_sum > 35 else "fragmented"
+
+        # Gainers (Growth > Market Growth)
+        # We need market growth again
+        market_growth = next((s.get("growth_value_5y_pct", 0) for s in all_suppliers if s.get("partner_country") == "World"), 0)
+        gainers = []
+        for s in sorted_s[:10]:
+            if s.get("growth_value_5y_pct", -999) > market_growth:
+                gainers.append(s.get("partner_country"))
+
+        # Regional (Simple Distance Proxy)
+        yc_dist = tm_yc.get("avg_distance_km") if tm_yc else None
+        regional = []
+        if yc_dist:
+             # Find countries with distance close to YC (+- 1000km)
+             for s in sorted_s:
+                 dist = s.get("avg_distance_km")
+                 if dist and abs(dist - yc_dist) < 1500 and s.get("partner_country") != self.your_country:
+                     regional.append(s.get("partner_country"))
         
         return {
-            "Target_market": self.config.get("target_market", ""),
-            "Market_concentration": concentration,
-            "Top_3_exporters": top_3 if top_3 else {}
+            "Market_Concentration_Level": conc_label,
+            "Top_Three_Suppliers": [
+                {
+                    "Supplier": s.get("partner_country"),
+                    "Market_Share_Percent": f"{s.get('share_in_target_market_imports_pct', 0):.1f}"
+                } for s in top_3
+            ],
+            "Pie_Chart_Last_Year_Market_Shares": "[CHART_PLACEHOLDER]",
+            "Top_Ten_Suppliers_Gaining_Share": gainers,
+            "Other_Suppliers_From_Your_Region": regional[:5]
         }
-    
-    def _build_data_sources(self) -> Dict[str, str]:
-        """Static data source."""
-        return {
-            "Sources": "ITC Trade Map"
-        }
-    
-    # ========================================================================
-    # HELPERS
-    # ========================================================================
-    
-    def _find_world_entry(self, data: List[Dict]) -> Optional[Dict]:
-        """Find the 'World' or 'Total' entry in parsed data."""
-        if not data:
-            return None
-        
-        for item in data:
-            label = item.get("label", "").lower()
-            if label in ["world", "total"]:
-                return item
-        
-        return None
-    
-    def _find_country_in_data(self, data: List[Dict], country: str) -> Optional[Dict]:
-        """Find a specific country in parsed data."""
-        if not data or not country:
-            return None
-        
-        country_lower = country.lower()
-        for item in data:
-            if item.get("label", "").lower() == country_lower:
-                return item
-        
-        return None
-    
-    def _assess_concentration(self, top_suppliers: List[Dict]) -> str:
-        """
-        Assess market concentration based on top 3 suppliers' share.
-        
-        Heuristic:
-        - High (>70%): Highly concentrated
-        - 50-70%: Moderately concentrated
-        - 30-50%: Fragmented
-        - <30%: Highly fragmented
-        """
-        if not top_suppliers:
-            return "Unknown"
-        
-        total_share = sum(s.get("share_pct", 0) for s in top_suppliers)
-        
-        if total_share > 70:
-            return "highly concentrated"
-        elif total_share > 50:
-            return "moderately concentrated"
-        elif total_share > 30:
-            return "fragmented"
-        else:
-            return "highly fragmented"
-    
-    def _format_usd(self, value: float) -> str:
-        """Format numeric value as USD."""
-        if not value or value == 0:
-            return ""
-        
-        if value >= 1_000_000_000:
-            return f"USD {value / 1_000_000_000:.2f}B"
-        elif value >= 1_000_000:
-            return f"USD {value / 1_000_000:.2f}M"
-        else:
-            return f"USD {value:,.0f}"
-    
-    def _format_percentage(self, value: float) -> str:
-        """Format numeric value as percentage."""
-        if not value or value == 0:
-            return ""
-        
-        return f"{value:.1f} %"
-    
-    def _format_unit_value(self, value: float) -> str:
-        """Format unit value (assumes USD/kg or similar)."""
-        if not value or value == 0:
-            return ""
-        
-        return f"{value:.2f} USD/kg"
 
-
-def build_quantitative_export_factsheet(
-    config: Dict[str, str],
-    world_data: List[Dict[str, Any]],
-    target_data: List[Dict[str, Any]],
-    your_country_data: List[Dict[str, Any]]
-) -> Dict[str, Any]:
-    """
-    Main entry point: Build a populated Factsheet JSON.
-    
-    Args:
-        config: Configuration with product, market, country info
-        world_data: Parsed world imports snapshot
-        target_data: Parsed target market imports snapshot
-        your_country_data: Parsed your country exports snapshot
+    def _build_companies(self, companies_data):
+        if not companies_data:
+            return []
         
-    Returns:
-        Populated Factsheet JSON dict
-    """
+        # Clean and map
+        output = []
+        for c in companies_data[:10]:
+            output.append({
+                "Company_Name": c.get("company_name", ""),
+                "City": c.get("city", ""),
+                "Website": c.get("website", "")
+            })
+        return output
+
+    # --- Helpers ---
+    def _find_row(self, dataset, key_field, value):
+        if not dataset: return None
+        for row in dataset:
+            if row.get(key_field, "").lower() == value.lower():
+                return row
+        return None
+
+    def _fmt_usd(self, val):
+        if val is None: return "N/A"
+        return f"USD {val:,.0f}"
+
+def build_quantitative_export_factsheet(config, world_data, target_data, your_country_data, companies_data=None):
     assembler = FactsheetAssembler(config)
-    return assembler.build(world_data, target_data, your_country_data)
+    return assembler.build(world_data, target_data, your_country_data, companies_data)

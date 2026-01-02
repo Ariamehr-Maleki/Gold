@@ -29,6 +29,11 @@ class DataDownloader(TradeSpider):
     Downloader that navigates TradeMap pages and reliably downloads exports.
     """
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Capture the official product name when a clarification/selection page provides it
+        self.official_product_name = None
+
     def get_selected_country_name(self) -> str:
         """
         Extracts the currently selected country name from the dropdown.
@@ -279,6 +284,8 @@ class DataDownloader(TradeSpider):
                         else:
                             official_name = raw_text.strip()
                         
+                        # Store for later use by other parts of the pipeline
+                        self.official_product_name = official_name
                         logging.info(f"Identified official product name: '{official_name}'")
                     except Exception:
                         logging.warning(f"Could not find official name for HS {product_code} in dropdown.")

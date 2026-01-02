@@ -7,56 +7,173 @@ import logging
 def clean_text(element):
     """Helper to safely extract and clean text."""
     if element:
-        return " ".join(element.get_text(separator=" ").split())
+        text = element.get_text(separator=" ", strip=True)
+        return " ".join(text.split())
     return None
 
 def parse_macmap_html(html_content):
     soup = BeautifulSoup(html_content, 'html.parser')
     
-    # 1. Parse Summary Boxes (MFN/Pref Rates)
+    # 1. Parse Summary Boxes
     summary_boxes = _parse_summary_boxes(soup)
     
-    # 2. Parse Tariffs & Detect TRQs
-    tariffs_raw, trq_info = _parse_tariff_section(soup) 
+    # 2. Parse Detailed Table
+    tariff_data = _parse_detailed_tariff_table(soup)
+
+    # 3. Categorize and Filter Agreement Names
+    mfn_entries = [t for t in tariff_data if t.get('is_mfn')]
+    pref_entries = [t for t in tariff_data if not t.get('is_mfn')]
     
-    # 3. Parse Remedies & NTMs
-    remedies = _parse_remedies_section(soup)
-    ntms = _parse_ntm_section(soup)
-
-    # 4. Extract Agreements & RoO
-    tariff_lines = []
-    agreements = set()
-    roo_links = []
-
-    for item in tariffs_raw:
-        if item['type'] == 'tariff_line':
-            tariff_lines.append(item)
-        elif item['type'] == 'agreement_detail':
-            details = item.get('details', {})
-            real_name = details.get('Agreement Name')
-            if real_name: agreements.add(real_name)
-            if 'RoO_Link' in details: roo_links.append(details['RoO_Link'])
-
-    # 5. Determine Status
-    # Logic: Benefits if an agreement is found OR if the summary box shows a Pref rate < MFN
     benefits_from = False
-    if len(agreements) > 0:
-        benefits_from = True
-    elif summary_boxes.get('pref_rate') and summary_boxes.get('mfn_rate'):
-         # Simple check if text differs, better logic relies on float comparison in scraper
-         if summary_boxes['pref_rate'] != summary_boxes['mfn_rate']:
-             benefits_from = True
+    
+    # We use two sets to distinguish between specific names (CEPA) and generic ones (UAE)
+    specific_agreements = set()
+    generic_regimes = set()
+    
+    mfn_rate_val = 1000.0
+    if mfn_entries and mfn_entries[0]['rate'] is not None:
+        mfn_rate_val = mfn_entries[0]['rate']
+
+    for p in pref_entries:
+        # Check for specific Agreement Details first
+        ag_details = p.get('agreement_details')
+        if ag_details and 'name' in ag_details:
+            specific_agreements.add(ag_details['name'])
+        elif p.get('regime_name'):
+            # Only fall back to regime name if no specific detail found
+            clean_name = p['regime_name'].replace('Preferential tariff for ', '').strip()
+            generic_regimes.add(clean_name)
+        
+        # Check advantage (Lower rate than MFN)
+        if p['rate'] is not None and p['rate'] < mfn_rate_val:
+            benefits_from = True
+
+    # FINAL LOGIC: If we have specific names, ignore the generic country names
+    # This ensures "CEPA, India-UAE" is shown instead of just "United Arab Emirats"
+    if specific_agreements:
+        final_agreements = list(specific_agreements)
+    else:
+        final_agreements = list(generic_regimes)
 
     return {
-        "summary": summary_boxes,
+        "summary_box_data": summary_boxes,
         "preferential_access_status": "benefits from" if benefits_from else "does not benefit from",
-        "identified_agreements": list(agreements),
-        "rules_of_origin_links": list(set(roo_links)),
-        "tariffs": tariff_lines,
-        "trq_info": trq_info,
-        "trade_remedies": remedies,
-        "regulatory_requirements": ntms
+        "identified_agreements": final_agreements, # <--- The fixed list
+        "tariffs_detailed": tariff_data,
+        "trade_remedies": _parse_remedies_section(soup),
+        "regulatory_requirements": _parse_ntm_section(soup)
     }
+
+def _parse_detailed_tariff_table(soup):
+    section = soup.find(id="custom-duties-results")
+    if not section: 
+        return []
+
+    rows = section.select("table tbody tr")
+    tariff_lines = []
+    current_tariff_obj = None
+
+    for row in rows:
+        row_id = str(row.get('id', ''))
+        
+        # --- TYPE 1: QUOTA ROW ---
+        if 'quota-result' in row_id:
+            if current_tariff_obj:
+                quota_div = row.find(id=lambda x: x and 'quota-detail' in x)
+                if quota_div:
+                    text = clean_text(quota_div)
+                    if text:
+                        current_tariff_obj['trq_details'] = text
+                        current_tariff_obj['has_trq'] = True
+            continue
+
+        # --- TYPE 2: AGREEMENT DETAILS ROW ---
+        if 'fta-roo-result' in row_id:
+            if current_tariff_obj:
+                details = _extract_agreement_details(row)
+                if details:
+                    current_tariff_obj['agreement_details'] = details
+            continue
+
+        # --- TYPE 3: STANDARD TARIFF ROW ---
+        cells = row.find_all('td', recursive=False)
+        if len(cells) >= 3:
+            regime_cell = cells[0]
+            regime_text = clean_text(regime_cell)
+            
+            rate_text = clean_text(cells[1]).replace('%', '').strip() if clean_text(cells[1]) else ""
+            try:
+                if "free" in rate_text.lower(): rate_val = 0.0
+                elif rate_text: rate_val = float(rate_text)
+                else: rate_val = None
+            except: rate_val = None
+
+            ave_text = clean_text(cells[2]).replace('%', '').strip() if clean_text(cells[2]) else ""
+
+            link = regime_cell.find('a', class_='tariff-regime-detail')
+            ntl_code = None
+            if link and link.has_attr('data-detail'):
+                match = re.search(r'ntl=([0-9\.]+)', link['data-detail'])
+                if match: ntl_code = match.group(1)
+
+            is_mfn = "MFN" in regime_text if regime_text else False
+
+            current_tariff_obj = {
+                "type": "tariff_line",
+                "ntl_code": ntl_code,
+                "regime_name": regime_text,
+                "rate_display": rate_text + "%" if rate_text and "free" not in rate_text.lower() else rate_text,
+                "rate": rate_val,
+                "ave_display": ave_text + "%" if ave_text else "N/A",
+                "is_mfn": is_mfn,
+                "has_trq": False,
+                "agreement_details": None
+            }
+            tariff_lines.append(current_tariff_obj)
+
+    return tariff_lines
+
+def _extract_agreement_details(row_element):
+    """
+    Parses the hidden details row. Uses recursive search to find content-rows.
+    """
+    data = {}
+    agreement_div = row_element.find(class_="agreement-detail")
+    if not agreement_div: return None
+
+    # RECURSIVE FIND: The HTML is deeply nested. find_all searches recursively by default.
+    # We look for any div with class 'content-row' inside the agreement-detail wrapper.
+    rows = agreement_div.find_all(class_="content-row")
+    
+    for r in rows:
+        lbl_elem = r.find(class_="lbl")
+        ctn_elem = r.find(class_="ctn")
+        
+        if not lbl_elem or not ctn_elem: continue
+        
+        lbl = clean_text(lbl_elem)
+        ctn = clean_text(ctn_elem)
+
+        if not lbl: continue
+
+        # Case-insensitive check
+        if "Name" in lbl: data['name'] = ctn
+        elif "In force" in lbl: data['in_force'] = ctn
+        elif "Type" in lbl: data['type'] = ctn
+        elif "Member states" in lbl: data['members'] = ctn
+
+    # Extract Links
+    links = []
+    anchors = agreement_div.find_all('a', href=True)
+    for a in anchors:
+        href = a['href']
+        if ".pdf" in href or "findrulesoforigin" in href:
+            text = clean_text(a) or "Link"
+            links.append({"title": text, "url": href})
+    
+    if links: data['links'] = links
+
+    return data if data else None
 
 def _parse_summary_boxes(soup):
     summary = {"mfn_rate": None, "pref_rate": None}
@@ -71,75 +188,11 @@ def _parse_summary_boxes(soup):
                 if "Pref" in label or "PREF" in label.upper(): summary["pref_rate"] = rate
     return summary
 
-def _parse_tariff_section(soup):
-    section = soup.find(id="custom-duties-results")
-    if not section: return [], {"has_trq": False, "details": []}
-
-    rows = section.select("table tbody tr")
-    results = []
-    trq_found = False
-    trq_details = []
-    
-    for row in rows:
-        if not row.get_text(strip=True): continue
-
-        # --- CASE A: Agreement Detail Block ---
-        agreement_div = row.find(class_="result-fta")
-        if agreement_div:
-            agreement_info = {}
-            content_rows = agreement_div.find_all(class_="content-row")
-            for cr in content_rows:
-                lbl = clean_text(cr.find(class_="lbl"))
-                ctn_elem = cr.find(class_="ctn")
-                ctn = clean_text(ctn_elem)
-                
-                if lbl:
-                    if "Name" in lbl: agreement_info["Agreement Name"] = ctn
-                    elif "In force" in lbl: agreement_info["In Force"] = ctn
-                    
-                    # Try to find Rules of Origin Link
-                    link = ctn_elem.find('a') if ctn_elem else None
-                    if link and "origin" in link.get('href', ''):
-                        agreement_info['RoO_Link'] = link['href']
-
-            if agreement_info:
-                results.append({"type": "agreement_detail", "details": agreement_info})
-            continue
-
-        # --- CASE B: Standard Tariff Row ---
-        cells = row.find_all('td', recursive=False)
-        if len(cells) >= 3:
-            regime = clean_text(cells[0])
-            rate = clean_text(cells[1]).replace('%', '')
-            
-            # TRQ Detection
-            if "quota" in regime.lower() or "iqtr" in regime.lower():
-                trq_found = True
-                trq_details.append(f"{regime}: {rate}")
-
-            link = row.find('a', class_='tariff-regime-detail')
-            ntl_code = None
-            if link and link.has_attr('data-detail'):
-                match = re.search(r'ntl=([0-9\.]+)', link['data-detail'])
-                if match: ntl_code = match.group(1)
-
-            is_mfn = "MFN" in regime if regime else False
-
-            results.append({
-                "type": "tariff_line",
-                "national_tariff_line": ntl_code,
-                "regime_name": regime,
-                "tariff_rate": rate,
-                "is_mfn": is_mfn
-            })
-
-    return results, {"has_trq": trq_found, "details": trq_details}
-
 def _parse_remedies_section(soup):
     container = soup.find(id="trade-remedy")
     if not container: return []
-    if "does not apply any trade remedy" in clean_text(container): return []
-
+    txt = clean_text(container)
+    if txt and "does not apply any trade remedy" in txt: return []
     remedies = []
     rows = container.select("table tbody tr")
     for row in rows:
@@ -154,12 +207,20 @@ def _parse_remedies_section(soup):
 def _parse_ntm_section(soup):
     container = soup.find(id="ntm-summary-results")
     if not container: return []
-
     ntms = []
     rows = container.find_all('tr', class_='toggle-trigger')
     for row in rows:
-        summary_wrapper = row.find(class_='measure-summary-wrapper')
-        if not summary_wrapper: continue
-        full_title = clean_text(summary_wrapper)
-        ntms.append(full_title)
+        # Try finding the wrapper which contains the code + title
+        wrapper = row.find(class_='measure-summary-wrapper')
+        if wrapper:
+            full_text = clean_text(wrapper)
+            # Remove "Learn more" clutter
+            if full_text:
+                full_text = full_text.replace("Learn more", "").strip()
+                ntms.append(full_text)
+        else:
+            # Fallback
+            summary_div = row.find(class_='measure-summary')
+            if summary_div:
+                ntms.append(clean_text(summary_div).replace("Learn more", "").strip())
     return ntms
