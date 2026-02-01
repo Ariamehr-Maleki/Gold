@@ -169,7 +169,7 @@ class FactsheetBuilder:
                 "Your_Country_Market_Share_Change": self._get(self.tm, "Growth_of_the_Market.Market_share_gained_or_lost")
             },
             "Growth_Visuals_and_Seasonality": {
-                "Line_Graph_Target_Market_Imports_5_10_Years": "[GRAPH_IMAGE_PATH]",
+                "Line_Graph_Target_Market_Imports_5_10_Years": self._get(self.tm, "Growth_Visuals_and_Seasonality.Line_Graph_Target_Market_Imports_5_10_Years"),
                 "Comments_On_Imports_Seasonality": "Detailed seasonality data requires monthly timeseries scraping."
             },
 
@@ -233,7 +233,7 @@ class FactsheetBuilder:
                     } 
                     for item in self._get(self.tm, "Competition.Top_3_Exporters_Details", [])
                 ],
-                "Pie_Chart_Last_Year_Market_Shares": "[GRAPH_IMAGE_PATH]",
+                "Pie_Chart_Last_Year_Market_Shares": self._get(self.tm, "Competition.Pie_Chart_Last_Year_Market_Shares"),
                 "Top_Ten_Suppliers_Gaining_Share": self._get(self.tm, "Competition.Market_Share_Increasers_Top10", []),
                 "Other_Suppliers_From_Your_Region": [
                     self._get(self.tm, "Competition.Regional_Competitors_Similiar_Distance.Supplier_X"),

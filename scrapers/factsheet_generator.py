@@ -3,8 +3,8 @@
 import logging
 import os
 from datetime import datetime
-# Import the new utility
-from support.chart_generator import generate_chart_from_json 
+# Import the new utilities
+from support.chart_generator import generate_chart_from_json, generate_pie_chart_market_shares
 
 logger = logging.getLogger("FactsheetGenerator")
 
@@ -93,6 +93,7 @@ class FactsheetGenerator:
 
         # --- NEW SECTION: CHART GENERATION ---
         graph_path = "[GRAPH_PLACEHOLDER]"
+        pie_chart_path = "[CHART_PLACEHOLDER]"
         
         if self.ts_data:
             try:
@@ -116,6 +117,30 @@ class FactsheetGenerator:
                     graph_path = os.path.abspath(generated)
             except Exception as e:
                 logger.error(f"Error triggering chart generation: {e}")
+        
+        # --- PIE CHART GENERATION: Market Shares ---
+        if self.target_suppliers:
+            try:
+                # Define Filename for pie chart
+                p_code = self.config.get("hs_code", "product")
+                t_market = self.config.get("target_market_id", "market")
+                pie_filename = f"pie_chart_{p_code}_{t_market}.png"
+                
+                # Define Full Path
+                pie_full_path = os.path.join(self.output_dir, "images", pie_filename)
+                
+                # Generate pie chart
+                generated_pie = generate_pie_chart_market_shares(
+                    self.target_suppliers,
+                    pie_full_path,
+                    title=f"Market Shares of Main Suppliers: {self.config.get('target_market_name', 'Target Market')}"
+                )
+                
+                if generated_pie:
+                    # Store absolute path for the Doc Generator
+                    pie_chart_path = os.path.abspath(generated_pie)
+            except Exception as e:
+                logger.error(f"Error triggering pie chart generation: {e}")
         # -------------------------------------------------
 
         # 1. TOTAL EXPORTS
@@ -326,6 +351,7 @@ class FactsheetGenerator:
                     "Comments_On_Imports_Seasonality": "Seasonality data requires monthly timeseries analysis."
                 },
                 "Competition": {
+                    "Pie_Chart_Last_Year_Market_Shares": pie_chart_path,
                     "Summary_Text_Data": {
                         "Concentration_Label": conc_text,
                         "Top_3_Suppliers": [s['name'] for s in top_3_details],
