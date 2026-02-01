@@ -15,9 +15,10 @@ class FactsheetAssembler:
         self.product_name = config.get("product_name", config.get("hs_code", ""))
         self.hs_code = config.get("hs_code", "")
         
-    def build(self, world_data: List[Dict], target_data: List[Dict], your_country_data: List[Dict], companies_data: List[Dict] = None) -> Dict[str, Any]:
+    def build(self, world_data: List[Dict], target_data: List[Dict], your_country_data: List[Dict], companies_data: List[Dict] = None, time_series_data: Dict[str, List[Dict]] = None) -> Dict[str, Any]:
         """
         Main build method.
+        time_series_data: dict with keys like 'target_market_quantity' containing time series records
         """
         # --- Pre-calculate Lookups ---
         # 1. World Row in Target Market Data (Target Market's imports from World)
@@ -34,6 +35,10 @@ class FactsheetAssembler:
 
         # 5. World Row in Your Country Exports (Your total exports to world)
         row_yc_world_exports = self._find_row(your_country_data, "partner_country", "World")
+
+        # 6. Enrich target_data with quantity growth from time series if available
+        if time_series_data:
+            target_data = self._enrich_with_quantity_growth(target_data, time_series_data)
 
         return {
             "Header": {
@@ -282,6 +287,39 @@ class FactsheetAssembler:
         return output
 
     # --- Helpers ---
+    def _enrich_with_quantity_growth(self, suppliers: List[Dict], time_series_data: Dict[str, List[Dict]]) -> List[Dict]:
+        """
+        Enriches supplier records with quantity growth calculated from time series.
+        time_series_data: dict with 'target_market_quantity' containing time series records
+        """
+        from support.data_parser import calculate_growth_from_timeseries
+        
+        if not time_series_data or 'target_market_quantity' not in time_series_data:
+            return suppliers
+        
+        ts_records = time_series_data.get('target_market_quantity', [])
+        
+        # Build a lookup: supplier_name -> time_series_data
+        ts_lookup = {}
+        for ts_record in ts_records:
+            supplier_name = ts_record.get('partner_country', '')
+            if supplier_name:
+                ts_lookup[supplier_name.lower()] = ts_record.get('time_series', {})
+        
+        # Enrich supplier records
+        enriched = []
+        for supplier in suppliers:
+            enriched_supplier = supplier.copy()
+            supplier_name = supplier.get('partner_country', '').lower()
+            
+            if supplier_name in ts_lookup:
+                qty_growth = calculate_growth_from_timeseries(ts_lookup[supplier_name])
+                enriched_supplier['growth_qty_5y_pct'] = qty_growth
+            
+            enriched.append(enriched_supplier)
+        
+        return enriched
+    
     def _find_row(self, dataset, key_field, value):
         if not dataset: return None
         for row in dataset:
@@ -293,6 +331,6 @@ class FactsheetAssembler:
         if val is None: return "N/A"
         return f"USD {val:,.0f}"
 
-def build_quantitative_export_factsheet(config, world_data, target_data, your_country_data, companies_data=None):
+def build_quantitative_export_factsheet(config, world_data, target_data, your_country_data, companies_data=None, time_series_data=None):
     assembler = FactsheetAssembler(config)
-    return assembler.build(world_data, target_data, your_country_data, companies_data)
+    return assembler.build(world_data, target_data, your_country_data, companies_data, time_series_data)

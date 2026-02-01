@@ -1,193 +1,193 @@
-﻿partner_country,value_exported_usd,trade_balance_usd,share_in_base_country_exports_pct,quantity_exported,quantity_unit,unit_value_usd,growth_value_5y_pct,growth_qty_5y_pct,growth_value_1y_pct,ranking_in_world_imports,share_in_world_imports_pct,tariff_faced_pct
-World,268196000.0,267974000.0,100.0,196742.0,Tons,1363.0,17.0,6.0,19.0,,100.0,
-China,202473000.0,202471000.0,75.5,153008.0,Tons,1323.0,15.0,4.0,8.0,1.0,39.1,0.0
-Japan,43120000.0,43120000.0,16.1,28973.0,Tons,1488.0,26.0,12.0,54.0,3.0,7.7,0.0
-"Korea, Republic of",7105000.0,7105000.0,2.6,4200.0,Tons,1692.0,,,,5.0,3.7,630.0
-Israel,3637000.0,3637000.0,1.4,2340.0,Tons,1554.0,,166.0,126.0,6.0,2.8,0.0
-Greece,3438000.0,3438000.0,1.3,2334.0,Tons,1473.0,,,260.0,12.0,1.7,0.0
-Türkiye,3265000.0,3265000.0,1.2,2249.0,Tons,1452.0,42.0,38.0,297.0,2.0,9.4,3.3
-United Arab Emirates,1299000.0,1284000.0,0.5,925.0,Tons,1404.0,,,249.0,19.0,0.8,5.0
-Singapore,1147000.0,1147000.0,0.4,837.0,Tons,1370.0,,,364.0,37.0,0.2,0.0
-Switzerland,985000.0,985000.0,0.4,595.0,Tons,1655.0,-30.0,1.0,,59.0,0.08,0.0
-India,943000.0,941000.0,0.4,732.0,Tons,1288.0,8.0,-37.0,-77.0,4.0,4.6,30.0
-Germany,263000.0,263000.0,0.1,190.0,Tons,1384.0,,,,9.0,2.1,0.0
-Netherlands,181000.0,181000.0,0.1,95.0,Tons,1905.0,7.0,-3.0,-59.0,15.0,1.3,0.0
-"Taipei, Chinese",167000.0,167000.0,0.1,114.0,Tons,1465.0,-56.0,-22.0,,14.0,1.3,12.0
-Kenya,136000.0,136000.0,0.1,102.0,Tons,1333.0,,,1843.0,88.0,0.02,0.0
-Saudi Arabia,38000.0,38000.0,0.0,50.0,Tons,760.0,46.0,-16.0,-90.0,8.0,2.1,5.0
-United States of America,,-44000.0,,,nan,,,,,11.0,1.9,0.0
-Mozambique,,-51000.0,,,nan,,,,,51.0,0.1,0.0
-Malawi,,-108000.0,,,nan,,,,,147.0,0.0,0.0
-Viet Nam,,,,,nan,,,,,7.0,2.2,5.0
-Egypt,,,,,nan,,,,,10.0,2.1,0.0
-Iraq,,,,,nan,,,,,13.0,1.3,
-Lebanon,,,,,nan,,,,,16.0,1.1,5.0
-Morocco,,,,,nan,,,,,17.0,1.0,2.5
-Russian Federation,,,,,nan,,,,,18.0,0.9,0.0
-Poland,,,,,nan,,,,,20.0,0.7,0.0
-Guatemala,,,,,nan,,,,,21.0,0.7,0.0
-Mexico,,,,,nan,,,,,22.0,0.6,0.0
-Canada,,,,,nan,,,,,23.0,0.6,0.0
-Tunisia,,,,,nan,,,,,24.0,0.5,10.0
-Syrian Arab Republic,,,,,nan,,,,,25.0,0.5,1.0
-France,,,,,nan,,,,,26.0,0.5,0.0
-Jordan,,,,,nan,,,,,27.0,0.5,0.0
-Italy,,,,,nan,,,,,28.0,0.5,0.0
-Indonesia,,,,,nan,,,,,29.0,0.5,5.0
-Algeria,,,,,nan,,,,,30.0,0.5,5.0
-Spain,,,,,nan,,,,,31.0,0.4,0.0
-United Kingdom,,,,,nan,,,,,32.0,0.4,0.0
-Thailand,,,,,nan,,,,,33.0,0.4,0.0
-Malaysia,,,,,nan,,,,,34.0,0.4,0.0
-Australia,,,,,nan,,,,,35.0,0.3,0.0
-Romania,,,,,nan,,,,,36.0,0.2,0.0
-Austria,,,,,nan,,,,,38.0,0.2,0.0
-Kuwait,,,,,nan,,,,,39.0,0.2,5.0
-Oman,,,,,nan,,,,,40.0,0.2,5.0
-Peru,,,,,nan,,,,,41.0,0.2,0.0
-Ukraine,,,,,nan,,,,,42.0,0.2,5.0
-Brazil,,,,,nan,,,,,43.0,0.2,4.0
-"Iran, Islamic Republic of",,,,,nan,,,,,44.0,0.1,10.0
-Bulgaria,,,,,nan,,,,,45.0,0.1,0.0
-Philippines,,,,,nan,,,,,46.0,0.1,7.0
-Belgium,,,,,nan,,,,,47.0,0.1,0.0
-Norway,,,,,nan,,,,,48.0,0.1,0.0
-Serbia,,,,,nan,,,,,49.0,0.1,5.0
-South Africa,,,,,nan,,,,,50.0,0.1,0.0
-Yemen,,,,,nan,,,,,52.0,0.1,25.0
-Togo,,,,,nan,,,,,53.0,0.09,5.0
-Cyprus,,,,,nan,,,,,54.0,0.09,0.0
-Sweden,,,,,nan,,,,,55.0,0.09,0.0
-Denmark,,,,,nan,,,,,56.0,0.08,0.0
-"Macedonia, North",,,,,nan,,,,,57.0,0.08,0.0
-Afghanistan,,,,,nan,,,,,58.0,0.08,2.5
-"Libya, State of",,,,,nan,,,,,60.0,0.08,0.0
-"Palestine, State of",,,,,nan,,,,,61.0,0.07,0.0
-Hungary,,,,,nan,,,,,62.0,0.07,0.0
-Croatia,,,,,nan,,,,,63.0,0.06,0.0
-Nepal,,,,,nan,,,,,64.0,0.06,10.0
-Czech Republic,,,,,nan,,,,,65.0,0.06,0.0
-Paraguay,,,,,nan,,,,,66.0,0.06,4.0
-Bangladesh,,,,,nan,,,,,67.0,0.06,0.0
-Kazakhstan,,,,,nan,,,,,68.0,0.05,0.0
-Uzbekistan,,,,,nan,,,,,69.0,0.05,20.0
-Ireland,,,,,nan,,,,,70.0,0.05,0.0
-New Zealand,,,,,nan,,,,,71.0,0.05,0.0
-Argentina,,,,,nan,,,,,72.0,0.05,4.0
-Chile,,,,,nan,,,,,73.0,0.04,0.0
-"Hong Kong, China",,,,,nan,,,,,74.0,0.04,0.0
-Slovenia,,,,,nan,,,,,75.0,0.03,0.0
-Lithuania,,,,,nan,,,,,76.0,0.03,0.0
-Slovakia,,,,,nan,,,,,77.0,0.03,0.0
-Colombia,,,,,nan,,,,,78.0,0.03,10.0
-Dominican Republic,,,,,nan,,,,,79.0,0.03,0.0
-Azerbaijan,,,,,nan,,,,,80.0,0.03,2.5
-Portugal,,,,,nan,,,,,81.0,0.03,0.0
-"Korea, Democratic People's Republic of",,,,,nan,,,,,82.0,0.03,
-Finland,,,,,nan,,,,,83.0,0.02,0.0
-Qatar,,,,,nan,,,,,84.0,0.02,5.0
-Tajikistan,,,,,nan,,,,,85.0,0.02,2.5
-Bahrain,,,,,nan,,,,,86.0,0.02,5.0
-Bosnia and Herzegovina,,,,,nan,,,,,87.0,0.02,0.0
-Uganda,,,,,nan,,,,,89.0,0.02,0.0
-Costa Rica,,,,,nan,,,,,90.0,0.02,0.0
-El Salvador,,,,,nan,,,,,91.0,0.02,0.0
-Georgia,,,,,nan,,,,,92.0,0.01,0.0
-Latvia,,,,,nan,,,,,93.0,0.01,0.0
-"Moldova, Republic of",,,,,nan,,,,,94.0,0.01,10.0
-Luxembourg,,,,,nan,,,,,95.0,0.01,0.0
-Uruguay,,,,,nan,,,,,96.0,0.01,4.0
-Ecuador,,,,,nan,,,,,97.0,0.01,0.0
-Mauritius,,,,,nan,,,,,98.0,0.01,0.0
-Armenia,,,,,nan,,,,,99.0,0.01,0.0
-Iceland,,,,,nan,,,,,100.0,0.01,0.0
-Sudan,,,,,nan,,,,,101.0,0.01,
-Albania,,,,,nan,,,,,102.0,0.01,0.0
-Honduras,,,,,nan,,,,,103.0,0.0,0.0
-Estonia,,,,,nan,,,,,104.0,0.0,0.0
-Malta,,,,,nan,,,,,105.0,0.0,0.0
-Ethiopia,,,,,nan,,,,,106.0,0.0,5.0
-Panama,,,,,nan,,,,,107.0,0.0,5.0
-Trinidad and Tobago,,,,,nan,,,,,108.0,0.0,0.0
-Montenegro,,,,,nan,,,,,109.0,0.0,0.0
-Jamaica,,,,,nan,,,,,110.0,0.0,0.0
-Kyrgyzstan,,,,,nan,,,,,111.0,0.0,0.0
-"Macao, China",,,,,nan,,,,,113.0,0.0,0.0
-Barbados,,,,,nan,,,,,114.0,0.0,2.5
-Mongolia,,,,,nan,,,,,115.0,0.0,5.0
-Maldives,,,,,nan,,,,,116.0,0.0,0.0
-Liberia,,,,,nan,,,,,117.0,0.0,7.5
-Ghana,,,,,nan,,,,,118.0,0.0,5.0
-Brunei Darussalam,,,,,nan,,,,,119.0,0.0,0.0
-Zimbabwe,,,,,nan,,,,,120.0,0.0,0.0
-"Venezuela, Bolivarian Republic of",,,,,nan,,,,,121.0,0.0,40.0
-"Bolivia, Plurinational State of",,,,,nan,,,,,122.0,0.0,12.5
-Ship stores and bunkers,,,,,nan,,,,,123.0,0.0,
-Burkina Faso,,,,,nan,,,,,124.0,0.0,5.0
-Namibia,,,,,nan,,,,,125.0,0.0,0.0
-Fiji,,,,,nan,,,,,126.0,0.0,5.0
-Angola,,,,,nan,,,,,127.0,0.0,0.0
-Sri Lanka,,,,,nan,,,,,128.0,0.0,30.0
-Zambia,,,,,nan,,,,,129.0,0.0,0.0
-Guyana,,,,,nan,,,,,130.0,0.0,2.5
-Botswana,,,,,nan,,,,,131.0,0.0,0.0
-Cabo Verde,,,,,nan,,,,,132.0,0.0,0.0
-New Caledonia,,,,,nan,,,,,133.0,0.0,
-Nicaragua,,,,,nan,,,,,134.0,0.0,0.0
-Papua New Guinea,,,,,nan,,,,,135.0,0.0,0.0
-Lao People's Democratic Republic,,,,,nan,,,,,136.0,0.0,20.0
-Seychelles,,,,,nan,,,,,137.0,0.0,0.0
-Bahamas,,,,,nan,,,,,138.0,0.0,35.0
-Côte d'Ivoire,,,,,nan,,,,,139.0,0.0,5.0
-French Polynesia,,,,,nan,,,,,140.0,0.0,8.0
-Belarus,,,,,nan,,,,,141.0,0.0,0.0
-Suriname,,,,,nan,,,,,142.0,0.0,2.5
-Bermuda,,,,,nan,,,,,143.0,0.0,5.0
-Madagascar,,,,,nan,,,,,144.0,0.0,10.0
-Lesotho,,,,,nan,,,,,145.0,0.0,0.0
-Cuba,,,,,nan,,,,,146.0,0.0,4.0
-United States Minor Outlying Islands,,,,,nan,,,,,148.0,0.0,
-Eswatini,,,,,nan,,,,,149.0,0.0,0.0
-Gabon,,,,,nan,,,,,150.0,0.0,10.0
-Mauritania,,,,,nan,,,,,151.0,0.0,5.0
-Grenada,,,,,nan,,,,,152.0,0.0,2.5
-Djibouti,,,,,nan,,,,,153.0,0.0,26.0
-Gambia,,,,,nan,,,,,154.0,0.0,5.0
-Curaçao,,,,,nan,,,,,155.0,0.0,
-"Congo, Democratic Republic of the",,,,,nan,,,,,156.0,0.0,10.0
-Belize,,,,,nan,,,,,157.0,0.0,2.5
-Somalia,,,,,nan,,,,,158.0,0.0,
-Greenland,,,,,nan,,,,,159.0,0.0,
-Antigua and Barbuda,,,,,nan,,,,,160.0,0.0,2.5
-Faroe Islands,,,,,nan,,,,,161.0,0.0,
-Bhutan,,,,,nan,,,,,162.0,0.0,50.0
-Cambodia,,,,,nan,,,,,163.0,0.0,15.0
-Guinea,,,,,nan,,,,,164.0,0.0,5.0
-Senegal,,,,,nan,,,,,165.0,0.0,5.0
-Cameroon,,,,,nan,,,,,166.0,0.0,10.0
-Cook Islands,,,,,nan,,,,,167.0,0.0,0.0
-Congo,,,,,nan,,,,,168.0,0.0,5.0
-Burundi,,,,,nan,,,,,169.0,0.0,0.0
-"Bonaire, Sint Eustatius and Saba",,,,,nan,,,,,170.0,0.0,
-Benin,,,,,nan,,,,,171.0,0.0,5.0
-Cayman Islands,,,,,nan,,,,,172.0,0.0,22.0
-Andorra,,,,,nan,,,,,173.0,0.0,
-Mali,,,,,nan,,,,,174.0,0.0,5.0
-Vanuatu,,,,,nan,,,,,175.0,0.0,5.0
-Equatorial Guinea,,,,,nan,,,,,176.0,0.0,10.0
-Turkmenistan,,,,,nan,,,,,177.0,0.0,
-Pakistan,,,,,nan,,,,,178.0,0.0,3.0
-Marshall Islands,,,,,nan,,,,,179.0,0.0,
-Sierra Leone,,,,,nan,,,,,180.0,0.0,5.0
-Samoa,,,,,nan,,,,,181.0,0.0,20.0
-Timor-Leste,,,,,nan,,,,,182.0,0.0,2.5
-Northern Mariana Islands,,,,,nan,,,,,183.0,0.0,
-Saint Vincent and the Grenadines,,,,,nan,,,,,185.0,0.0,2.5
-Gibraltar,,,,,nan,,,,,184.0,0.0,
-Saint Pierre and Miquelon,,,,,nan,,,,,186.0,0.0,5.0
-Sao Tome and Principe,,,,,nan,,,,,187.0,0.0,5.0
-Rwanda,,,,,nan,,,,,188.0,0.0,0.0
-Sint Maarten (Dutch part),,,,,nan,,,,,189.0,0.0,
-Saint Helena,,,,,nan,,,,,190.0,0.0,
-Turks and Caicos Islands,,,,,nan,,,,,191.0,0.0,
-Tonga,,,,,nan,,,,,192.0,0.0,15.0
+﻿partner_country,value_exported_usd,share_in_base_country_exports_pct,growth_value_5y_pct
+World,102187192000.0,100.0,-6.0
+United States of America,32417815000.0,31.7,-8.0
+"Hong Kong, China",10582095000.0,10.4,-1.0
+Netherlands,8847401000.0,8.7,-7.0
+Germany,6290437000.0,6.2,-6.0
+Japan,5833082000.0,5.7,-9.0
+India,5194235000.0,5.1,7.0
+United Kingdom,3895680000.0,3.8,-8.0
+Australia,2569576000.0,2.5,-4.0
+United Arab Emirates,2486152000.0,2.4,6.0
+"Korea, Republic of",1625442000.0,1.6,-9.0
+Russian Federation,1542883000.0,1.5,-6.0
+Singapore,1465072000.0,1.4,-4.0
+Canada,1434986000.0,1.4,-6.0
+Czech Republic,1216008000.0,1.2,-7.0
+Mexico,1151336000.0,1.1,-2.0
+Indonesia,1109736000.0,1.1,5.0
+France,974215000.0,1.0,-8.0
+Türkiye,964836000.0,0.9,3.0
+Poland,960300000.0,0.9,14.0
+Italy,930944000.0,0.9,-8.0
+"Taipei, Chinese",882120000.0,0.9,-6.0
+Malaysia,801302000.0,0.8,0.0
+Thailand,705582000.0,0.7,-6.0
+Viet Nam,607914000.0,0.6,3.0
+Philippines,504089000.0,0.5,-2.0
+Switzerland,478065000.0,0.5,8.0
+Colombia,474084000.0,0.5,-4.0
+South Africa,464637000.0,0.5,-2.0
+Spain,441498000.0,0.4,-6.0
+Chile,397422000.0,0.4,-10.0
+Saudi Arabia,380432000.0,0.4,32.0
+Peru,380085000.0,0.4,-6.0
+Greece,348663000.0,0.3,-3.0
+Belgium,346892000.0,0.3,-2.0
+Kazakhstan,312881000.0,0.3,11.0
+New Zealand,211576000.0,0.2,-3.0
+Hungary,208113000.0,0.2,44.0
+Denmark,197642000.0,0.2,9.0
+Sweden,173580000.0,0.2,-7.0
+Israel,171442000.0,0.2,-12.0
+Austria,164315000.0,0.2,-8.0
+Panama,151828000.0,0.1,-16.0
+Argentina,127853000.0,0.1,-9.0
+Romania,107524000.0,0.1,-9.0
+Ecuador,105259000.0,0.1,19.0
+Brazil,103879000.0,0.1,-14.0
+Finland,81117000.0,0.1,-2.0
+Kyrgyzstan,79381000.0,0.1,274.0
+Portugal,76295000.0,0.1,-19.0
+Azerbaijan,59172000.0,0.1,33.0
+Armenia,55561000.0,0.1,153.0
+Tunisia,52655000.0,0.1,24.0
+Bulgaria,51407000.0,0.1,11.0
+Georgia,48840000.0,0.0,29.0
+Uzbekistan,47242000.0,0.0,127.0
+El Salvador,45255000.0,0.0,53.0
+Lithuania,41210000.0,0.0,-5.0
+Serbia,39263000.0,0.0,15.0
+Cambodia,38456000.0,0.0,107.0
+Morocco,35898000.0,0.0,3.0
+Uruguay,34261000.0,0.0,5.0
+Norway,33296000.0,0.0,-9.0
+Costa Rica,31031000.0,0.0,2.0
+Guatemala,30983000.0,0.0,15.0
+Croatia,28853000.0,0.0,-7.0
+Ireland,28705000.0,0.0,-15.0
+Nigeria,24804000.0,0.0,29.0
+Bangladesh,24275000.0,0.0,-25.0
+Ghana,21365000.0,0.0,8.0
+Uganda,21066000.0,0.0,64.0
+Mongolia,19397000.0,0.0,33.0
+Myanmar,19202000.0,0.0,-3.0
+Sri Lanka,18600000.0,0.0,-30.0
+Iceland,18323000.0,0.0,21.0
+Paraguay,17151000.0,0.0,5.0
+Slovakia,16786000.0,0.0,5.0
+Latvia,16077000.0,0.0,-9.0
+Iraq,15945000.0,0.0,10.0
+Qatar,15744000.0,0.0,-11.0
+Belarus,13682000.0,0.0,9.0
+Slovenia,12405000.0,0.0,-6.0
+Angola,11823000.0,0.0,46.0
+Jordan,10568000.0,0.0,-14.0
+Pakistan,10394000.0,0.0,-26.0
+Ukraine,9925000.0,0.0,-55.0
+Egypt,9876000.0,0.0,-22.0
+Estonia,9771000.0,0.0,5.0
+Ethiopia,9529000.0,0.0,27.0
+Turkmenistan,9375000.0,0.0,0.0
+Nepal,9238000.0,0.0,15.0
+Bosnia and Herzegovina,9075000.0,0.0,35.0
+Oman,9043000.0,0.0,-6.0
+Mauritius,8642000.0,0.0,10.0
+Luxembourg,8438000.0,0.0,-68.0
+Côte d'Ivoire,8166000.0,0.0,125.0
+"Macao, China",7354000.0,0.0,6.0
+Kenya,7268000.0,0.0,22.0
+Kuwait,6697000.0,0.0,-8.0
+"Tanzania, United Republic of",5287000.0,0.0,6.0
+Honduras,5243000.0,0.0,10.0
+Cyprus,4581000.0,0.0,-9.0
+Lao People's Democratic Republic,4035000.0,0.0,42.0
+Jamaica,3546000.0,0.0,77.0
+"Venezuela, Bolivarian Republic of",3388000.0,0.0,39.0
+Guinea,3239000.0,0.0,121.0
+Malta,3098000.0,0.0,59.0
+"Macedonia, North",2829000.0,0.0,-15.0
+Papua New Guinea,2768000.0,0.0,21.0
+Albania,2581000.0,0.0,5.0
+Lebanon,2384000.0,0.0,-1.0
+Bahrain,2367000.0,0.0,-8.0
+Mozambique,2226000.0,0.0,25.0
+Togo,2173000.0,0.0,19.0
+"Congo, Democratic Republic of the",2116000.0,0.0,138.0
+Burkina Faso,2052000.0,0.0,24.0
+"Moldova, Republic of",1832000.0,0.0,-23.0
+Nicaragua,1761000.0,0.0,23.0
+"Bolivia, Plurinational State of",1345000.0,0.0,-29.0
+Algeria,1339000.0,0.0,2.0
+Senegal,1312000.0,0.0,47.0
+Guyana,1168000.0,0.0,174.0
+Madagascar,1112000.0,0.0,16.0
+Brunei Darussalam,1082000.0,0.0,64.0
+Cuba,1048000.0,0.0,84.0
+Cameroon,969000.0,0.0,-20.0
+Zambia,892000.0,0.0,46.0
+Botswana,876000.0,0.0,60.0
+"Libya, State of",758000.0,0.0,-7.0
+Trinidad and Tobago,731000.0,0.0,25.0
+Malawi,723000.0,0.0,232.0
+Tajikistan,514000.0,0.0,61.0
+Eritrea,436000.0,0.0,228.0
+Saint Lucia,435000.0,0.0,
+Zimbabwe,431000.0,0.0,-9.0
+Benin,418000.0,0.0,155.0
+Dominican Republic,407000.0,0.0,-73.0
+Liberia,298000.0,0.0,66.0
+Rwanda,274000.0,0.0,24.0
+New Caledonia,256000.0,0.0,39.0
+Sierra Leone,243000.0,0.0,33.0
+Gabon,209000.0,0.0,-11.0
+Vanuatu,204000.0,0.0,14.0
+Tonga,202000.0,0.0,29.0
+"Palestine, State of",190000.0,0.0,70.0
+Fiji,186000.0,0.0,44.0
+Mali,183000.0,0.0,100.0
+Somalia,143000.0,0.0,
+Namibia,130000.0,0.0,-19.0
+Syrian Arab Republic,99000.0,0.0,
+Maldives,96000.0,0.0,13.0
+Belize,88000.0,0.0,149.0
+Afghanistan,88000.0,0.0,64.0
+Sudan,81000.0,0.0,58.0
+Yemen,77000.0,0.0,42.0
+Timor-Leste,73000.0,0.0,34.0
+Marshall Islands,67000.0,0.0,106.0
+Bahamas,66000.0,0.0,
+South Sudan,66000.0,0.0,
+Mauritania,61000.0,0.0,
+Cayman Islands,60000.0,0.0,
+Congo,60000.0,0.0,6.0
+Bhutan,52000.0,0.0,
+Chad,45000.0,0.0,29.0
+"Korea, Democratic People's Republic of",34000.0,0.0,
+"Iran, Islamic Republic of",30000.0,0.0,-66.0
+Djibouti,30000.0,0.0,19.0
+Guinea-Bissau,22000.0,0.0,
+Comoros,22000.0,0.0,
+Bermuda,18000.0,0.0,151.0
+Equatorial Guinea,18000.0,0.0,209.0
+Burundi,15000.0,0.0,
+United States Minor Outlying Islands,13000.0,0.0,
+Montenegro,12000.0,0.0,82.0
+Antigua and Barbuda,11000.0,0.0,
+Sint Maarten (Dutch part),11000.0,0.0,
+Saint Kitts and Nevis,9000.0,0.0,236.0
+Kiribati,9000.0,0.0,-35.0
+Suriname,8000.0,0.0,-55.0
+Sao Tome and Principe,8000.0,0.0,-35.0
+"Micronesia, Federated States of",6000.0,0.0,
+Lesotho,5000.0,0.0,
+Aruba,5000.0,0.0,
+Seychelles,4000.0,0.0,-26.0
+Cabo Verde,3000.0,0.0,
+Niger,2000.0,0.0,-37.0
+Haiti,2000.0,0.0,-70.0
+Curaçao,1000.0,0.0,
+Grenada,1000.0,0.0,
+Solomon Islands,1000.0,0.0,-17.0
+Samoa,1000.0,0.0,-40.0
+Niue,1000.0,0.0,

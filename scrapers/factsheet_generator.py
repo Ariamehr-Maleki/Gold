@@ -1,21 +1,34 @@
 # scrapers/factsheet_generator.py
 
 import logging
+import os
 from datetime import datetime
+# Import the new utility
+from support.chart_generator import generate_chart_from_json 
 
 logger = logging.getLogger("FactsheetGenerator")
 
 class FactsheetGenerator:
-    def __init__(self, parsed_data, config):
+    # UPDATED INIT: Accept output_dir
+    def __init__(self, parsed_data, config, output_dir="."):
         self.data = parsed_data
         self.config = config
+        self.output_dir = output_dir
         
-        # Datasets
+        # NEW: Load Time Series Data (target market imports by partner country)
+        self.ts_data = parsed_data["snapshots"].get("target_market_value_ts", {}).get("data", [])
+
+        # --- EXISTING SNAPSHOT DATASETS ---
         self.base_exports = parsed_data["snapshots"].get("base_country_global_exports", {}).get("data", [])
         self.target_suppliers = parsed_data["snapshots"].get("target_market_suppliers", {}).get("data", [])
         self.global_imports = parsed_data["snapshots"].get("global_imports", {}).get("data", [])
         
-        # Key Rows
+        # --- NEW TIME SERIES DATASETS ---
+        # Used for "Appreciating/Depreciating" 5-year trends
+        self.world_uv_ts = parsed_data["snapshots"].get("world_unit_value_ts", {}).get("data", [])
+        self.target_uv_ts = parsed_data["snapshots"].get("target_market_unit_value_ts", {}).get("data", [])
+
+        # --- KEY ROWS (Snapshot based) ---
         self.row_world_in_base = self._find_row(self.base_exports, "partner_country", "World")
         self.row_target_in_base = self._find_row(self.base_exports, "partner_country", self.config.get("target_market_name", ""))
         
@@ -40,7 +53,7 @@ class FactsheetGenerator:
         return f"{val:.1f}"
 
     def _get_trend(self, row):
-        """Determines if Unit Value is appreciating or depreciating."""
+        """Legacy trend check based on static 5-year growth column (Fallback)."""
         if not row: return "N/A"
         g_val = row.get("growth_value_5y_pct")
         g_qty = row.get("growth_qty_5y_pct")
@@ -48,7 +61,63 @@ class FactsheetGenerator:
         if g_val is None or g_qty is None: return "N/A"
         return "appreciating" if g_val > g_qty else "depreciating"
 
+    def _calculate_trend_text(self, ts_row_data):
+        """
+        NEW: Calculates 5-year trend from Time Series row data.
+        Returns: "appreciating", "depreciating", or "stable"
+        """
+        if not ts_row_data or not ts_row_data.get("time_series"):
+            return "N/A"
+        
+        ts = ts_row_data["time_series"]
+        years = sorted(ts.keys())
+        
+        if len(years) < 2: return "N/A"
+        
+        # Compare Start Year vs End Year
+        start_year = years[0]
+        end_year = years[-1]
+        
+        # Only calculate if we have a span of at least 3 years to call it a trend
+        if int(end_year) - int(start_year) >= 2:
+            start_val = ts[start_year]
+            end_val = ts[end_year]
+            
+            if end_val > start_val: return "appreciating"
+            elif end_val < start_val: return "depreciating"
+            else: return "stable"
+            
+        return "N/A"
+
     def generate(self):
+
+        # --- NEW SECTION: CHART GENERATION ---
+        graph_path = "[GRAPH_PLACEHOLDER]"
+        
+        if self.ts_data:
+            try:
+                # Define Filename
+                p_code = self.config.get("hs_code", "product")
+                t_market = self.config.get("target_market_id", "market")
+                filename = f"chart_{p_code}_{t_market}.png"
+                
+                # Define Full Path
+                full_path = os.path.join(self.output_dir, "images", filename)
+                
+                # Generate
+                generated = generate_chart_from_json(
+                    self.ts_data, 
+                    full_path, 
+                    title=f"Import Trends (5 Years): {self.config.get('target_market_name', 'Target Market')}"
+                )
+                
+                if generated:
+                    # Store absolute path for the Doc Generator
+                    graph_path = os.path.abspath(generated)
+            except Exception as e:
+                logger.error(f"Error triggering chart generation: {e}")
+        # -------------------------------------------------
+
         # 1. TOTAL EXPORTS
         total_exports = self.row_world_in_base.get("value_exported_usd") if self.row_world_in_base else None
         rank_val = self.row_target_in_base.get("ranking_in_world_imports") if self.row_target_in_base else "N/A"
@@ -86,6 +155,7 @@ class FactsheetGenerator:
             gained_lost = "gained" if yc_growth_5y > tm_growth_5y else "lost"
 
         # 4. UNIT VALUE
+        # A. Static Values (Snapshot)
         uv_tm = self.row_world_in_target.get("unit_value_usd") if self.row_world_in_target else None
         unit_type = self.row_world_in_target.get("quantity_unit", "Unit") if self.row_world_in_target else "Unit"
         uv_world = self.row_world_global_imports.get("unit_value_usd") if self.row_world_global_imports else None
@@ -93,31 +163,47 @@ class FactsheetGenerator:
         uv_compare = "N/A"
         if uv_tm is not None and uv_world is not None:
             uv_compare = "more than" if uv_tm > uv_world else "less than"
+        
+        # B. Time Series Trends (New Logic)
+        # 1. Target Market UV Trend (using TS data)
+        tm_uv_ts_row = self._find_row(self.target_uv_ts, "partner_country", "World") or \
+                       self._find_row(self.target_uv_ts, "partner_country", "Total")
+        tm_uv_trend_text = self._calculate_trend_text(tm_uv_ts_row)
+        
+        # 2. World UV Trend (using TS data)
+        world_uv_ts_row = self._find_row(self.world_uv_ts, "partner_country", "World") or \
+                          self._find_row(self.world_uv_ts, "partner_country", "Total")
+        world_uv_trend_text = self._calculate_trend_text(world_uv_ts_row)
 
-        tm_uv_trend = self._get_trend(self.row_world_in_target)
-        world_uv_trend = self._get_trend(self.row_world_global_imports)
-
+        # 3. Your Country UV (Static & Trend)
         uv_yc = self.row_yc_in_target.get("unit_value_usd") if self.row_yc_in_target else None
         uv_yc_compare = "higher" if (uv_yc or 0) > (uv_tm or 0) else "lower"
         
-        yc_trend_raw = self._get_trend(self.row_yc_in_target)
-        yc_trend_past = "appreciated" if yc_trend_raw == "appreciating" else "depreciated" if yc_trend_raw == "depreciating" else "N/A"
+        # Use TS for Your Country Trend
+        yc_uv_ts_row = self._find_row(self.target_uv_ts, "partner_country", self.config.get("your_country_name"))
+        yc_trend_past = self._calculate_trend_text(yc_uv_ts_row)
 
-        # --- ANALYSIS: Top Suppliers, Trends, and Heterogeneity ---
+        # C. Heterogeneity & Top Suppliers
         sorted_suppliers = sorted(
             [x for x in self.target_suppliers if x.get("partner_country") not in ["World", "Total", "nan"]],
             key=lambda k: k.get("value_imported_usd", 0) or 0,
             reverse=True
         )
 
-        # A. Appreciating Suppliers (Top 5)
-        top_5 = sorted_suppliers[:5]
-        appreciating_suppliers = [
-            s.get("partner_country") for s in top_5 if self._get_trend(s) == "appreciating"
-        ]
-        appreciating_suppliers_str = "; ".join(appreciating_suppliers) if appreciating_suppliers else "None"
+        # 1. Top 5 Suppliers with Appreciating UV (Cross-referencing Snapshot Top 5 with TS Trends)
+        top_5_by_value = sorted_suppliers[:5]
+        top_5_appreciating = []
+        
+        for s in top_5_by_value:
+            s_name = s.get("partner_country")
+            # Find this supplier in the TS data
+            s_ts_row = self._find_row(self.target_uv_ts, "partner_country", s_name)
+            if self._calculate_trend_text(s_ts_row) == "appreciating":
+                top_5_appreciating.append(s_name)
 
-        # B. Heterogeneity (Top 10) -> COUNTRY X and COUNTRY Y
+        appreciating_suppliers_str = "; ".join(top_5_appreciating) if top_5_appreciating else "None"
+
+        # 2. Heterogeneity (Top 10)
         top_10 = sorted_suppliers[:10]
         country_x, country_y = "N/A", "N/A"
         val_x, val_y = 0, 0
@@ -140,10 +226,8 @@ class FactsheetGenerator:
                 range_desc = "wide" if is_wide else "narrow"
                 market_nature = "rather heterogeneous" if is_wide else "somewhat homogeneous"
 
-        # C. Regional Competitors -> SUPPLIER X, Y, Z
-        # Proxy: Find suppliers with similar "Average distance" to Your Country
-       # 1. Market Share Increasers (Top 10 Suppliers)
-        # Definition: A supplier increases share if their growth > total market growth
+        # 5. COMPETITION
+        # A. Market Share Increasers (Top 10 Suppliers)
         market_growth_5y = self.row_world_in_target.get("growth_value_5y_pct") if self.row_world_in_target else 0
         top_10 = sorted_suppliers[:10]
         
@@ -155,31 +239,25 @@ class FactsheetGenerator:
                 if s_growth > market_growth_5y:
                     increasers_list.append(s.get("partner_country"))
 
-        # 2. Regional Competitors (Supplier X, Y, Z)
-        # Proxy: Find suppliers with "Average distance" similar to "Your Country"
+        # B. Regional Competitors
         supplier_x, supplier_y, supplier_z = "N/A", "N/A", "N/A"
-        
         yc_dist = self.row_yc_in_target.get("avg_distance_km")
         
         if yc_dist:
-            # Filter: Not 'Your Country', Must have Distance
             potential_neighbors = [
                 s for s in sorted_suppliers 
                 if s.get("partner_country") != self.config.get("your_country_name") 
                 and s.get("avg_distance_km") is not None
             ]
-            
-            # Sort by difference in distance (Smallest delta = closest geographically relative to target)
             potential_neighbors.sort(key=lambda k: abs((k.get("avg_distance_km") or 0) - yc_dist))
             
             if len(potential_neighbors) > 0: supplier_x = potential_neighbors[0].get("partner_country")
             if len(potential_neighbors) > 1: supplier_y = potential_neighbors[1].get("partner_country")
             if len(potential_neighbors) > 2: supplier_z = potential_neighbors[2].get("partner_country")
         else:
-            # Fallback if your country has no distance data (e.g. neighboring country with 0 distance or error)
             supplier_x = "Distance data unavailable"
 
-        # 3. Top 3 Market Share (for text filling)
+        # C. Concentration (Top 3)
         top_3 = sorted_suppliers[:3]
         top_3_details = []
         for s in top_3:
@@ -195,7 +273,6 @@ class FactsheetGenerator:
         # --- CONSTRUCT JSON ---
         factsheet = {
             "Quantitative_Export_Factsheet": {
-                # ... (Keep Header, Total_exports, Size, Growth, Unit_Value sections unchanged) ...
                 "Header": {
                     "Product": self.config.get("product_name"),
                     "Target_Market": self.config.get("target_market_name"),
@@ -229,8 +306,8 @@ class FactsheetGenerator:
                     "Average_unit_value": f"{self._format_usd(uv_tm)} USD / {unit_type}",
                     "Compare_to_world_average": uv_compare,
                     "World_unit_value": f"{self._format_usd(uv_world)} USD / {unit_type}",
-                    "Target_Market_Trend_5y": tm_uv_trend,
-                    "World_Trend_5y": world_uv_trend,
+                    "Target_Market_Trend_5y": tm_uv_trend_text,
+                    "World_Trend_5y": world_uv_trend_text,
                     "Unit_value_paid_to_your_country": f"{self._format_usd(uv_yc)} USD / {unit_type}",
                     "Compare_YC_to_Market_Average": uv_yc_compare,
                     "Your_Country_Trend_5y": yc_trend_past,
@@ -244,8 +321,10 @@ class FactsheetGenerator:
                         "market_nature": market_nature
                     }
                 },
-
-                # --- UPDATED COMPETITION SECTION ---
+                "Growth_Visuals_and_Seasonality": {
+                    "Line_Graph_Target_Market_Imports_5_10_Years": graph_path,
+                    "Comments_On_Imports_Seasonality": "Seasonality data requires monthly timeseries analysis."
+                },
                 "Competition": {
                     "Summary_Text_Data": {
                         "Concentration_Label": conc_text,
@@ -261,7 +340,6 @@ class FactsheetGenerator:
                          "Supplier_Z": supplier_z
                     }
                 }
-                # -----------------------------------
             }
         }
         

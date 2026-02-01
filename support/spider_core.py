@@ -354,7 +354,7 @@ class TradeSpider(object):
                 logging.warning("CAPTCHA detected. Engaging Ensemble Auto-Solver...")
                 
                 solved = False
-                for i in range(3):
+                for i in range(10):
                     # Try to solve
                     if not self._solve_captcha():
                         logging.warning(f"Solver internal error on attempt {i+1}")

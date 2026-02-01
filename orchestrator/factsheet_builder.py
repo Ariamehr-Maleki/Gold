@@ -88,6 +88,21 @@ class FactsheetBuilder:
         # 3. Country Profile Logic
         c_profile = self.country_profiles.get(target_market, {})
 
+            
+            # [HELPER FUNCTION TO CLEAN UNIT STRINGS]
+        def _clean_unit_string(full_string):
+            # Input: "USD / Tons" -> Output: "Tons"
+            if "/" in full_string:
+                return full_string.split("/", 1)[1].strip()
+            return full_string.replace("USD", "").strip()
+
+        # [HELPER FUNCTION TO CLEAN VALUE STRINGS]
+        def _clean_value_string(full_string):
+            # Input: "2,160 USD / Tons" -> Output: "2,160"
+            if "USD" in str(full_string):
+                return str(full_string).split("USD")[0].strip()
+            return str(full_string)
+
         factsheet = {
             "Header": {
                 "Header_Logo": "[LOGO_PATH]",
@@ -159,34 +174,49 @@ class FactsheetBuilder:
             },
 
             "Unit_Value": {
-                "Year": self._get(self.tm, "Size_of_the_Market.Year"), # Using Size year as proxy
+                "Year": self._get(self.tm, "Size_of_the_Market.Year"),
+                
                 "Target_Market_Avg_Unit_Value": {
-                    "Value_USD": self._get(self.tm, "Unit_Value.Average_unit_value").split(' ')[0],
-                    "Unit": " ".join(self._get(self.tm, "Unit_Value.Average_unit_value").split(' ')[1:])
+                    "Value_USD": _clean_value_string(self._get(self.tm, "Unit_Value.Average_unit_value")), 
+                    # Clean unit to avoid "USD/ USD / Tons"
+                    "Unit": _clean_unit_string(self._get(self.tm, "Unit_Value.Average_unit_value")) 
                 },
+                
                 "Comparison_To_World_Unit_Value_Statement": self._get(self.tm, "Unit_Value.Compare_to_world_average"),
+                
                 "World_Unit_Value": {
-                    "Value_USD": self._get(self.tm, "Unit_Value.World_unit_value").split(' ')[0],
-                    "Unit": " ".join(self._get(self.tm, "Unit_Value.World_unit_value").split(' ')[1:])
+                    "Value_USD": _clean_value_string(self._get(self.tm, "Unit_Value.World_unit_value")),
+                    "Unit": _clean_unit_string(self._get(self.tm, "Unit_Value.World_unit_value"))
                 },
+                
                 "Target_Market_Unit_Value_Trend": self._get(self.tm, "Unit_Value.Target_Market_Trend_5y"),
+                
+                # --- FIX 1: ADD MISSING WORLD TREND HERE ---
+                "World_Unit_Value_Trend": self._get(self.tm, "Unit_Value.World_Trend_5y"), 
+                # -------------------------------------------
+                
                 "Your_Country_Unit_Value_Paid_By_Target": {
-                    "Value_USD": self._get(self.tm, "Unit_Value.Unit_value_paid_to_your_country").split(' ')[0],
-                    "Unit": " ".join(self._get(self.tm, "Unit_Value.Unit_value_paid_to_your_country").split(' ')[1:])
+                    "Value_USD": _clean_value_string(self._get(self.tm, "Unit_Value.Unit_value_paid_to_your_country")),
+                    "Unit": _clean_unit_string(self._get(self.tm, "Unit_Value.Unit_value_paid_to_your_country"))
                 },
                 "Your_Country_Unit_Value_Position_Statement": self._get(self.tm, "Unit_Value.Compare_YC_to_Market_Average"),
                 "Your_Country_Unit_Value_Trend": self._get(self.tm, "Unit_Value.Your_Country_Trend_5y"),
+                
                 "Top_Five_Suppliers_With_Appreciating_Unit_Value": self._get(self.tm, "Unit_Value.Top5_Suppliers_Appreciating", "").split('; '),
+                
                 "Top_Ten_Suppliers_Unit_Value_Range": {
                     "Range_Descriptor": self._get(self.tm, "Unit_Value.Heterogeneity_Analysis.range_description"),
+                    
+                    # --- FIX 2: CLEAN HIGH/LOW VALUES ---
                     "Highest_Unit_Value": {
-                        "Value_USD": self._get(self.tm, "Unit_Value.Heterogeneity_Analysis.Country_X_Value"),
-                        "Unit": "Unit",
+                        # Previously included "USD / Tons" in the value
+                        "Value_USD": _clean_value_string(self._get(self.tm, "Unit_Value.Heterogeneity_Analysis.Country_X_Value")),
+                        "Unit": _clean_unit_string(self._get(self.tm, "Unit_Value.Heterogeneity_Analysis.Country_X_Value")),
                         "Country": self._get(self.tm, "Unit_Value.Heterogeneity_Analysis.Country_X_High")
                     },
                     "Lowest_Unit_Value": {
-                        "Value_USD": self._get(self.tm, "Unit_Value.Heterogeneity_Analysis.Country_Y_Value"),
-                        "Unit": "Unit",
+                        "Value_USD": _clean_value_string(self._get(self.tm, "Unit_Value.Heterogeneity_Analysis.Country_Y_Value")),
+                        "Unit": _clean_unit_string(self._get(self.tm, "Unit_Value.Heterogeneity_Analysis.Country_Y_Value")),
                         "Country": self._get(self.tm, "Unit_Value.Heterogeneity_Analysis.Country_Y_Low")
                     },
                     "Market_Heterogeneity_Statement": self._get(self.tm, "Unit_Value.Heterogeneity_Analysis.market_nature")

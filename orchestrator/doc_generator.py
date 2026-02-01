@@ -95,6 +95,7 @@ class FactsheetGenerator:
             "58,630 USD/ unit": f"{self._get(f'{uv}.Target_Market_Avg_Unit_Value.Value_USD')} {self._get(f'{uv}.Target_Market_Avg_Unit_Value.Unit')}",
             "[more than/less than]": self._get(f"{uv}.Comparison_To_World_Unit_Value_Statement"),
             "[appreciated/depreciated]": self._get(f"{uv}.Target_Market_Unit_Value_Trend"),
+            "[appreciating/depreciating].": self._get(f"{uv}.World_Unit_Value_Trend") + ".", 
             "[country X]": self._get(f"{uv}.Top_Ten_Suppliers_Unit_Value_Range.Highest_Unit_Value.Country"),
             "[country Y]": self._get(f"{uv}.Top_Ten_Suppliers_Unit_Value_Range.Lowest_Unit_Value.Country"),
             "[rather heterogeneous/somewhat homogeneous]": self._get(f"{uv}.Top_Ten_Suppliers_Unit_Value_Range.Market_Heterogeneity_Statement"),
