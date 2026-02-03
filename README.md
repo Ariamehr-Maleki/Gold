@@ -171,3 +171,39 @@ For each run, a new directory is created (e.g., `runs/20251117_103000/`), contai
 ├── geckodriver.exe               # Firefox WebDriver
 ├── requirements.txt              # Python package dependencies
 └── Quantitative_Factsheet_Template.docx  # Word template for the final report
+
+## Web Interface (Streamlit Dashboard)
+
+For users who prefer a graphical interface over the command line, the project includes a Streamlit-based web application (`app.py`). This dashboard acts as a UI wrapper for the orchestrator, allowing for interactive configuration and file management.
+
+**Key Features:**
+-   **Interactive Configuration:** Easily input HS Codes, Country Names, and toggle "Dry Run" mode via a web form.
+-   **Visual Feedback:** Real-time status indicators track the progress of the orchestration engine.
+-   **File Management:** Automatically compresses the output folder into a ZIP archive for one-click downloading.
+-   **Image Preview:** Instantly view generated charts (e.g., `.png`, `.jpg`) directly in the browser.
+
+**How to Launch:**
+
+1.  Ensure you have Streamlit installed:
+    ```bash
+    pip install streamlit
+    ```
+
+2.  Run the application from the project root:
+    ```bash
+    streamlit run app.py
+    ```
+
+3.  The interface will open automatically in your default web browser (usually at `http://localhost:8501`).
+
+---
+
+### Update to Project File Structure
+*You should also update your **Project File Structure** section to include the new file:*
+
+```text
+.
+├── app.py                        # Streamlit Web UI entry point
+├── main.py                       # CLI entry point for the application
+...
+```
