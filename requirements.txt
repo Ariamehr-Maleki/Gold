@@ -5,3 +5,4 @@ lxml>=4.9.0
 matplotlib>=3.7.0
 python-docx>=0.8.11
 pycountry-convert>=0.7.2
+streamlit>=1.20.0
