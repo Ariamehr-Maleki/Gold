@@ -1,65 +1,98 @@
+***
+
 # Automated Trade Data Analysis Suite
 
 This project is a sophisticated orchestration engine designed to automate the collection, aggregation, and analysis of international trade data. It launches a suite of scrapers to gather information from various specialized sources, merges the data into a unified structure, and generates a comprehensive quantitative factsheet in both DOCX and PDF formats.
 
 ## Key Features
 
-- **Multi-Source Data Aggregation**: Scrapes data from multiple websites:
-    - **TradeMap**: For detailed import/export values, market size, growth trends, and supplier lists.
-    - **MacMap**: For market access conditions like customs tariffs and regulatory requirements.
-    - **Export Potential Map**: For unrealized export potential analysis.
-    - **ePing**: For the latest regulatory alerts and notifications.
-- **Parallel Execution**: Runs scrapers concurrently to significantly speed up data collection.
-- **Configuration-Driven**: The entire process is controlled by simple JSON configuration files, allowing easy modification of scrapers, data points, and run parameters.
-- **Robust Data Mapping**: A priority-based system merges data from different sources into a final, clean template, ensuring the most reliable data is used.
-- **Automated Reporting**: Generates multiple outputs for each run:
-    - A master `final_report.json` with all aggregated data.
-    - Human-readable Markdown reports for process auditing.
-    - A professional, chart--_enhanced **Quantitative Factsheet** in `.docx` and `.pdf` formats.
+- **Multi-Source Data Aggregation**:
+    - **TradeMap**: Detailed import/export values, market size, growth trends, supplier lists, and company contact data.
+    - **MacMap**: Market access conditions, customs tariffs (MFN vs Preferential), and regulatory requirements (NTMs).
+    - **Export Potential Map**: Unrealized export potential analysis.
+    - **ePing**: Latest SPS/TBT regulatory alerts and notifications.
+- **Visual Analytics**: Automatically generates line charts for trade trends and pie charts for market share analysis.
+- **Intelligent Automation**:
+    - **Parallel Execution**: Runs scrapers concurrently for speed.
+    - **CAPTCHA Solving**: Integrated OCR (using `ddddocr` and `Tesseract`) to handle TradeMap login and verification barriers automatically.
+    - **Robust Navigation**: Custom Selenium logic to handle dynamic .aspx form states and popups.
+- **User Interfaces**:
+    - **Web Dashboard**: A Streamlit-based UI for easy configuration, visualization, and one-click downloading.
+    - **CLI**: A command-line interface for advanced batch processing and automation.
+- **Automated Reporting**: Generates a professional **Quantitative Factsheet** (`.docx`/`.pdf`), a raw data JSON bundle, and audit logs.
 
 ## System Architecture
 
-The project follows a modular orchestrator pattern.
+The project follows a modular orchestrator pattern with two entry points (`app.py` or `main.py`).
 
 ```
-+----------------+      +---------------------------+      +--------------------+
-|   main.py      |----->|   Orchestrator Engine     |----->|   Scraper Scripts  |
-| (Entrypoint)   |      |  (orchestrator/engine.py) |      | (scrapers/*.py)    |
-+----------------+      +-------------+-------------+      +----------+---------+
-       ^                        | (Runs in Parallel)             | (Selenium)
-       |                        |                                |
-+------+----------+      +------v-------+      +----------------v-----------------+
-|  run_config.json|      | Mapping &    |      |  Individual Scraper Outputs      |
-|  (Input Params) |      | Merging Logic|----->|  (trademap.json, macmap.json...) |
-+-----------------+      +--------------+      +----------------------------------+
-                                |
-                                v
-+----------------------+      +--------------------+      +--------------------+
-|  final_report.json   |<-----|   Reporting        |----->|  mapping_report.md |
-|  (Aggregated Data)   |      | (orchestrator/*)   |      +--------------------+
-+----------------------+      +---------+----------+
-                                        |
-                                        v
-                               +---------------------+
-                               |  Factsheet (.docx)  |
-                               |  Factsheet (.pdf)   |
-                               +---------------------+
++----------------+      +----------------+
+|    app.py      |      |    main.py     |
+| (Streamlit UI) |      | (CLI Backend)  |
++-------+--------+      +--------+-------+
+        |                        |
+        +----------+-------------+
+                   |
+        +----------v----------------+      +--------------------+
+        |   Orchestrator Engine     |----->|   Scraper Scripts  |
+        | (orchestrator/engine.py)  |      | (scrapers/*.py)    |
+        +-------------+-------------+      +----------+---------+
+                      |                               | (Selenium/Requests)
+                      |                               v
++---------------------v-----+            +--------------------------+
+| Data Mapping & Merging    |<-----------| Raw Scraper Outputs      |
+| (factsheet_assembler.py)  |            | (JSON, Excel snapshots)  |
++-------------+-------------+            +--------------------------+
+              |
+              v
++-----------------------------+      +-----------------------+
+| Reports & Visuals           |----->| Final Output Folder   |
+| (doc_generator, charts)     |      | (ZIP, PDF, DOCX, JSON)|
++-----------------------------+      +-----------------------+
 ```
 
-1.  **`main.py`**: The entry point. It parses command-line arguments and `run_config.json` to define the parameters for the run (e.g., HS code, target country).
-2.  **Orchestrator Engine**: The core logic that reads `config.json` to know *which* scrapers to run. It launches each scraper as an isolated subprocess, either sequentially or in parallel.
-3.  **Scrapers**: Individual Python scripts that use Selenium to navigate a specific website, perform searches, and download data, saving their findings to a dedicated JSON output file.
-4.  **Mapping & Merging**: After the scrapers finish, the orchestrator loads their JSON outputs. Using the `mappings` rules in `config.json`, it populates a master `template.json` structure.
-5.  **Reporting**: Finally, the orchestrator generates all output files, including the final JSON, markdown audit reports, and the Word/PDF factsheets.
+## Project File Structure
+
+```text
+.
+├── app.py                            # Streamlit Web UI entry point
+├── main.py                           # CLI entry point
+├── config/
+│   ├── config.json                   # Master config: scrapers, priorities
+│   ├── run_config.json               # Default input parameters
+│   └── template.json                 # Final data structure schema
+├── orchestrator/
+│   ├── engine.py                     # Core logic
+│   ├── utils.py                      # Logging and helpers
+│   └── ...
+├── scrapers/                         # Individual extraction scripts
+│   ├── trademap_scraper.py
+│   ├── macmap_scraper.py
+│   ├── potential_scraper.py
+│   └── eping_scraper.py
+├── support/                          # Shared libraries
+│   ├── spider_core.py                # Selenium base class + Captcha solving
+│   ├── data_downloader.py            # TradeMap specific navigation
+│   ├── data_parser.py                # HTML/Excel table parsing logic
+│   ├── chart_generator.py            # Matplotlib chart creation
+│   ├── factsheet_assembler.py        # Logic to build the final report structure
+│   ├── macmap_formatter.py           # MacMap specific formatting
+│   └── country_info_service.py       # API calls for population/GDP
+├── geckodriver.exe                   # Firefox WebDriver
+├── requirements.txt                  # Python dependencies
+└── Quantitative_Factsheet_Template.docx  # Word template
+```
 
 ## Setup and Installation
 
-**Prerequisites:**
-*   Python 3.8+
-*   Mozilla Firefox browser installed.
-*   `geckodriver.exe` (Firefox WebDriver) placed in the project's root directory.
+### Prerequisites
+1.  **Python 3.8+**
+2.  **Mozilla Firefox** browser installed.
+3.  **GeckoDriver**: Ensure `geckodriver.exe` is in the project root or system PATH.
+4.  **OCR Tools** (for CAPTCHA solving):
+    *   **Tesseract OCR**: Install [Tesseract](https://github.com/UB-Mannheim/tesseract/wiki) and ensure the executable path is correct in `support/spider_core.py`.
 
-**Installation Steps:**
+### Installation Steps
 
 1.  **Clone the repository:**
     ```bash
@@ -67,143 +100,77 @@ The project follows a modular orchestrator pattern.
     cd <repository-directory>
     ```
 
-2.  **Create and activate a virtual environment (recommended):**
+2.  **Create virtual environment:**
     ```bash
     python -m venv venv
-    # On Windows
+    # Windows
     venv\Scripts\activate
-    # On macOS/Linux
+    # Mac/Linux
     source venv/bin/activate
     ```
 
-3.  **Install the required Python packages:**
+3.  **Install dependencies:**
     ```bash
     pip install -r requirements.txt
     ```
 
-4.  **Set up TradeMap credentials:**
-    The TradeMap scraper requires login credentials. Set them as environment variables to avoid hardcoding:
-    ```bash
-    # On Windows (Command Prompt)
-    set TRADEMAP_USER="your_email@example.com"
-    set TRADEMAP_PASS="your_password"
-
-    # On Windows (PowerShell)
+4.  **Set TradeMap Credentials:**
+    The scraper requires valid credentials to access data. Set them as environment variables:
+    
+    *Windows (PowerShell):*
+    ```powershell
     $env:TRADEMAP_USER="your_email@example.com"
     $env:TRADEMAP_PASS="your_password"
-
-    # On macOS/Linux
+    ```
+    *Mac/Linux:*
+    ```bash
     export TRADEMAP_USER="your_email@example.com"
     export TRADEMAP_PASS="your_password"
     ```
 
-5.  **Ensure the factsheet template is present:**
-    The file `Quantitative_Factsheet_Template.docx` must be in the project's root directory.
-
 ## How to Run
 
-The primary entry point is `main.py`. You can configure a run by editing `config/run_config.json` or by overriding parameters via the command line.
+### Option 1: Web Interface (Recommended)
+The Streamlit dashboard offers the easiest way to run the tool, visualize progress, and download results.
 
-**1. Basic Run (using `run_config.json`)**
-
-Modify `config/run_config.json` to specify your desired HS code and countries. Then, simply run:
-```bash
-python main.py
-```
-All outputs will be saved to a new timestamped folder inside the `./runs/` directory.
-
-**2. Overriding Parameters via Command Line**
-
-You can override any parameter from the `run_config.json` file directly from the command line. This is useful for automated scripts or quick tests.
-
-```bash
-python main.py \
-    --hs-code "851712" \
-    --your-country-name "South Korea" \
-    --your-country-id "410" \
-    --target-market-name "Germany" \
-    --target-market-id "276"
-```
-
-**3. Useful Flags**
-
--   `--sequential`: Forces scrapers to run one by one. Useful for debugging.
--   `--dry-run`: Skips scraper execution entirely. The orchestrator will try to map data from existing output files in the output directory.
--   `--outdir <path>`: Specify a different base directory for the run outputs.
-
-## Output Directory Structure
-
-For each run, a new directory is created (e.g., `runs/20251117_103000/`), containing:
-
--   `final_report.json`: The master JSON file with all aggregated data.
--   `Factsheet_[Market]_[HSCode].docx`: The generated Word document factsheet.
--   `Factsheet_[Market]_[HSCode].pdf`: The generated PDF factsheet.
--   `mapping_report.md`: A human-readable report showing which source was used for each data point.
--   `review_checklist.md`: A list of fields that were not successfully filled and may need manual review.
--   `orchestrator.log`: The main log file for the orchestration process.
--   `scraper_name_output.json`: The raw JSON output from each individual scraper.
--   `/logs/`: A subdirectory containing detailed logs for each individual scraper run (`trademap.log`, `macmap.log`, etc.).
--   `/graphs/`: Contains the generated chart images.
-
-## Project File Structure
-
-```
-.
-├── config/
-│   ├── config.json               # Master config: scrapers, priorities, mappings
-│   ├── run_config.json           # Input parameters for a specific run
-│   └── template.json             # The final, desired output data structure
-├── orchestrator/
-│   ├── engine.py                 # Core orchestration logic
-│   ├── doc_generator.py          # Generates DOCX/PDF factsheets
-│   ├── reporting.py              # Creates MD reports and final JSON
-│   └── utils.py                  # Helper functions (logging, path access)
-├── scrapers/
-│   ├── trademap_scraper.py
-│   ├── macmap_scraper.py
-│   ├── potential_scraper.py
-│   └── eping_scraper.py
-├── support/
-│   ├── spider_core.py            # Base class for Selenium scrapers
-│   ├── data_downloader.py        # Advanced downloader for TradeMap
-│   └── data_parser.py            # Parses raw .txt files from TradeMap
-├── main.py                       # Main entry point for the application
-├── geckodriver.exe               # Firefox WebDriver
-├── requirements.txt              # Python package dependencies
-└── Quantitative_Factsheet_Template.docx  # Word template for the final report
-
-## Web Interface (Streamlit Dashboard)
-
-For users who prefer a graphical interface over the command line, the project includes a Streamlit-based web application (`app.py`). This dashboard acts as a UI wrapper for the orchestrator, allowing for interactive configuration and file management.
-
-**Key Features:**
--   **Interactive Configuration:** Easily input HS Codes, Country Names, and toggle "Dry Run" mode via a web form.
--   **Visual Feedback:** Real-time status indicators track the progress of the orchestration engine.
--   **File Management:** Automatically compresses the output folder into a ZIP archive for one-click downloading.
--   **Image Preview:** Instantly view generated charts (e.g., `.png`, `.jpg`) directly in the browser.
-
-**How to Launch:**
-
-1.  Ensure you have Streamlit installed:
-    ```bash
-    pip install streamlit
-    ```
-
-2.  Run the application from the project root:
+1.  Run the app:
     ```bash
     streamlit run app.py
     ```
+2.  Open your browser to the URL shown (usually `http://localhost:8501`).
+3.  Enter the **HS Code**, **Your Country**, and **Target Market**.
+4.  Click **Run Orchestration**.
+5.  Once complete, download the **Full Output ZIP** or the Factsheet JSON directly.
 
-3.  The interface will open automatically in your default web browser (usually at `http://localhost:8501`).
+### Option 2: Command Line (Advanced)
+Use the CLI for automated scripts or server environments.
 
----
-
-### Update to Project File Structure
-*You should also update your **Project File Structure** section to include the new file:*
-
-```text
-.
-├── app.py                        # Streamlit Web UI entry point
-├── main.py                       # CLI entry point for the application
-...
+**Basic Run:**
+```bash
+python main.py
 ```
+*Uses settings from `config/run_config.json`.*
+
+**Run with Overrides:**
+```bash
+python main.py \
+    --hs-code "090111" \
+    --your-country-name "Rwanda" \
+    --target-market-name "France" \
+    --timeout 900
+```
+
+**Flags:**
+- `--dry-run`: Skips scraping; attempts to generate reports from existing data in the output folder.
+- `--sequential`: Runs scrapers one by one (easier for debugging logic).
+
+## Output Directory Structure
+
+For every run, a timestamped folder is created (e.g., `runs/20251117_103000/`):
+
+-   **`factsheet_data.json`**: The clean, structured data used to populate the Word template.
+-   **`final_reportNew.json`**: The raw aggregated data from all sources.
+-   **`Factsheet_[Market]_[HSCode].docx`**: The final quantitative report.
+-   **`scraper_results/`**: Folder containing the raw JSON output from every scraper.
+-   **`logs/`**: Detailed execution logs (`trademap.log`, `macmap.log`).
+-   **`graphs/`**: Generated `.png` charts used in the report.
