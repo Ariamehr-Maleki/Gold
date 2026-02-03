@@ -160,9 +160,7 @@ python main.py \
     --timeout 900
 ```
 
-**Flags:**
-- `--dry-run`: Skips scraping; attempts to generate reports from existing data in the output folder.
-- `--sequential`: Runs scrapers one by one (easier for debugging logic).
+
 
 ## Output Directory Structure
 
