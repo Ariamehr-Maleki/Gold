@@ -14,13 +14,16 @@ def clean_text(element):
 def parse_macmap_html(html_content):
     soup = BeautifulSoup(html_content, 'html.parser')
     
-    # 1. Parse Summary Boxes
+    # 1. Parse Header Info (Exporter, Importer, Product) - NEW
+    header_info = _parse_header_info(soup)
+    
+    # 2. Parse Summary Boxes (Average Tariffs)
     summary_boxes = _parse_summary_boxes(soup)
     
-    # 2. Parse Detailed Table
+    # 3. Parse Detailed Table
     tariff_data = _parse_detailed_tariff_table(soup)
 
-    # 3. Categorize and Filter Agreement Names
+    # 4. Categorize and Filter Agreement Names
     mfn_entries = [t for t in tariff_data if t.get('is_mfn')]
     pref_entries = [t for t in tariff_data if not t.get('is_mfn')]
     
@@ -49,20 +52,56 @@ def parse_macmap_html(html_content):
             benefits_from = True
 
     # FINAL LOGIC: If we have specific names, ignore the generic country names
-    # This ensures "CEPA, India-UAE" is shown instead of just "United Arab Emirats"
     if specific_agreements:
         final_agreements = list(specific_agreements)
     else:
         final_agreements = list(generic_regimes)
 
     return {
+        "header_info": header_info, # <--- Added this to the return
         "summary_box_data": summary_boxes,
         "preferential_access_status": "benefits from" if benefits_from else "does not benefit from",
-        "identified_agreements": final_agreements, # <--- The fixed list
+        "identified_agreements": final_agreements, 
         "tariffs_detailed": tariff_data,
         "trade_remedies": _parse_remedies_section(soup),
         "regulatory_requirements": _parse_ntm_section(soup)
     }
+
+def _parse_header_info(soup):
+    """
+    Parses the top 'Overview' section to validate Exporter, Importer, and Product.
+    """
+    data = {"exporter": None, "importer": None, "product": None}
+    
+    # Look for the specific ID provided in your snippet
+    wrapper = soup.find(id="overview-summary-wrapper")
+    if not wrapper:
+        # Fallback: try finding the class if ID is missing
+        wrapper = soup.find(class_="overview-page-wrapper")
+        
+    if not wrapper: 
+        return data
+
+    # The data is organized in 'summary-group' divs
+    groups = wrapper.find_all(class_="summary-group")
+    
+    for group in groups:
+        heading_el = group.find(class_="summary-heading")
+        text_el = group.find(class_="summary-text")
+        
+        if heading_el and text_el:
+            heading = clean_text(heading_el).upper()
+            text = clean_text(text_el)
+            
+            if "EXPORTING" in heading:
+                data["exporter"] = text
+            elif "IMPORTER" in heading:
+                data["importer"] = text
+            elif "PRODUCT" in heading:
+                # The product text might be inside the ID 'collapseExample', but clean_text handles that
+                data["product"] = text
+                
+    return data
 
 def _parse_detailed_tariff_table(soup):
     section = soup.find(id="custom-duties-results")
@@ -101,7 +140,10 @@ def _parse_detailed_tariff_table(soup):
             regime_cell = cells[0]
             regime_text = clean_text(regime_cell)
             
-            rate_text = clean_text(cells[1]).replace('%', '').strip() if clean_text(cells[1]) else ""
+            # Extract Rate
+            rate_text_raw = clean_text(cells[1])
+            rate_text = rate_text_raw.replace('%', '').strip() if rate_text_raw else ""
+            
             try:
                 if "free" in rate_text.lower(): rate_val = 0.0
                 elif rate_text: rate_val = float(rate_text)
@@ -110,6 +152,7 @@ def _parse_detailed_tariff_table(soup):
 
             ave_text = clean_text(cells[2]).replace('%', '').strip() if clean_text(cells[2]) else ""
 
+            # Extract NTL Code link if available
             link = regime_cell.find('a', class_='tariff-regime-detail')
             ntl_code = None
             if link and link.has_attr('data-detail'):
@@ -122,7 +165,7 @@ def _parse_detailed_tariff_table(soup):
                 "type": "tariff_line",
                 "ntl_code": ntl_code,
                 "regime_name": regime_text,
-                "rate_display": rate_text + "%" if rate_text and "free" not in rate_text.lower() else rate_text,
+                "rate_display": rate_text + "%" if rate_text and "free" not in rate_text.lower() else rate_text_raw,
                 "rate": rate_val,
                 "ave_display": ave_text + "%" if ave_text else "N/A",
                 "is_mfn": is_mfn,
@@ -141,8 +184,7 @@ def _extract_agreement_details(row_element):
     agreement_div = row_element.find(class_="agreement-detail")
     if not agreement_div: return None
 
-    # RECURSIVE FIND: The HTML is deeply nested. find_all searches recursively by default.
-    # We look for any div with class 'content-row' inside the agreement-detail wrapper.
+    # RECURSIVE FIND: The HTML is deeply nested.
     rows = agreement_div.find_all(class_="content-row")
     
     for r in rows:
@@ -209,18 +251,32 @@ def _parse_ntm_section(soup):
     if not container: return []
     ntms = []
     rows = container.find_all('tr', class_='toggle-trigger')
+    
     for row in rows:
+        # 1. Extract the Count
+        count_div = row.find(class_='measure-count')
+        count_str = clean_text(count_div) if count_div else "0"
+        
+        # 2. Extract the Text Description
         # Try finding the wrapper which contains the code + title
         wrapper = row.find(class_='measure-summary-wrapper')
+        text_content = ""
+        
         if wrapper:
             full_text = clean_text(wrapper)
-            # Remove "Learn more" clutter
             if full_text:
-                full_text = full_text.replace("Learn more", "").strip()
-                ntms.append(full_text)
+                # Remove "Learn more" clutter
+                text_content = full_text.replace("Learn more", "").strip()
         else:
             # Fallback
             summary_div = row.find(class_='measure-summary')
             if summary_div:
-                ntms.append(clean_text(summary_div).replace("Learn more", "").strip())
+                text_content = clean_text(summary_div).replace("Learn more", "").strip()
+
+        # 3. Format: "(Count) Description"
+        if text_content:
+            # User requested the number "in front of" the agreement
+            formatted_entry = f"({count_str}) {text_content}"
+            ntms.append(formatted_entry)
+            
     return ntms

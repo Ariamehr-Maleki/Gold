@@ -5,7 +5,7 @@
         "Target_Market": "699",
         "Product": "080410",
         "Advantage_Statement": "[784] does not have a preferential tariff advantage over key competitors in [699] for [080410].",
-        "Other_Suppliers_Analysis": "Apart from the top three suppliers, other top suppliers facing preferential tariffs in [699] include: 704.",
+        "Other_Suppliers_Analysis": "Apart from the top three suppliers, other top five suppliers facing preferential tariffs in [699] include: 704.",
         "Rules_of_Origin_Compliance": {
             "Statement": "To benefit from preferential market access to [699], exporters from [784] must comply with Rules of Origin of the preferential trade agreement(s).",
             "Rules_of_Origin_Link": "https://findrulesoforigin.org/documents/pdf/itc01163_full.pdf",
@@ -30,7 +30,7 @@
                 "MFN_or_general_tariff": "30%",
                 "Lowest_tariff_faced_by_Your_Country": "0.0%",
                 "Notes": "Ref: CEPA, India-UAE",
-                "Lowest_tariff_faced_by_Competitor_A": "0.0% (704)",
+                "Lowest_tariff_faced_by_Competitor_A": "N/A (704)",
                 "Lowest_tariff_faced_by_Competitor_B": "0.0% (764)",
                 "Lowest_tariff_faced_by_Competitor_C": "-"
             },
@@ -41,27 +41,27 @@
                 "Lowest_tariff_faced_by_Your_Country": "0.0%",
                 "Notes": "Ref: CEPA, India-UAE",
                 "Lowest_tariff_faced_by_Competitor_A": "0.0% (704)",
-                "Lowest_tariff_faced_by_Competitor_B": "0.0% (764)",
+                "Lowest_tariff_faced_by_Competitor_B": "N/A (764)",
                 "Lowest_tariff_faced_by_Competitor_C": "-"
             },
             {
                 "National_tariff_line_code_in_Target_Market": "08041030",
                 "Product_Description": "",
-                "MFN_or_general_tariff": "20%",
-                "Lowest_tariff_faced_by_Your_Country": "0.0%",
-                "Notes": "Ref: CEPA, India-UAE",
-                "Lowest_tariff_faced_by_Competitor_A": "0.0% (704)",
-                "Lowest_tariff_faced_by_Competitor_B": "0.0% (764)",
+                "MFN_or_general_tariff": "N/A",
+                "Lowest_tariff_faced_by_Your_Country": "N/A",
+                "Notes": "",
+                "Lowest_tariff_faced_by_Competitor_A": "N/A (704)",
+                "Lowest_tariff_faced_by_Competitor_B": "N/A (764)",
                 "Lowest_tariff_faced_by_Competitor_C": "-"
             },
             {
                 "National_tariff_line_code_in_Target_Market": "08041090",
                 "Product_Description": "",
-                "MFN_or_general_tariff": "30%",
-                "Lowest_tariff_faced_by_Your_Country": "0.0%",
-                "Notes": "Ref: CEPA, India-UAE",
-                "Lowest_tariff_faced_by_Competitor_A": "0.0% (704)",
-                "Lowest_tariff_faced_by_Competitor_B": "0.0% (764)",
+                "MFN_or_general_tariff": "N/A",
+                "Lowest_tariff_faced_by_Your_Country": "N/A",
+                "Notes": "",
+                "Lowest_tariff_faced_by_Competitor_A": "N/A (704)",
+                "Lowest_tariff_faced_by_Competitor_B": "N/A (764)",
                 "Lowest_tariff_faced_by_Competitor_C": "-"
             }
         ],

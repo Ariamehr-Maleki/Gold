@@ -4,6 +4,7 @@ import json
 import logging
 import os
 from datetime import datetime
+from support.country_info_service import CountryInfoService
 
 logger = logging.getLogger("FactsheetBuilder")
 
@@ -20,17 +21,10 @@ class FactsheetBuilder:
         self.ep = self.data.get("Export_Potential", {})
         self.eping = self.data.get("SPS_TBT_Notifications", {})
         
-        # Load Country Profiles
-        self.country_profiles = self._load_country_profiles()
+        # Initialize Country Info Service
+        self.country_info_service = CountryInfoService()
 
-    def _load_country_profiles(self):
-        path = os.path.join(os.getcwd(), "assets", "country_profiles.json")
-        if os.path.exists(path):
-            try:
-                with open(path, 'r', encoding='utf-8') as f:
-                    return json.load(f)
-            except: return {}
-        return {}
+
 
     def _get(self, source, path, default=""):
         """Helper to get nested data safely."""
@@ -85,8 +79,10 @@ class FactsheetBuilder:
         # 2. Rank Logic
         calculated_rank = self._calculate_global_rank(target_market)
 
-        # 3. Country Profile Logic
-        c_profile = self.country_profiles.get(target_market, {})
+        # 3. Country Profile Logic - Fetch dynamically from APIs
+        logger.info(f"Fetching country profile for: '{target_market}'")
+        c_profile = self.country_info_service.get_country_profile(target_market)
+        logger.info(f"Country profile retrieved for '{target_market}': {c_profile}")
 
             
             # [HELPER FUNCTION TO CLEAN UNIT STRINGS]
@@ -137,15 +133,27 @@ class FactsheetBuilder:
                 "Rank_in_World_For_Imports_Of_This_Product": calculated_rank # <--- UPDATED
             },
 
-            "Opportunity_Summary": {
-                "Summary_Text": f"Opportunity analysis for exporting {product_code} to {target_market}.",
-                "Capital_City": c_profile.get("Capital_City", "[Data Not Scraped]"),
-                "Population": c_profile.get("Population", "[Data Not Scraped]"),
-                "GDP_Per_Capita": c_profile.get("GDP_Per_Capita", "[Data Not Scraped]"),
-                "Currency": c_profile.get("Currency", "[Data Not Scraped]"),
-                "Languages": c_profile.get("Languages", "[Data Not Scraped]"),
-                "Country_Profile_Link": f"https://www.trademap.org/Country_SelProductCountry.aspx?nvpm=1|{self._get(self.mm, 'Target_Market')}||||{product_code}"
+            "Target_Market_Basic_Info": {
+                "Rank_in_World_for_Imports": str(int(calculated_rank)) if calculated_rank != "N/A" else "N/A",
+                "Capital_City": c_profile.get("capital_city", "[Data Not Scraped]"),
+                "Population": c_profile.get("population", "[Data Not Scraped]"),
+                "Population_Year": c_profile.get("population_year", "[Data Not Scraped]"),
+                "GDP_per_capita_USD": c_profile.get("gdp_per_capita_usd", "[Data Not Scraped]"),
+                "GDP_per_capita_Year": c_profile.get("gdp_per_capita_year", "[Data Not Scraped]"),
+                "Currency": c_profile.get("currency", "[Data Not Scraped]"),
+                "Languages": c_profile.get("languages", "[Data Not Scraped]"),
+                "Country_Profile_Link": c_profile.get("country_profile_link", f"https://www.trademap.org/Country_SelProductCountry.aspx?nvpm=1|{self._get(self.mm, 'Target_Market')}||||{product_code}")
             },
+
+            # "Opportunity_Summary": {
+            #     "Summary_Text": f"Opportunity analysis for exporting {product_code} to {target_market}.",
+            #     "Capital_City": c_profile.get("Capital_City", "[Data Not Scraped]"),
+            #     "Population": c_profile.get("Population", "[Data Not Scraped]"),
+            #     "GDP_Per_Capita": c_profile.get("GDP_Per_Capita", "[Data Not Scraped]"),
+            #     "Currency": c_profile.get("Currency", "[Data Not Scraped]"),
+            #     "Languages": c_profile.get("Languages", "[Data Not Scraped]"),
+            #     "Country_Profile_Link": f"https://www.trademap.org/Country_SelProductCountry.aspx?nvpm=1|{self._get(self.mm, 'Target_Market')}||||{product_code}"
+            # },
 
             "Size_of_the_Market": {
                 "Year": self._get(self.tm, "Size_of_the_Market.Year"),
@@ -169,7 +177,7 @@ class FactsheetBuilder:
                 "Your_Country_Market_Share_Change": self._get(self.tm, "Growth_of_the_Market.Market_share_gained_or_lost")
             },
             "Growth_Visuals_and_Seasonality": {
-                "Line_Graph_Target_Market_Imports_5_10_Years": self._get(self.tm, "Growth_Visuals_and_Seasonality.Line_Graph_Target_Market_Imports_5_10_Years"),
+                "Line_Graph_Target_Market_Imports_5_10_Years": "[GRAPH_IMAGE_PATH]",
                 "Comments_On_Imports_Seasonality": "Detailed seasonality data requires monthly timeseries scraping."
             },
 
@@ -233,7 +241,7 @@ class FactsheetBuilder:
                     } 
                     for item in self._get(self.tm, "Competition.Top_3_Exporters_Details", [])
                 ],
-                "Pie_Chart_Last_Year_Market_Shares": self._get(self.tm, "Competition.Pie_Chart_Last_Year_Market_Shares"),
+                "Pie_Chart_Last_Year_Market_Shares": "[GRAPH_IMAGE_PATH]",
                 "Top_Ten_Suppliers_Gaining_Share": self._get(self.tm, "Competition.Market_Share_Increasers_Top10", []),
                 "Other_Suppliers_From_Your_Region": [
                     self._get(self.tm, "Competition.Regional_Competitors_Similiar_Distance.Supplier_X"),
@@ -243,27 +251,27 @@ class FactsheetBuilder:
             },
 
             "Market_Access": {
-                "Preferential_Market_Access_Status": "benefits" if "benefit" in self._get(self.mm, "your_country_has_or_does_not_have_a_preferential_tariff_advantage...", "") else "does not benefit",
-                "Relevant_Preferential_Trade_Agreements": self._get(self.mm, "Relevant_preferential_trade_agreements", "None").split(';'),
+                "Preferential_Market_Access_Status": self._get(self.mm, "Preferential_Market_Access_Status", "does not benefit"),
+                "Relevant_Preferential_Trade_Agreements": self._get(self.mm, "Relevant_Preferential_Trade_Agreements", "None").split(';') if isinstance(self._get(self.mm, "Relevant_Preferential_Trade_Agreements", "None"), str) else [self._get(self.mm, "Relevant_Preferential_Trade_Agreements", "None")],
                 "Tariff_Table": self._get(self.mm, "Tariff_Table", []),
-                "Short_Tariff_Analysis": self._get(self.mm, "Short_analysis_of_tariffs_and_tariff_rate_quotas_if_applicable_for_example"),
-                "Tariff_Analysis_Details": {
-                    "Your_Country_Preferential_Tariff_Advantage_Status": self._get(self.mm, "your_country_has_or_does_not_have_a_preferential_tariff_advantage_over_key_competitors_in_target_market_for_product"),
-                    "Other_Top_Five_Suppliers_With_Preferential_Tariffs": [], # Not currently extracted explicitly as list in MM output
-                    "None_Of_Top_Five_Has_Prefernces_Statement": "See Analysis",
-                    "Rules_Of_Origin_Notes_And_Certificate_Of_Origin_Info": self._get(self.mm, "Rules_Of_Origin_and_Certificate_Of_Origin_information"),
-                    "Tariff_Rate_Quota": {
-                        "Applied": self._get(self.mm, "Tariff_rate_quota.Target_market_applies_a_tariff_rate_quota_on_imports_of_product"),
-                        "Quota_Volume": self._get(self.mm, "Tariff_rate_quota.Quota_details"),
-                        "Application_Period": "N/A",
-                        "Outside_Quota_Tariff_Rate": "N/A"
-                    },
-                    "Other_Duties_Trade_Remedies_Info": self._get(self.mm, "Other_duties_applied_by_Target_market_to_imports_of_product_from_Your_country")
-                }
+                # "Short_Tariff_Analysis": self._get(self.mm, "Short_analysis_of_tariffs_and_tariff_rate_quotas_if_applicable_for_example"),
+                # "Tariff_Analysis_Details": {
+                #     "Your_Country_Preferential_Tariff_Advantage_Status": self._get(self.mm, "your_country_has_or_does_not_have_a_preferential_tariff_advantage_over_key_competitors_in_target_market_for_product"),
+                #     "Other_Top_Five_Suppliers_With_Preferential_Tariffs": [], # Not currently extracted explicitly as list in MM output
+                #     "None_Of_Top_Five_Has_Prefernces_Statement": "See Analysis",
+                #     "Rules_Of_Origin_Notes_And_Certificate_Of_Origin_Info": self._get(self.mm, "Rules_Of_Origin_and_Certificate_Of_Origin_information"),
+                #     "Tariff_Rate_Quota": {
+                #         "Applied": self._get(self.mm, "Tariff_rate_quota.Target_market_applies_a_tariff_rate_quota_on_imports_of_product"),
+                #         "Quota_Volume": self._get(self.mm, "Tariff_rate_quota.Quota_details"),
+                #         "Application_Period": "N/A",
+                #         "Outside_Quota_Tariff_Rate": "N/A"
+                #     },
+                #     "Other_Duties_Trade_Remedies_Info": self._get(self.mm, "Other_duties_applied_by_Target_market_to_imports_of_product_from_Your_country")
+                # }
             },
 
             "Non_Tariff_Measures": {
-                "Mandatory_Market_Access_Requirements_List": self._get(self.mm, "Mandatory_market_access_requirements_non_tariff_measures.Requirements_list", []),
+                "Mandatory_Market_Access_Requirements_List": self._get(self.mm, "Mandatory_market_access_requirements", []),
                 "Potential_New_Non_Tariff_Measures": {
                     "Description_and_Links": f"Found {len(self._get(self.eping, 'notifications', []))} notifications.",
                     "Concern_Explanation": "Notifications regarding SPS/TBT can imply upcoming regulatory changes.",

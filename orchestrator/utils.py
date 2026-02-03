@@ -1,118 +1,94 @@
 # orchestrator/utils.py
 
-import json  # <--- Added this import
+import json
 import logging
 import os
 import sys
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple
 
 def setup_logging(log_file_path: str) -> logging.Logger:
     """Configures and returns a logger that writes to both file and console."""
     logger = logging.getLogger("Orchestrator")
     logger.setLevel(logging.INFO)
-
-    # Prevent double logging by stopping propagation to root logger
     logger.propagate = False 
 
-    # Prevent adding duplicate handlers if this function is called multiple times
     if logger.hasHandlers():
         logger.handlers.clear()
 
-    # File handler
     try:
         file_handler = logging.FileHandler(log_file_path, mode='w', encoding='utf-8')
-        file_formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
-        file_handler.setFormatter(file_formatter)
+        file_handler.setFormatter(logging.Formatter('%(asctime)s - %(levelname)s - %(message)s'))
         logger.addHandler(file_handler)
     except Exception as e:
         print(f"Warning: Could not set up file logging: {e}")
 
-    # Console handler
     console_handler = logging.StreamHandler(sys.stdout)
-    console_formatter = logging.Formatter('%(levelname)s: %(message)s')
-    console_handler.setFormatter(console_formatter)
+    console_handler.setFormatter(logging.Formatter('%(levelname)s: %(message)s'))
     logger.addHandler(console_handler)
 
     return logger
 
-def load_country_lookup(logger, json_path="m49-list-with-itc.json"):
+def load_dual_country_maps(logger, json_path="m49-list-with-itc.json") -> Tuple[Dict[str, str], Dict[str, str]]:
     """
-    Loads the country JSON and creates a mapping from country name to M49 code.
+    Reads the JSON file ONCE and returns two separate lookups.
+    Returns: (itc_map, m49_map)
     """
-    country_map = {}
+    itc_map = {}
+    m49_map = {}
+
     try:
         if not os.path.exists(json_path):
-             logger.warning(f"Country code file not found at {json_path}. Name-to-code lookup disabled.")
-             return {}
+             logger.warning(f"Country code file not found at {json_path}. Lookups disabled.")
+             return {}, {}
 
         with open(json_path, 'r', encoding='utf-8') as f:
             data = json.load(f)
-            # Support both structure types: direct list or dict with 'countries' key
-            if isinstance(data, dict) and 'countries' in data:
-                items = data['countries']
-            elif isinstance(data, list):
-                items = data
-            else:
-                items = []
 
-            for country in items:
-                name = country.get('name') or country.get('Name') or country.get('english')
-                m49code = country.get('m49code') or country.get('Code') or country.get('id')
-                
-                # We use the country name in all caps as the key for case-insensitive lookup
-                if name and m49code is not None:
-                    country_map[name.upper()] = str(m49code)
+        # Support both structure types: list or dict with 'countries'
+        items = data['countries'] if isinstance(data, dict) and 'countries' in data else data
 
-        logger.info(f"Loaded {len(country_map)} country names for lookup.")
-    except json.JSONDecodeError as e:
-        logger.error(f"Error decoding country JSON file: {e}")
+        for country in items:
+            # Get Name (Normalize to UPPER for lookup)
+            name = country.get('name') or country.get('Name') or country.get('english')
+            if not name: 
+                continue
+            
+            normalized_name = name.strip().upper()
+
+            # 1. Populate ITC Map
+            itc = country.get('itcCode')
+            if itc is not None:
+                itc_map[normalized_name] = str(itc)
+
+            # 2. Populate M49 Map
+            m49 = country.get('m49code')
+            if m49 is not None:
+                m49_map[normalized_name] = str(m49)
+
+        logger.info(f"Loaded Maps: {len(itc_map)} ITC codes, {len(m49_map)} M49 codes.")
+        
     except Exception as e:
-        logger.error(f"An unexpected error occurred while loading country data: {e}")
+        logger.error(f"Error loading dual country maps: {e}")
+        return {}, {}
 
-    return country_map
+    return itc_map, m49_map
 
 def get_country_code(country_name, country_map):
-    """
-    Translates a country name (case-insensitive) to its M49 code string.
-    """
-    if not country_name:
-        return None
+    """Translates a country name (case-insensitive) to code string."""
+    if not country_name: return None
     return country_map.get(country_name.upper())
 
 def get_by_path(data: Dict[str, Any], path: str) -> Optional[Any]:
-    """
-    Access a nested value in a dictionary using a dot-separated path.
-    Example: get_by_path(data, "a.b.c")
-    """
     keys = path.split('.')
     current = data
     for key in keys:
         if isinstance(current, dict) and key in current:
             current = current[key]
         elif isinstance(current, list):
-            # Try to handle list indices if path uses integer (e.g. "items.0.value")
             try:
                 idx = int(key)
-                if 0 <= idx < len(current):
-                    current = current[idx]
-                else:
-                    return None
-            except ValueError:
-                return None
-        else:
-            return None
+                if 0 <= idx < len(current): current = current[idx]
+                else: return None
+            except ValueError: return None
+        else: return None
     return current
-
-def set_by_path(data: Dict[str, Any], path: str, value: Any):
-    """
-    Set a value in a nested dictionary using a dot-separated path.
-    Creates nested dictionaries if they don't exist.
-    Example: set_by_path(data, "a.b.c", 123)
-    """
-    keys = path.split('.')
-    current_level = data
-    for i, key in enumerate(keys[:-1]):
-        if key not in current_level or not isinstance(current_level[key], dict):
-            current_level[key] = {}
-        current_level = current_level[key]
-    current_level[keys[-1]] = value

@@ -30,7 +30,6 @@ class MacMapScraper(TradeSpider):
     def handle_popup(self):
         """Closes the subscription popup if it appears."""
         try:
-            # Wait specifically for the popup or continue if not found
             popup_btn = WebDriverWait(self.driver, 5).until(EC.element_to_be_clickable((By.ID, "hidePopup")))
             popup_btn.click()
             time.sleep(1)
@@ -42,78 +41,91 @@ class MacMapScraper(TradeSpider):
     def _wait_for_loading_overlay(self):
         """Waits for the 'processing' overlay (spinner) to appear and then disappear."""
         try:
-            # Wait briefly for overlay to appear (it might happen instantly)
-            WebDriverWait(self.driver, 2).until(
+            # Wait briefly for overlay to appear
+            WebDriverWait(self.driver, 3).until(
                 EC.presence_of_element_located((By.CSS_SELECTOR, ".blockUI, .loading, .spinner"))
             )
-            # If it appeared, wait up to 15s for it to vanish
-            WebDriverWait(self.driver, 15).until(
+            # If it appeared, wait longer for it to vanish
+            WebDriverWait(self.driver, 20).until(
                 EC.invisibility_of_element_located((By.CSS_SELECTOR, ".blockUI, .loading, .spinner"))
             )
         except TimeoutException:
-            pass # Overlay didn't appear or didn't disappear (rely on subsequent DOM checks)
+            pass 
         except Exception:
             pass
 
     def _wait_for_table(self):
-        """Robustly waits for the data table rows to populate with real data."""
+        """
+        Robustly waits for the data table rows to populate with real data.
+        Includes a grace period before accepting 'No data' as final.
+        """
         start_time = time.time()
-        timeout = 60
+        timeout = 90  
+        grace_period = 8 # Increased grace period to 8s
+        
+        logging.info("Waiting for table data to populate...")
         
         while time.time() - start_time < timeout: 
+            elapsed = time.time() - start_time
             try:
                 rows = self.driver.find_elements(By.CSS_SELECTOR, "#custom-duties-results table tbody tr")
-                # Ensure we have rows and they aren't empty placeholders
-                if len(rows) > 0 and rows[0].text.strip() != "":
-                    # Double check that we don't have a "Loading..." text row
-                    if "oading" not in rows[0].text:
-                        return True
                 
-                # Fast fail if explicit "No data" message exists
+                if len(rows) > 0:
+                    first_row_text = rows[0].text.strip()
+                    
+                    if first_row_text != "":
+                        if "oading" in first_row_text:
+                            if int(time.time()) % 5 == 0:
+                                logging.debug("Table contains 'Loading...' text. Waiting...")
+                        else:
+                            logging.info(f"Table populated with {len(rows)} rows. First row starts with: '{first_row_text[:30]}...'")
+                            return True
+                
+                # Check for explicit "No data" message
+                # ONLY fail if we are past the grace period
                 if "No data available" in self.driver.page_source:
-                    return False
+                    if elapsed > grace_period:
+                        time.sleep(2)
+                        if "No data available" in self.driver.page_source:
+                            logging.warning("Explicit 'No data available' message confirmed after grace period.")
+                            return False
+                    else:
+                        pass # Still in grace period
+
             except StaleElementReferenceException:
-                # DOM updated mid-check, retry
                 continue
-            except Exception: 
+            except Exception as e: 
                 pass
+            
             time.sleep(0.5)
+            
+        logging.error(f"Timeout ({timeout}s) reached waiting for table data.")
         return False
 
     def _wait_for_initial_page_load(self):
-        """
-        Blocks execution until the browser confirms the page is 'complete'.
-        Then attempts to verify critical elements without crashing.
-        """
         logging.info("Waiting for page stabilization...")
         try:
-            # 1. Generic Browser Load Check (The "Is page still loading?" check)
-            # This waits for the browser's own 'stop' signal (spinner in tab stops)
             WebDriverWait(self.driver, 30).until(
                 lambda d: d.execute_script("return document.readyState") == "complete"
             )
 
-            # 2. Wait for Body
             WebDriverWait(self.driver, 20).until(
                 EC.presence_of_element_located((By.TAG_NAME, "body"))
             )
 
-            # 3. Wait for any overlay to vanish
             self._wait_for_loading_overlay()
 
-            # 4. "Soft" Check for Dropdown (Critical but we won't crash here)
             try:
-                WebDriverWait(self.driver, 15).until(
+                WebDriverWait(self.driver, 20).until(
                     EC.presence_of_element_located((By.ID, "ntlc-product-list"))
                 )
             except TimeoutException:
-                logging.warning("Warning: Product dropdown (ntlc-product-list) not detected yet. Proceeding anyway...")
+                logging.warning("Warning: Product dropdown (ntlc-product-list) not detected. Proceeding cautiously...")
 
-            # 5. Handle Popup
             self.handle_popup()
             
             logging.info("Page fully loaded (readyState=complete). Waiting 10s buffer...")
-            time.sleep(10) # <--- ADDED FIX WAIT
+            time.sleep(10) 
             return True
 
         except TimeoutException:
@@ -124,43 +136,32 @@ class MacMapScraper(TradeSpider):
             return False
 
     def _expand_agreement_details(self):
-        """
-        Clicks all 'Trade agreement details' links to reveal hidden Rows/Divs.
-        Forces click regardless of class state and waits for '#fta-result' or similar to appear.
-        """
         try:
-            # 1. Find all toggle links based on text content
             links = self.driver.find_elements(By.XPATH, "//a[contains(text(), 'Trade agreement details')]")
             
             clicked_something = False
             for link in links:
                 try:
                     if link.is_displayed():
-                        # Force click via JS to bypass potential overlays/class checks
                         self.driver.execute_script("arguments[0].click();", link)
                         clicked_something = True
                 except Exception:
                     continue
             
-            # 2. If we clicked, WAIT for the content to visibly load in the DOM
             if clicked_something:
                 try:
-                    # Wait for the specific container IDs you identified (fta-result or result-fta)
-                    WebDriverWait(self.driver, 5).until(
+                    WebDriverWait(self.driver, 8).until(
                         EC.visibility_of_any_elements_located((By.CSS_SELECTOR, "#fta-result, .result-fta, .agreement-detail"))
                     )
                 except TimeoutException:
-                    logging.warning("Expanded details link clicked, but content did not appear.")
+                    pass
                 
-                # Small buffer for animation completion
-                logging.info("Details expanded. Waiting 10s buffer...")
-                time.sleep(10) # <--- ADDED FIX WAIT
+                time.sleep(5) 
                 
         except Exception as e:
             logging.warning(f"Error expanding details: {e}")
 
     def _get_ntl_options(self):
-        """Parses the dropdown to get the list of sub-products (National Tariff Lines)."""
         try:
             select_elem = self.driver.find_element(By.ID, "ntlc-product-list")
             options = select_elem.find_elements(By.TAG_NAME, "option")
@@ -176,17 +177,13 @@ class MacMapScraper(TradeSpider):
             return []
 
     def _select_ntl_code(self, ntl_code):
-        """
-        Selects the NTL code and explicitly waits for the DOM to update (old rows to disappear).
-        Replaces the buggy jQuery wait with a visual Staleness check.
-        """
         try:
-            # 1. Capture the state of the CURRENT table rows before we trigger change
-            # This helps us verify that the table actually refreshes
+            logging.info(f"Attempting to select NTL: {ntl_code}")
+            
             old_rows = self.driver.find_elements(By.CSS_SELECTOR, "#custom-duties-results table tbody tr")
             old_ref = old_rows[0] if old_rows else None
 
-            # 2. Trigger the change via JavaScript
+            # Trigger change
             script = f"""
                 var $select = $('#ntlc-product-list');
                 $select.val('{ntl_code}');
@@ -195,36 +192,31 @@ class MacMapScraper(TradeSpider):
             """
             self.driver.execute_script(script)
             
-            # 3. Wait for the 'Processing' overlay
+            # Increased buffer to 5s to allow JS to fire fully
+            time.sleep(5) 
+            
             self._wait_for_loading_overlay()
 
-            # 4. Critical: Wait for the OLD row to detach (Staleness)
-            # This ensures we don't accidentally scrape the previous screen's data
             if old_ref:
                 try:
-                    # Wait up to 5 seconds for the old row to be removed
-                    WebDriverWait(self.driver, 5).until(EC.staleness_of(old_ref))
+                    WebDriverWait(self.driver, 15).until(EC.staleness_of(old_ref))
+                    logging.info("Old table rows successfully detached.")
                 except TimeoutException:
-                    logging.warning(f"NTL {ntl_code}: Table rows did not detach (DOM update might be stuck).")
+                    logging.warning(f"NTL {ntl_code}: Old table rows did not detach within 15s. DOM update might be stuck.")
 
-            # 5. Wait for the NEW table to populate
             if not self._wait_for_table():
                 logging.warning(f"NTL {ntl_code}: New table did not load within timeout.")
                 return False
 
-            # 6. Safety Buffer for rendering text/animations
-            logging.info("NTL selected. Waiting 10s buffer...")
-            time.sleep(10) # <--- ADDED FIX WAIT
+            logging.info("NTL selected and table verified. Waiting 5s buffer...")
+            time.sleep(5) 
             
             return True
         except Exception as e:
             logging.error(f"Failed to select NTL {ntl_code}: {e}")
             return False
 
-    # scrapers/macmap_scraper.py
-
-    # 1. Update the scraping method to accept a limit flag
-    def scrape_all_lines_for_country(self, reporter_id, partner_id, hs_code, master_ntl_list=None, single_line_only=False):
+    def scrape_all_lines_for_country(self, reporter_id, partner_id, hs_code, master_ntl_list=None, single_line_only=False, max_lines=6):
         base_url = f"https://www.macmap.org/en/query/results?reporter={reporter_id}&partner={partner_id}&product={hs_code}&level=6"
         
         logging.info(f"Navigating to {base_url}")
@@ -232,16 +224,12 @@ class MacMapScraper(TradeSpider):
             logging.error(f"Failed to load URL for Partner {partner_id}")
             return {}, []
             
-        # ... [Initial Load Barrier Code remains the same] ...
         if not self._wait_for_initial_page_load():
             return {}, []
         
-        # ... [Dropdown Population Code remains the same] ...
         if not master_ntl_list:
-            # (Keep existing logic to get master_ntl_list)
             try:
                 self.wait.until(EC.presence_of_element_located((By.ID, "ntlc-product-list")))
-                self.wait.until(lambda driver: len(driver.find_elements(By.CSS_SELECTOR, "#ntlc-product-list option")) > 0)
                 time.sleep(3)
                 master_ntl_list = self._get_ntl_options()
             except Exception:
@@ -250,23 +238,41 @@ class MacMapScraper(TradeSpider):
 
         results_by_line = {} 
         
-        # Optimized Loop
         total = len(master_ntl_list)
         for i, item in enumerate(master_ntl_list):
             
-            # --- NEW OPTIMIZATION ---
             if single_line_only and i > 0:
                 logging.info(f"[{partner_id}] Single line mode active. Stopping after first line.")
                 break
-            # ------------------------
+            
+            if i >= max_lines:
+                logging.info(f"[{partner_id}] Max lines limit ({max_lines}) reached. Stopping.")
+                break
 
             code = item['code']
             logging.info(f"   [{partner_id}] Processing line {i+1}/{total}: {code}")
             
-            if not self._select_ntl_code(code): continue
+            # --- TRY 1 ---
+            success = self._select_ntl_code(code)
             
-            if self._wait_for_table():
-                self._expand_agreement_details()
+            # --- RETRY LOGIC (Refresh) ---
+            if not success:
+                logging.warning(f"Failed to load data for {code}. Refreshing page and retrying...")
+                try:
+                    self.driver.refresh()
+                    if self._wait_for_initial_page_load():
+                        logging.info("Page refreshed. Retrying selection...")
+                        success = self._select_ntl_code(code)
+                    else:
+                        logging.error("Page reload failed.")
+                except Exception as e:
+                    logging.error(f"Error during refresh retry: {e}")
+
+            if not success:
+                logging.warning(f"Skipping line {code} after retry failure.")
+                continue
+            
+            self._expand_agreement_details()
 
             try:
                 full_html = self.driver.find_element(By.TAG_NAME, "body").get_attribute("innerHTML")
@@ -276,33 +282,32 @@ class MacMapScraper(TradeSpider):
 
         return results_by_line, master_ntl_list
 
-    # 2. Update the logic to use this flag for the 'other' suppliers
     def run_comparison_logic(self, config):
         target_id = config['target_market_id']
         your_id = config['your_country_id']
         comp_ids = config.get('competitor_ids', [])
-        other_ids = config.get('other_supplier_ids', []) # Get the new IDs
+        other_ids = config.get('other_supplier_ids', [])
         hs_code = config['hs_code']
 
-        # 1. Scrape YOUR COUNTRY (All lines)
+        # 1. Scrape YOUR COUNTRY
         logging.info(f"--- Scraping Base Country: {your_id} ---")
         your_data_map, master_ntl_list = self.scrape_all_lines_for_country(target_id, your_id, hs_code)
         
         if not master_ntl_list:
+            logging.error("No NTL lines found for base country. Aborting.")
             return None
 
-        # 2. Scrape COMPETITORS (Top 3 -> All lines)
+        # 2. Scrape COMPETITORS
         competitor_data_maps = {}
         for cid in comp_ids:
             logging.info(f"--- Scraping Competitor: {cid} ---")
             c_data, _ = self.scrape_all_lines_for_country(target_id, cid, hs_code, master_ntl_list)
             competitor_data_maps[cid] = c_data
 
-        # 3. Scrape OTHER SUPPLIERS (Next 5 -> First line only)
+        # 3. Scrape OTHER SUPPLIERS
         other_suppliers_maps = {}
         for oid in other_ids:
             logging.info(f"--- Scraping Other Supplier (Summary Mode): {oid} ---")
-            # Pass single_line_only=True here
             o_data, _ = self.scrape_all_lines_for_country(target_id, oid, hs_code, master_ntl_list, single_line_only=True)
             other_suppliers_maps[oid] = o_data
 
@@ -316,21 +321,28 @@ if __name__ == '__main__':
     parser.add_argument("--your-country-id", required=True)
     parser.add_argument("--target-market-id", required=True)
     parser.add_argument("--competitor-ids", nargs='+', default=[])
-    parser.add_argument("--other-supplier-ids", nargs='+', default=[], help="IDs of the next 5 top suppliers")
+    parser.add_argument("--other-supplier-ids", nargs='+', default=[])
+    parser.add_argument("--competitor-names-map", default='{}', help="JSON string mapping competitor IDs to names")
     parser.add_argument("--output", default="market_access_filled.json")
     parser.add_argument("--headless", action='store_true')
-    # Name arguments (Added for compatibility with orchestrator)
     parser.add_argument("--your-country-name", help="Ignored.")
     parser.add_argument("--target-market-name", help="Ignored.")
 
     args = parser.parse_args()
+
+    # Parse the competitor_names_map from JSON string
+    try:
+        competitor_names_map = json.loads(args.competitor_names_map)
+    except (json.JSONDecodeError, TypeError):
+        competitor_names_map = {}
 
     config = {
         "hs_code": args.hs_code,
         "your_country_id": args.your_country_id,
         "target_market_id": args.target_market_id,
         "competitor_ids": args.competitor_ids,
-        "other_supplier_ids": args.other_supplier_ids # <--- NEW
+        "other_supplier_ids": args.other_supplier_ids,
+        "country_names_map": competitor_names_map
     }
 
     print("Initializing MacMap Scraper...")

@@ -5,6 +5,7 @@ import os
 from datetime import datetime
 # Import the new utilities
 from support.chart_generator import generate_chart_from_json, generate_pie_chart_market_shares
+from support.country_info_service import CountryInfoService
 
 logger = logging.getLogger("FactsheetGenerator")
 
@@ -95,6 +96,13 @@ class FactsheetGenerator:
         graph_path = "[GRAPH_PLACEHOLDER]"
         pie_chart_path = "[CHART_PLACEHOLDER]"
         
+        # --- Country basic info (separate service) ---
+        country_service = CountryInfoService()
+        target_country_info = country_service.get_country_profile(
+            self.config.get("target_market_name")
+        )
+
+
         if self.ts_data:
             try:
                 # Define Filename
@@ -266,7 +274,7 @@ class FactsheetGenerator:
 
         # B. Regional Competitors
         supplier_x, supplier_y, supplier_z = "N/A", "N/A", "N/A"
-        yc_dist = self.row_yc_in_target.get("avg_distance_km")
+        yc_dist = self.row_yc_in_target.get("avg_distance_km") if self.row_yc_in_target else None
         
         if yc_dist:
             potential_neighbors = [
