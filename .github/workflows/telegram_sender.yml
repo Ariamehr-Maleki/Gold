@@ -1,0 +1,45 @@
+name: Telegram Price Sender
+
+on:
+  schedule:
+    # All times in UTC  (Iran summer = UTC+4:30)
+    # ── Hourly messages ─────────────────────────────────────────
+    - cron: "31  4 * * *"   #  9:01 Tehran
+    - cron: "32  5 * * *"   # 10:02 Tehran
+    - cron: "33  6 * * *"   # 11:03 Tehran
+    - cron: "34  7 * * *"   # 12:04 Tehran  (hourly — after Parsian cron)
+    - cron: "35  8 * * *"   # 13:05 Tehran
+    - cron: "36  9 * * *"   # 14:06 Tehran
+    - cron: "37 10 * * *"   # 15:07 Tehran
+    - cron: "38 11 * * *"   # 16:08 Tehran
+    - cron: "39 12 * * *"   # 17:09 Tehran
+    - cron: "40 13 * * *"   # 18:10 Tehran  (hourly — before Parsian cron)
+    - cron: "41 14 * * *"   # 19:11 Tehran
+    - cron: "42 15 * * *"   # 20:12 Tehran
+    - cron: "43 16 * * *"   # 21:13 Tehran
+    # ── Parsian table ───────────────────────────────────────────
+    - cron: "30  7 * * *"   # 12:00 Tehran
+    - cron: "00 14 * * *"   # 18:30 Tehran
+  workflow_dispatch: {}     # allow manual trigger from GitHub UI
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install requests pytz jdatetime
+
+      - name: Send price message
+        env:
+          NERKH_TOKEN:      ${{ secrets.NERKH_TOKEN }}
+          NAVASAN_KEY:      ${{ secrets.NAVASAN_KEY }}
+          TELEGRAM_TOKEN:   ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python telegram_sender/send.py
