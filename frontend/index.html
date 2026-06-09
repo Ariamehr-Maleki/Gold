@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>داشبورد قیمت طلا و سکه</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;900&display=swap" rel="stylesheet"/>
+<style>
+/* ─── Tokens ─────────────────────────────────────────────────────────── */
+:root{
+  --bg:       #ede8df;
+  --bg2:      #e2ddd4;
+  --card:     #ffffff;
+  --sh:       0 2px 10px rgba(0,0,0,.08),0 1px 3px rgba(0,0,0,.05);
+  --sh-h:     0 6px 22px rgba(0,0,0,.13),0 2px 7px rgba(0,0,0,.07);
+  --bdr:      rgba(0,0,0,.065);
+  --bdr2:     rgba(0,0,0,.04);
+  --gold:     #c9920a;
+  --gold-bg:  #fff5d6;
+  --txt:      #0d0d0d;
+  --txt2:     #555;
+  --txt3:     #999;
+  --green:    #17a34a;  --green-bg: #e6f9ed;  --green-ring: rgba(23,163,74,.25);
+  --amber:    #d97706;  --amber-bg: #fef3c7;  --amber-ring: rgba(217,119,6,.25);
+  --red:      #dc2626;  --red-bg:   #fee2e2;  --red-ring:   rgba(220,38,38,.25);
+  --r:        14px;
+}
+.dark{
+  --bg:       #0b0f1a;
+  --bg2:      #111827;
+  --card:     #141d2e;
+  --sh:       0 2px 14px rgba(0,0,0,.5);
+  --sh-h:     0 7px 28px rgba(0,0,0,.7);
+  --bdr:      rgba(255,255,255,.065);
+  --bdr2:     rgba(255,255,255,.04);
+  --gold:     #f5a623;
+  --gold-bg:  #29200a;
+  --txt:      #eef2fb;
+  --txt2:     #8899b0;
+  --txt3:     #445566;
+  --green:    #22c55e;  --green-bg: #061a0e;
+  --amber:    #f59e0b;  --amber-bg: #1e1500;
+  --red:      #ef4444;  --red-bg:   #1e0606;
+}
+
+/* ─── Reset ──────────────────────────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Vazirmatn',Tahoma,Arial,sans-serif;background:var(--bg);color:var(--txt);
+     min-height:100vh;direction:rtl;transition:background .3s,color .3s;-webkit-font-smoothing:antialiased}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+
+/* ─── Progress bar ───────────────────────────────────────────────────── */
+#pbar{position:fixed;inset-block-start:0;inset-inline:0;height:2px;z-index:400;background:transparent}
+#pfill{height:100%;background:linear-gradient(90deg,var(--gold),#e8b84b);width:100%;transition:width 1s linear}
+
+/* ─── Header — compact single row ───────────────────────────────────── */
+header{
+  position:sticky;top:0;z-index:200;
+  background:var(--bg);border-bottom:1px solid var(--bdr2);
+  padding:7px 18px;
+  transition:background .3s;
+}
+.hrow{
+  max-width:1300px;margin:0 auto;
+  display:flex;align-items:center;gap:12px;flex-wrap:nowrap;
+}
+.logo{display:flex;align-items:center;gap:7px;flex-shrink:0}
+.logo-ico{
+  width:28px;height:28px;border-radius:7px;flex-shrink:0;
+  background:linear-gradient(135deg,var(--gold),#a37008);
+  display:flex;align-items:center;justify-content:center;font-size:14px;
+}
+.logo-txt{font-size:15px;font-weight:800;white-space:nowrap;letter-spacing:-.3px}
+
+.hstatus{display:flex;align-items:center;gap:10px;flex:1;min-width:0;flex-wrap:nowrap;overflow:hidden}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0;animation:pulse 2s ease-in-out infinite}
+.dot.err{background:var(--red);animation:none}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
+.hstat-lbl{font-size:11px;color:var(--txt2);white-space:nowrap}
+.hstat-val{font-size:11px;font-weight:700;color:var(--txt);white-space:nowrap}
+.hsep{width:1px;height:14px;background:var(--bdr);flex-shrink:0}
+.cd-num{font-weight:700;color:var(--gold);font-variant-numeric:tabular-nums}
+
+.hbtns{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.hbtn{
+  display:inline-flex;align-items:center;gap:4px;
+  padding:5px 10px;border-radius:7px;
+  border:1px solid var(--bdr);background:var(--card);
+  color:var(--txt2);font-size:11.5px;font-weight:600;
+  box-shadow:0 1px 3px rgba(0,0,0,.06);
+  transition:all .18s;white-space:nowrap;
+}
+.hbtn:hover{border-color:var(--gold);color:var(--gold)}
+.hbtn.on{border-color:var(--gold);color:var(--gold);background:var(--gold-bg)}
+.hbtn-gold{background:var(--gold);border-color:transparent;color:#fff;font-weight:700;box-shadow:0 2px 7px rgba(0,0,0,.15)}
+.hbtn-gold:hover{opacity:.88;color:#fff}
+.dark .hbtn-gold{color:#0b0f1a}
+.dark .hbtn-gold:hover{color:#0b0f1a}
+
+/* ─── Main ───────────────────────────────────────────────────────────── */
+main{max-width:1300px;margin:0 auto;padding:12px 18px 50px}
+
+/* ─── Summary bar — 5 items forced to one row ────────────────────────── */
+.sumbar{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:0;
+  background:var(--card);
+  border-radius:var(--r);
+  box-shadow:var(--sh);
+  border:1px solid var(--bdr);
+  margin-bottom:20px;
+  overflow:hidden;   /* clips inner borders at corners */
+}
+.sum-item{
+  display:flex;flex-direction:column;align-items:center;
+  padding:10px 8px 9px;
+  gap:3px;
+  position:relative;
+  transition:background .18s;
+}
+.sum-item:not(:last-child)::after{
+  content:'';position:absolute;
+  inset-block:12% 12%;inset-inline-end:0;
+  width:1px;background:var(--bdr);
+}
+.sum-item:hover{background:var(--bg)}
+.sum-icon{font-size:18px;line-height:1;margin-bottom:1px}
+.sum-name{font-size:10.5px;color:var(--txt2);font-weight:600;text-align:center;white-space:nowrap}
+.sum-price{
+  font-size:14px;font-weight:900;color:var(--txt);
+  font-variant-numeric:tabular-nums;text-align:center;
+  white-space:nowrap;
+}
+.sum-unit{font-size:9px;color:var(--txt3);font-weight:500}
+
+/* flash for summary items */
+@keyframes sfu{0%,100%{color:var(--txt)}50%{color:var(--green)}}
+@keyframes sfd{0%,100%{color:var(--txt)}50%{color:var(--red)}}
+.sfu .sum-price{animation:sfu .7s ease}
+.sfd .sum-price{animation:sfd .7s ease}
+
+/* ─── Section ────────────────────────────────────────────────────────── */
+.section{margin-bottom:20px}
+.sec-head{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:10px;
+}
+.sec-label{display:flex;align-items:center;gap:8px}
+.sec-tag{width:3px;height:16px;border-radius:2px;background:var(--gold);flex-shrink:0}
+.sec-name{font-size:13px;font-weight:700;color:var(--txt)}
+.sec-sub{font-size:10.5px;color:var(--txt2);margin-top:1px}
+.sec-sort{
+  font-size:11px;padding:4px 9px;border-radius:7px;
+  color:var(--txt2);border:1px solid var(--bdr);background:var(--card);
+  transition:all .18s;
+}
+.sec-sort:hover{border-color:var(--gold);color:var(--gold)}
+.sec-sort.on{border-color:var(--gold);color:var(--gold);background:var(--gold-bg)}
+
+/* ─── Card grid ──────────────────────────────────────────────────────── */
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}
+@media(min-width:540px){.grid{grid-template-columns:repeat(3,1fr)}}
+@media(min-width:700px){.grid{grid-template-columns:repeat(4,1fr)}}
+@media(min-width:950px){.grid{grid-template-columns:repeat(5,1fr)}}
+@media(min-width:1150px){.grid{grid-template-columns:repeat(6,1fr)}}
+
+/* ─── Coin card — compact ────────────────────────────────────────────── */
+.card{
+  background:var(--card);border-radius:var(--r);
+  padding:11px 11px 10px;
+  box-shadow:var(--sh);border:1px solid var(--bdr);
+  transition:transform .2s,box-shadow .2s,background .25s;
+  position:relative;overflow:hidden;
+}
+.card:hover{transform:translateY(-2px);box-shadow:var(--sh-h)}
+
+@keyframes fu{0%,100%{background:var(--card)}45%{background:rgba(34,197,94,.12)}}
+@keyframes fd{0%,100%{background:var(--card)}45%{background:rgba(239,68,68,.10)}}
+.fu{animation:fu .7s ease}
+.fd{animation:fd .7s ease}
+
+/* card top */
+.card-top{display:flex;align-items:center;gap:7px;margin-bottom:8px}
+.ico{
+  width:34px;height:34px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;flex-shrink:0;
+  box-shadow:0 1px 5px rgba(0,0,0,.1);
+}
+.card-names{flex:1;min-width:0}
+.card-name{font-size:11.5px;font-weight:700;color:var(--txt);line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.card-code{font-size:9px;color:var(--txt3);font-weight:500;font-family:monospace;display:block;margin-top:1px}
+
+/* bubble chip */
+.chip{
+  display:inline-flex;align-items:center;gap:2px;
+  padding:2px 7px;border-radius:5px;
+  font-size:11px;font-weight:700;line-height:1.3;
+  margin-bottom:4px;
+}
+.cg{background:var(--green-bg);color:var(--green);border:1px solid var(--green-ring)}
+.ca{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-ring)}
+.cr{background:var(--red-bg);  color:var(--red);  border:1px solid var(--red-ring)}
+.cn{color:var(--txt3);font-size:11px;font-weight:400}
+
+/* price */
+.card-price{font-size:19px;font-weight:900;color:var(--txt);font-variant-numeric:tabular-nums;line-height:1;letter-spacing:-.3px;margin-bottom:2px;word-break:break-all}
+.card-unit{font-size:9.5px;color:var(--txt2);font-weight:500;margin-bottom:9px}
+
+/* detail rows */
+.card-sep{height:1px;background:var(--bdr2);margin-bottom:8px}
+.drows{display:flex;flex-direction:column;gap:5px}
+.drow{display:flex;align-items:center;justify-content:space-between;font-size:10.5px}
+.dlbl{color:var(--txt3);font-weight:500}
+.dval{color:var(--txt2);font-weight:700}
+.dv-g{color:var(--green);font-weight:700}
+.dv-a{color:var(--amber);font-weight:700}
+.dv-r{color:var(--red);  font-weight:700}
+.dv-dash{color:var(--txt3)}
+
+/* ─── Skeleton ───────────────────────────────────────────────────────── */
+.sk-sumbar{background:var(--card);border-radius:var(--r);box-shadow:var(--sh);border:1px solid var(--bdr);margin-bottom:20px;padding:12px 16px;display:flex;gap:0}
+.sk-sum-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;padding:4px}
+.sk-card{background:var(--card);border-radius:var(--r);box-shadow:var(--sh);border:1px solid var(--bdr);padding:11px}
+.sk{border-radius:5px;background:linear-gradient(90deg,var(--bg2) 25%,var(--bg) 50%,var(--bg2) 75%);background-size:300% 100%;animation:shim 1.5s infinite}
+@keyframes shim{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+/* ─── Error ──────────────────────────────────────────────────────────── */
+#err-box{display:none;text-align:center;padding:70px 20px}
+.err-emoji{font-size:48px;margin-bottom:14px}
+.err-title{font-size:18px;font-weight:800;margin-bottom:7px}
+.err-msg{font-size:13px;color:var(--txt2);margin-bottom:20px}
+
+@keyframes spin{to{transform:rotate(360deg)}}
+.spin{animation:spin .85s linear infinite}
+
+/* ─── Mobile ─────────────────────────────────────────────────────────── */
+@media(max-width:480px){
+  header,main{padding-inline:12px}
+  .logo-txt{font-size:13px}
+  .hstat-lbl,.hstat-val,.cd-num{font-size:10px}
+  .hbtn{padding:4px 8px;font-size:10.5px}
+  .sumbar{grid-template-columns:repeat(5,1fr);overflow-x:auto}
+  .sum-price{font-size:12px}
+  .sum-name{font-size:9px}
+}
+</style>
+</head>
+<body>
+
+<div id="pbar"><div id="pfill"></div></div>
+
+<!-- ══ Header — single compact row ════════════════════════════════════════ -->
+<header>
+  <div class="hrow">
+
+    <div class="logo">
+      <div class="logo-ico">🪙</div>
+      <span class="logo-txt">طلا و سکه</span>
+    </div>
+
+    <span class="hsep"></span>
+
+    <div class="hstatus">
+      <span class="dot" id="dot"></span>
+      <span class="hstat-lbl">بروزرسانی:</span>
+      <span class="hstat-val" id="uptime">—</span>
+      <span class="hsep"></span>
+      <span class="hstat-lbl">بعدی در</span>
+      <span class="hstat-val cd-num" id="cd">60</span>
+      <span class="hstat-lbl">ث</span>
+    </div>
+
+    <div class="hbtns">
+      <button class="hbtn" id="sort-btn" onclick="toggleSort()">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M3 6h18M6 12h12M10 18h4"/></svg>
+        حباب↑
+      </button>
+      <button class="hbtn" id="tbtn" onclick="toggleTheme()">
+        <svg id="t-ico" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+        <span id="t-lbl">شب</span>
+      </button>
+      <button class="hbtn hbtn-gold" onclick="doRefresh()">
+        <svg id="ri" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+          <path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/>
+          <path d="M3 22v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/>
+        </svg>
+        بروزرسانی
+      </button>
+    </div>
+
+  </div>
+</header>
+
+<!-- ══ Content ════════════════════════════════════════════════════════════ -->
+<main>
+  <div id="err-box">
+    <div class="err-emoji">⚠️</div>
+    <div class="err-title">خطا در دریافت اطلاعات</div>
+    <div class="err-msg" id="err-msg">اتصال به سرور برقرار نشد</div>
+    <button class="hbtn hbtn-gold" style="margin:0 auto" onclick="doRefresh()">تلاش مجدد</button>
+  </div>
+  <div id="dash"></div>
+</main>
+
+<script>
+/* ── Config ────────────────────────────────────────────────────────────── */
+const REFRESH_SEC = 60;
+const API = window.location.protocol === 'file:'
+  ? 'http://localhost:8000/api/prices'
+  : '/api/prices';
+
+/* items shown in summary bar (in display order) */
+const SUMMARY_ORDER = ['OUNCE','MAZANEH','USD','GOLD18K','GOLD24K'];
+const SUMMARY_SET   = new Set(SUMMARY_ORDER);
+
+/* ── State ─────────────────────────────────────────────────────────────── */
+let current = null, sorting = false, darkMode = false;
+let prev = {}, cdTimer = null, secs = REFRESH_SEC;
+
+/* ── Persian helpers ───────────────────────────────────────────────────── */
+const PD = ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
+const p  = n => String(n).replace(/\d/g, d => PD[d]);
+function fmtN(v){
+  if(v==null||v===0) return '—';
+  try{ return Math.round(v).toLocaleString('fa-IR'); }
+  catch{ return Math.round(v).toLocaleString(); }
+}
+
+/* ── Icons ─────────────────────────────────────────────────────────────── */
+const ICONS = {
+  OUNCE:'🌐', MAZANEH:'⚖️', GOLD24K:'🟡', USD:'🇺🇸', GOLD18K:'✨',
+  SEKE_EMAMI:'🪙', SEKE_BAHAR:'🪙', SEKE_NIM:'🔶', SEKE_ROB:'🔸', SEKE_1G:'🔹',
+  SEKE_PRS100:'🟠', SEKE_PRS200:'🟠', SEKE_PRS400:'🟠', SEKE_PRS500:'🟠', SEKE_PRS700:'🟠',
+};
+const ICON_BG_L = {
+  OUNCE:'#ddeeff', MAZANEH:'#f0f0f0', GOLD24K:'#fff8e1', USD:'#e6f4ea', GOLD18K:'#fff8e1',
+  SEKE_EMAMI:'#fff3e0', SEKE_BAHAR:'#fff3e0', SEKE_NIM:'#fff3e0', SEKE_ROB:'#fff3e0', SEKE_1G:'#e8eeff',
+  SEKE_PRS100:'#fff3e0', SEKE_PRS200:'#fff3e0', SEKE_PRS400:'#fff3e0', SEKE_PRS500:'#fff3e0', SEKE_PRS700:'#fff3e0',
+};
+const ICON_BG_D = {
+  OUNCE:'#0d1e2e', MAZANEH:'#1a1a1a', GOLD24K:'#1e1800', USD:'#071a0d', GOLD18K:'#1e1800',
+  SEKE_EMAMI:'#1a1200', SEKE_BAHAR:'#1a1200', SEKE_NIM:'#1a1200', SEKE_ROB:'#1a1200', SEKE_1G:'#0d0d22',
+  SEKE_PRS100:'#1a1200', SEKE_PRS200:'#1a1200', SEKE_PRS400:'#1a1200', SEKE_PRS500:'#1a1200', SEKE_PRS700:'#1a1200',
+};
+const GRP_ICONS = {main_coins:'🪙', parsian:'⚜️'};
+
+function iconBg(code){ return darkMode ? (ICON_BG_D[code]||'#1a2035') : (ICON_BG_L[code]||'#f5f5f5'); }
+
+/* ── Theme ─────────────────────────────────────────────────────────────── */
+function toggleTheme(){
+  darkMode=!darkMode;
+  document.body.classList.toggle('dark',darkMode);
+  document.getElementById('t-lbl').textContent = darkMode?'روز':'شب';
+  const ti=document.getElementById('t-ico');
+  if(darkMode) ti.innerHTML=`<circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>`;
+  else         ti.innerHTML=`<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>`;
+  if(current) renderAll(current); // re-render to pick up new icon backgrounds
+}
+
+/* ── Sort ──────────────────────────────────────────────────────────────── */
+function toggleSort(){
+  sorting=!sorting;
+  document.getElementById('sort-btn').classList.toggle('on',sorting);
+  if(current) renderAll(current);
+}
+
+/* ── Countdown ─────────────────────────────────────────────────────────── */
+function startCd(){
+  clearInterval(cdTimer); secs=REFRESH_SEC;
+  cdTimer=setInterval(()=>{
+    secs--;
+    if(secs<=0){secs=REFRESH_SEC;doRefresh();}
+    const el=document.getElementById('cd');
+    if(el) el.textContent=p(secs);
+    const fill=document.getElementById('pfill');
+    if(fill) fill.style.width=((secs/REFRESH_SEC)*100)+'%';
+  },1000);
+}
+
+/* ── Skeleton ──────────────────────────────────────────────────────────── */
+function showSkeleton(){
+  document.getElementById('err-box').style.display='none';
+  const dash=document.getElementById('dash');
+  dash.style.display='';
+  /* summary bar skeleton */
+  const sumSkel=`<div class="sk-sumbar">${
+    Array(5).fill(`<div class="sk-sum-item">
+      <div class="sk" style="width:24px;height:24px;border-radius:50%"></div>
+      <div class="sk" style="width:55px;height:9px"></div>
+      <div class="sk" style="width:70px;height:13px"></div>
+    </div>`).join('')
+  }</div>`;
+  /* coin section skeletons */
+  const coinSkel=[4,6].map(n=>`
+    <div class="section">
+      <div class="sec-head">
+        <div class="sec-label">
+          <div class="sec-tag"></div>
+          <div><div class="sk" style="width:90px;height:12px;margin-bottom:3px"></div>
+               <div class="sk" style="width:65px;height:9px"></div></div>
+        </div>
+      </div>
+      <div class="grid">
+        ${'<div class="sk-card">'+
+          '<div style="display:flex;align-items:center;gap:7px;margin-bottom:8px">'+
+          '<div class="sk" style="width:34px;height:34px;border-radius:50%;flex-shrink:0"></div>'+
+          '<div style="flex:1"><div class="sk" style="width:70%;height:10px;margin-bottom:4px"></div>'+
+          '<div class="sk" style="width:45%;height:8px"></div></div></div>'+
+          '<div class="sk" style="width:45%;height:10px;margin-bottom:4px"></div>'+
+          '<div class="sk" style="width:75%;height:18px;margin-bottom:3px"></div>'+
+          '<div class="sk" style="width:28%;height:8px;margin-bottom:9px"></div>'+
+          '<div class="sk" style="height:1px;margin-bottom:7px"></div>'+
+          '<div class="sk" style="width:100%;height:8px;margin-bottom:5px"></div>'+
+          '<div class="sk" style="width:60%;height:8px"></div>'+
+          '</div>'.repeat(n)}
+      </div>
+    </div>`).join('');
+  dash.innerHTML=sumSkel+coinSkel;
+}
+
+/* ── Summary bar ───────────────────────────────────────────────────────── */
+function renderSummaryBar(data){
+  const map={};
+  data.groups.forEach(g=>g.items.forEach(i=>{ if(SUMMARY_SET.has(i.code)) map[i.code]=i; }));
+
+  const items=SUMMARY_ORDER.map(c=>map[c]).filter(Boolean);
+
+  return `<div class="sumbar" id="sumbar">
+    ${items.map(item=>{
+      const pr=prev[item.code];
+      let flash='';
+      if(pr!=null&&item.market_price!=null){
+        if(item.market_price>pr) flash='sfu';
+        else if(item.market_price<pr) flash='sfd';
+      }
+      return `<div class="sum-item ${flash}" id="sc-${item.code}">
+        <span class="sum-icon">${ICONS[item.code]||'◆'}</span>
+        <span class="sum-name">${item.name}</span>
+        <span class="sum-price">${fmtN(item.market_price)}</span>
+        <span class="sum-unit">تومان</span>
+      </div>`;
+    }).join('')}
+  </div>`;
+}
+
+/* ── Coin card ─────────────────────────────────────────────────────────── */
+function chipHtml(pct){
+  if(pct==null) return `<span class="cn">بدون حباب</span>`;
+  const cls=pct<=5?'cg':pct<=15?'ca':'cr';
+  const arrow=pct>=0?'↑':'↓';
+  const sign=pct>=0?'+':'';
+  return `<span class="chip ${cls}">${arrow} ${sign}${p(Math.abs(pct).toFixed(1))}٪</span>`;
+}
+
+function makeCard(item){
+  const pr=prev[item.code];
+  let flash='';
+  if(pr!=null&&item.market_price!=null){
+    if(item.market_price>pr) flash='fu';
+    else if(item.market_price<pr) flash='fd';
+  }
+  const pct=item.bubble_percent;
+  const vcls=pct==null?'':(pct<=5?'dv-g':pct<=15?'dv-a':'dv-r');
+  const absSign=item.bubble_absolute==null?null:(item.bubble_absolute>=0?'+':'−');
+
+  return `<div class="card ${flash}" id="c-${item.code}">
+  <div class="card-top">
+    <div class="ico" style="background:${iconBg(item.code)}">${ICONS[item.code]||'◆'}</div>
+    <div class="card-names">
+      <div class="card-name">${item.name}</div>
+      <span class="card-code">${item.code}</span>
+    </div>
+  </div>
+  ${chipHtml(pct)}
+  <div class="card-price">${fmtN(item.market_price)}</div>
+  <div class="card-unit">تومان</div>
+  <div class="card-sep"></div>
+  <div class="drows">
+    <div class="drow">
+      <span class="dlbl">ارزش ذاتی</span>
+      ${item.real_value!=null
+        ?`<span class="dval">${fmtN(item.real_value)} ت</span>`
+        :`<span class="dv-dash">—</span>`}
+    </div>
+    <div class="drow">
+      <span class="dlbl">مبلغ حباب</span>
+      ${item.bubble_absolute!=null
+        ?`<span class="${vcls}">${absSign}${fmtN(Math.abs(item.bubble_absolute))} ت</span>`
+        :`<span class="dv-dash">—</span>`}
+    </div>
+  </div>
+</div>`;
+}
+
+/* ── Section (coin groups only) ────────────────────────────────────────── */
+function makeSection(grp){
+  /* skip groups whose items are all in the summary bar */
+  const coins=grp.items.filter(i=>!SUMMARY_SET.has(i.code));
+  if(coins.length===0) return '';
+
+  let items=[...coins];
+  if(sorting) items=[...items].sort((a,b)=>(a.bubble_percent??Infinity)-(b.bubble_percent??Infinity));
+
+  const sortBtn=`<button class="sec-sort ${sorting?'on':''}" onclick="toggleSort()">
+    ${sorting?'↑ مرتب شده':'مرتب بر حباب'}
+  </button>`;
+
+  return `<div class="section" id="s-${grp.id}">
+  <div class="sec-head">
+    <div class="sec-label">
+      <div class="sec-tag"></div>
+      <div>
+        <div class="sec-name">${GRP_ICONS[grp.id]||''} ${grp.title}</div>
+        <div class="sec-sub">${grp.subtitle}</div>
+      </div>
+    </div>
+    ${sortBtn}
+  </div>
+  <div class="grid">${items.map(makeCard).join('')}</div>
+</div>`;
+}
+
+/* ── Render all ────────────────────────────────────────────────────────── */
+function renderAll(data){
+  document.getElementById('err-box').style.display='none';
+  const dash=document.getElementById('dash');
+  dash.style.display='';
+  document.getElementById('dot').classList.remove('err');
+  const ut=document.getElementById('uptime');
+  if(ut) ut.textContent=data.timestamp_display||'—';
+
+  dash.innerHTML=renderSummaryBar(data)+data.groups.map(makeSection).join('');
+  data.groups.forEach(g=>g.items.forEach(i=>{prev[i.code]=i.market_price;}));
+}
+
+/* ── Fetch ─────────────────────────────────────────────────────────────── */
+async function doRefresh(){
+  const ri=document.getElementById('ri');
+  if(ri) ri.classList.add('spin');
+  if(!current) showSkeleton();
+  try{
+    const res=await fetch(API);
+    if(!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data=await res.json();
+    current=data;
+    renderAll(data);
+    startCd();
+  }catch(err){
+    console.error(err);
+    document.getElementById('dot').classList.add('err');
+    if(!current){
+      document.getElementById('dash').style.display='none';
+      document.getElementById('err-msg').textContent=`اتصال برقرار نشد: ${err.message}`;
+      document.getElementById('err-box').style.display='';
+    }
+  }finally{
+    if(ri) ri.classList.remove('spin');
+  }
+}
+
+doRefresh();
+</script>
+</body>
+</html>
