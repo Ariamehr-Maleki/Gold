@@ -324,10 +324,7 @@ async def cmd_parsian(update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
 # ─── App factory ──────────────────────────────────────────────────────────
 
-def make_app(first_hourly: int = 3600):
-    """Build and configure the Application. first_hourly controls when the
-    first hourly job fires (seconds). Pass 30 for standalone, 3600 for
-    combined mode (startup message is sent manually instead)."""
+def make_app():
     app = (
         ApplicationBuilder()
         .token(BOT_TOKEN)
@@ -342,15 +339,25 @@ def make_app(first_hourly: int = 3600):
     app.add_handler(CommandHandler("parsian", cmd_parsian))
 
     jq = app.job_queue
-    jq.run_repeating(job_hourly, interval=3600, first=first_hourly)
-    jq.run_daily(job_parsian, time=dtime(hour=12, minute=0, tzinfo=TEHRAN_TZ))
+
+    # ─── Hourly price jobs: 9:01, 10:02, 11:03 ... 21:13 (Tehran) ───────
+    for hour in range(9, 22):          # 9 → 21 inclusive
+        minute = hour - 8              # 9→1, 10→2, ... 21→13
+        jq.run_daily(
+            job_hourly,
+            time=dtime(hour=hour, minute=minute, tzinfo=TEHRAN_TZ),
+        )
+
+    # ─── Parsian table: 12:00 and 18:30 (Tehran) ─────────────────────────
+    jq.run_daily(job_parsian, time=dtime(hour=12, minute=0,  tzinfo=TEHRAN_TZ))
+    jq.run_daily(job_parsian, time=dtime(hour=18, minute=30, tzinfo=TEHRAN_TZ))
 
     return app
 
-# ─── Main (standalone) ────────────────────────────────────────────────────
+# ─── Main ─────────────────────────────────────────────────────────────────
 
 def main() -> None:
-    app = make_app(first_hourly=30)
+    app = make_app()
     log.info("ربات آریسوگلد در حال اجرا است...")
     app.run_polling(drop_pending_updates=True)
 
