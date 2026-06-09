@@ -311,9 +311,120 @@ main{max-width:1300px;margin:0 auto;padding:12px 18px 50px}
 <script>
 /* ── Config ────────────────────────────────────────────────────────────── */
 const REFRESH_SEC = 60;
-const API = window.location.protocol === 'file:'
-  ? 'http://localhost:8000/api/prices'
-  : '/api/prices';
+
+/* ── API credentials (called directly from browser) ─────────────────────── */
+const GOLD_TOKEN   = 'JP5zKH45Y9eRnNMrgEwG4KI3LRqax1KciYgdvejyJ3c=';
+const GOLD_URL     = 'https://api.nerkh.io/v1/prices/json/gold';
+const NAVASAN_KEY  = 'freeNbwMNzuAY2WxQKzdlxdpBOw6KH4j';
+const NAVASAN_URL  = `https://api.navasan.tech/latest/?api_key=${NAVASAN_KEY}`;
+
+/* ── Coin metadata ───────────────────────────────────────────────────────── */
+const METADATA = {
+  SEKE_EMAMI:  {weight:8.133, purity:900},
+  SEKE_BAHAR:  {weight:8.133, purity:900},
+  SEKE_NIM:    {weight:4.066, purity:900},
+  SEKE_ROB:    {weight:2.033, purity:900},
+  SEKE_1G:     {weight:1.010, purity:900},
+  SEKE_PRS100: {weight:0.100, purity:750},
+  SEKE_PRS200: {weight:0.200, purity:750},
+  SEKE_PRS400: {weight:0.400, purity:750},
+  SEKE_PRS500: {weight:0.500, purity:750},
+  SEKE_PRS700: {weight:0.700, purity:750},
+};
+const PERSIAN_NAMES = {
+  OUNCE:'اونس جهانی', MAZANEH:'مظنه', GOLD24K:'طلای ۲۴ عیار',
+  USD:'دلار آمریکا', GOLD18K:'طلای ۱۸ عیار',
+  SEKE_EMAMI:'سکه امامی', SEKE_BAHAR:'سکه بهار آزادی',
+  SEKE_NIM:'نیم سکه', SEKE_ROB:'ربع سکه', SEKE_1G:'سکه یک گرمی',
+  SEKE_PRS100:'پارسیان ۱۰۰ سوتی', SEKE_PRS200:'پارسیان ۲۰۰ سوتی',
+  SEKE_PRS400:'پارسیان ۴۰۰ سوتی', SEKE_PRS500:'پارسیان ۵۰۰ سوتی',
+  SEKE_PRS700:'پارسیان ۷۰۰ سوتی',
+};
+const BASE_ITEMS = new Set(['OUNCE','MAZANEH','GOLD24K','USD']);
+const GROUPS_CONFIG = [
+  {id:'global',   title:'بازار جهانی',  subtitle:'قیمت‌های بین‌المللی',        items:['OUNCE','MAZANEH','GOLD24K']},
+  {id:'currency', title:'ارز',          subtitle:'نرخ ارز روز',                items:['USD']},
+  {id:'gold18',   title:'طلای ۱۸ عیار', subtitle:'قیمت هر گرم — با محاسبه حباب', items:['GOLD18K']},
+  {id:'main_coins',title:'سکه‌های اصلی', subtitle:'سکه‌های بانک مرکزی',        items:['SEKE_EMAMI','SEKE_BAHAR','SEKE_NIM','SEKE_ROB']},
+  {id:'parsian',  title:'پارسیان و گرمی',subtitle:'سکه‌های گرمی و پارسیان',   items:['SEKE_PRS100','SEKE_PRS200','SEKE_PRS400','SEKE_PRS500','SEKE_PRS700','SEKE_1G']},
+];
+
+/* ── Data fetchers ───────────────────────────────────────────────────────── */
+async function fetchGoldData() {
+  const res = await fetch(GOLD_URL, {headers:{Authorization:`Bearer ${GOLD_TOKEN}`}});
+  if (!res.ok) throw new Error(`nerkh.io: HTTP ${res.status}`);
+  const json = await res.json();
+  return json?.data?.prices || {};
+}
+
+async function fetchUsdData() {
+  const res = await fetch(NAVASAN_URL);
+  if (!res.ok) throw new Error(`navasan: HTTP ${res.status}`);
+  const data = await res.json();
+  for (const key of ['usd_sell','tehran_naghdi_sell','harat_naghdi_sell']) {
+    if (data[key]) return parseFloat(data[key].value);
+  }
+  return 0;
+}
+
+/* ── Bubble calculation ──────────────────────────────────────────────────── */
+function calcItem(code, marketPrice, ounce, usd, gold18k) {
+  if (BASE_ITEMS.has(code)) return {realValue:null, bubbleAbs:null, bubblePct:null};
+  if (code === 'GOLD18K') {
+    if (ounce > 0 && usd > 0) {
+      const rv = (ounce * usd * 0.750) / 31.10343;
+      const ba = marketPrice - rv;
+      return {realValue:rv, bubbleAbs:ba, bubblePct:rv>0?(ba/rv)*100:null};
+    }
+    return {realValue:null, bubbleAbs:null, bubblePct:null};
+  }
+  if (METADATA[code] && gold18k > 0) {
+    const {weight, purity} = METADATA[code];
+    const rv = weight * (purity / 750) * gold18k;
+    const ba = marketPrice - rv;
+    return {realValue:rv, bubbleAbs:ba, bubblePct:rv>0?(ba/rv)*100:null};
+  }
+  return {realValue:null, bubbleAbs:null, bubblePct:null};
+}
+
+/* ── Build data object (mirrors backend response shape) ─────────────────── */
+async function loadPrices() {
+  const [goldRaw, usdPrice] = await Promise.all([fetchGoldData(), fetchUsdData()]);
+
+  const live = {};
+  for (const [key, info] of Object.entries(goldRaw)) {
+    if (info && info.current != null) {
+      const v = parseFloat(String(info.current).replace(/,/g,''));
+      if (!isNaN(v)) live[key] = v;
+    }
+  }
+  live['USD'] = usdPrice;
+
+  const ounce  = live['OUNCE']  || 0;
+  const usd    = live['USD']    || 0;
+  const gold18k= live['GOLD18K']|| 0;
+
+  const now = new Date();
+  const timeStr = now.toLocaleTimeString('fa-IR', {hour:'2-digit', minute:'2-digit', second:'2-digit'});
+
+  const groups = GROUPS_CONFIG.map(grp => ({
+    ...grp,
+    items: grp.items.map(code => {
+      const mp = live[code] || 0;
+      const {realValue, bubbleAbs, bubblePct} = calcItem(code, mp, ounce, usd, gold18k);
+      return {
+        code,
+        name: PERSIAN_NAMES[code] || code,
+        market_price:     mp || null,
+        real_value:       realValue != null ? Math.round(realValue) : null,
+        bubble_absolute:  bubbleAbs != null ? Math.round(bubbleAbs) : null,
+        bubble_percent:   bubblePct != null ? Math.round(bubblePct*10)/10 : null,
+      };
+    })
+  }));
+
+  return {timestamp_display: timeStr, groups};
+}
 
 /* items shown in summary bar (in display order) */
 const SUMMARY_ORDER = ['OUNCE','MAZANEH','USD','GOLD18K','GOLD24K'];
@@ -545,9 +656,7 @@ async function doRefresh(){
   if(ri) ri.classList.add('spin');
   if(!current) showSkeleton();
   try{
-    const res=await fetch(API);
-    if(!res.ok) throw new Error(`HTTP ${res.status}`);
-    const data=await res.json();
+    const data=await loadPrices();
     current=data;
     renderAll(data);
     startCd();
