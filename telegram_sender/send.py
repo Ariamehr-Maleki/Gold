@@ -15,8 +15,7 @@ TG_CHAT_ID   = os.environ["TELEGRAM_CHAT_ID"]
 
 NERKH_HEADERS = {"Authorization": f"Bearer {NERKH_TOKEN}"}
 GOLD_URL      = "https://api.nerkh.io/v1/prices/json/gold"
-NAVASAN_URL   = "http://api.navasan.tech/latest/"
-TGJU_USD_URL  = "https://api.tgju.org/v1/market/indicator/summary-table-data/price_dollar_rl"
+NERKH_USD_URL = "https://api.nerkh.io/v1/prices/json/currency/USD"
 TG_API        = f"https://api.telegram.org/bot{TG_TOKEN}/sendMessage"
 TEHRAN_TZ     = pytz.timezone("Asia/Tehran")
 
@@ -68,33 +67,21 @@ def _fetch_gold():
         print(f"خطای دریافت طلا: {e}")
         return {}
 
-def _tgju_usd():
-    r = requests.get(TGJU_USD_URL,
-                     headers={"User-Agent": "Mozilla/5.0 Chrome/120"}, timeout=20)
+def _nerkh_usd():
+    r = requests.get(NERKH_USD_URL, headers=NERKH_HEADERS, timeout=10)
     r.raise_for_status()
-    rows = r.json().get("data", [])
-    if not rows: raise ValueError("TGJU: no rows")
-    return float(re.sub(r"[^0-9.]", "", str(rows[0][1]))) / 10
-
-def _navasan_usd():
-    r = requests.get(NAVASAN_URL,
-                     headers={"User-Agent": "Mozilla/5.0", "Accept": "application/json"},
-                     params={"api_key": NAVASAN_KEY}, timeout=10)
-    r.raise_for_status()
-    d = r.json()
-    for key in ("usd_sell", "tehran_naghdi_sell", "harat_naghdi_sell"):
-        if key in d: return float(d[key]["value"])
-    raise ValueError("Navasan: no USD key")
+    current = r.json().get("data", {}).get("prices", {}).get("USD", {}).get("current")
+    if not current:
+        raise ValueError("nerkh USD: no current value")
+    return float(str(current).replace(",", "")) - 1200
 
 def fetch_prices():
     raw = _fetch_gold()
     usd = 0.0
-    for fn in (_tgju_usd, _navasan_usd):
-        try:
-            usd = fn()
-            if usd > 0: break
-        except Exception as e:
-            print(f"USD fallback ({fn.__name__}): {e}")
+    try:
+        usd = _nerkh_usd()
+    except Exception as e:
+        print(f"USD fetch error: {e}")
 
     data = {}
     for k, v in raw.items():

@@ -5,7 +5,6 @@
 """
 import asyncio
 import logging
-import re
 import time as _time
 from datetime import datetime, time as dtime
 
@@ -33,11 +32,7 @@ log = logging.getLogger(__name__)
 NERKH_TOKEN    = "1S060h9Vp6L58-8IiINiFVNqHDyjLCT-1rW0zBZMsOU="
 NERKH_HEADERS  = {"Authorization": f"Bearer {NERKH_TOKEN}"}
 GOLD_URL       = "https://api.nerkh.io/v1/prices/json/gold"
-NAVASAN_KEY    = "freeNbwMNzuAY2WxQKzdlxdpBOw6KH4j"
-NAVASAN_URL    = "http://api.navasan.tech/latest/"
-TGJU_USD_URL   = (
-    "https://api.tgju.org/v1/market/indicator/summary-table-data/price_dollar_rl"
-)
+NERKH_USD_URL  = "https://api.nerkh.io/v1/prices/json/currency/USD"
 
 # ─── کش قیمت دلار (۵ دقیقه) ─────────────────────────────────────────────────
 _USD_CACHE: dict = {"value": 0.0, "ts": 0.0}
@@ -102,45 +97,22 @@ def _fetch_gold() -> dict:
         log.error("خطای دریافت طلا: %s", e)
         return {}
 
-def _tgju_usd() -> float:
-    """دریافت نرخ دلار از TGJU — بدون محدودیت درخواست."""
-    headers = {"User-Agent": "Mozilla/5.0 Chrome/120"}
-    r = requests.get(TGJU_USD_URL, headers=headers, timeout=20)
-    r.raise_for_status()
-    rows = r.json().get("data", [])
-    if not rows:
-        raise ValueError("TGJU: no rows")
-    rial = float(re.sub(r"[^0-9.]", "", str(rows[0][1])))
-    return rial / 10
-
-
-def _navasan_usd() -> float:
-    """دریافت نرخ دلار از Navasan — فال‌بک."""
-    headers = {"User-Agent": "Mozilla/5.0 Chrome/120", "Accept": "application/json"}
-    r = requests.get(NAVASAN_URL, headers=headers,
-                     params={"api_key": NAVASAN_KEY}, timeout=10)
-    r.raise_for_status()
-    d = r.json()
-    for key in ("usd_sell", "tehran_naghdi_sell", "harat_naghdi_sell"):
-        if key in d:
-            return float(d[key]["value"])
-    raise ValueError("Navasan: no USD key")
-
-
 def _fetch_usd() -> float:
-    """نرخ دلار به تومان — کش ۵ دقیقه + TGJU اول، Navasan فال‌بک."""
+    """نرخ دلار از nerkh.io — منهای ۱۲۰۰ تومان."""
     now = _time.time()
     if _USD_CACHE["value"] and now - _USD_CACHE["ts"] < _USD_TTL:
         return _USD_CACHE["value"]
 
-    result = 0.0
-    for fn in (_tgju_usd, _navasan_usd):
-        try:
-            result = fn()
-            if result > 0:
-                break
-        except Exception as e:
-            log.warning("USD fetch fallback (%s): %s", fn.__name__, e)
+    try:
+        r = requests.get(NERKH_USD_URL, headers=NERKH_HEADERS, timeout=10)
+        r.raise_for_status()
+        current = r.json().get("data", {}).get("prices", {}).get("USD", {}).get("current")
+        if not current:
+            raise ValueError("nerkh USD: no current value")
+        result = float(str(current).replace(",", "")) - 1200
+    except Exception as e:
+        log.warning("USD fetch error: %s", e)
+        result = 0.0
 
     if result > 0:
         _USD_CACHE["value"] = result
