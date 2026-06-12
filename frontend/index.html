@@ -315,8 +315,7 @@ const REFRESH_SEC = 60;
 /* ── API credentials (called directly from browser) ─────────────────────── */
 const GOLD_TOKEN   = '1S060h9Vp6L58-8IiINiFVNqHDyjLCT-1rW0zBZMsOU=';
 const GOLD_URL     = 'https://api.nerkh.io/v1/prices/json/gold';
-const NAVASAN_KEY  = 'freeNbwMNzuAY2WxQKzdlxdpBOw6KH4j';
-const NAVASAN_URL  = `https://api.navasan.tech/latest/?api_key=${NAVASAN_KEY}`;
+const NERKH_USD_URL = 'https://api.nerkh.io/v1/prices/json/currency/USD';
 
 /* ── Coin metadata ───────────────────────────────────────────────────────── */
 const METADATA = {
@@ -358,13 +357,12 @@ async function fetchGoldData() {
 }
 
 async function fetchUsdData() {
-  const res = await fetch(NAVASAN_URL);
-  if (!res.ok) throw new Error(`navasan: HTTP ${res.status}`);
-  const data = await res.json();
-  for (const key of ['usd_sell','tehran_naghdi_sell','harat_naghdi_sell']) {
-    if (data[key]) return parseFloat(data[key].value);
-  }
-  return 0;
+  const res = await fetch(NERKH_USD_URL, {headers:{Authorization:`Bearer ${GOLD_TOKEN}`}});
+  if (!res.ok) throw new Error(`nerkh USD: HTTP ${res.status}`);
+  const json = await res.json();
+  const current = json?.data?.prices?.USD?.current;
+  if (!current) return 0;
+  return parseFloat(String(current).replace(/,/g,'')) - 1200;
 }
 
 /* ── Bubble calculation ──────────────────────────────────────────────────── */
