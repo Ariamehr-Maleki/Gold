@@ -2,7 +2,7 @@
 
 A real-time, RTL Persian dashboard for Iranian gold and coin prices with bubble-calculation analytics.
  
-## Features
+## Features 
 
 - Live prices from **Nerkh.io** (gold/coins) and **Navasan** (USD)
 - Intrinsic value & bubble % calculation for all coins and 18K gold
