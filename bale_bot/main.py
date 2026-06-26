@@ -11,14 +11,13 @@ from datetime import datetime, time as dtime
 import pytz
 import requests
 import jdatetime
-from telegram import Bot, InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import Bot
 from telegram.ext import Application, ApplicationBuilder, CommandHandler, ContextTypes
 
 # ─── تنظیمات ─────────────────────────────────────────────────────────────
 BOT_TOKEN  = "1229708366:QHZEJ5dYWGpl2X5lQt-awSXWOsAhUIgkqG8"
 CHAT_ID    = 5315053603         # ← پس از اضافه کردن ربات به گروه، دستور /chatid را اجرا کن
 PHONE_NUMBER = "+989123338643"
-CALL_BUTTON  = InlineKeyboardMarkup([[InlineKeyboardButton("📞 تماس با ما", url=f"tel:{PHONE_NUMBER}")]])
 BALE_BASE  = "https://tapi.bale.ai/bot"
 BALE_FILE  = "https://tapi.bale.ai/file/bot"
 TEHRAN_TZ  = pytz.timezone("Asia/Tehran")
@@ -192,6 +191,7 @@ def build_hourly_message(prices: dict) -> str:
     lines.append(f"ساعت: {time_s}")
     lines.append(f"تاریخ: {date_s}")
     lines.append("🟢 آریسوگلد، خرید امن سکه و طلای آب‌شده")
+    lines.append(f"📞 تماس با ما: {PHONE_NUMBER}")
     return "\n".join(lines)
 
 
@@ -228,6 +228,7 @@ def build_parsian_message(prices: dict) -> str:
     lines.append(f"ساعت: {time_s}")
     lines.append(f"تاریخ: {date_s}")
     lines.append("🟢 آریسوگلد، خرید امن سکه و طلای آب‌شده")
+    lines.append(f"📞 تماس با ما: {PHONE_NUMBER}")
     return "\n".join(lines)
 
 # ─── Job callbacks ────────────────────────────────────────────────────────
@@ -239,7 +240,7 @@ async def job_hourly(context: ContextTypes.DEFAULT_TYPE) -> None:
     try:
         prices = await asyncio.to_thread(fetch_prices)
         text   = build_hourly_message(prices)
-        await context.bot.send_message(chat_id=CHAT_ID, text=text, reply_markup=CALL_BUTTON)
+        await context.bot.send_message(chat_id=CHAT_ID, text=text)
         log.info("پیام ساعتی ارسال شد.")
     except Exception as e:
         log.error("خطا در ارسال پیام ساعتی: %s", e)
@@ -252,7 +253,7 @@ async def job_parsian(context: ContextTypes.DEFAULT_TYPE) -> None:
     try:
         prices = await asyncio.to_thread(fetch_prices)
         text   = build_parsian_message(prices)
-        await context.bot.send_message(chat_id=CHAT_ID, text=text, reply_markup=CALL_BUTTON)
+        await context.bot.send_message(chat_id=CHAT_ID, text=text)
         log.info("جدول پارسیان ارسال شد.")
     except Exception as e:
         log.error("خطا در ارسال جدول پارسیان: %s", e)
@@ -281,7 +282,7 @@ async def cmd_now(update, context: ContextTypes.DEFAULT_TYPE) -> None:
     try:
         prices = await asyncio.to_thread(fetch_prices)
         text   = build_hourly_message(prices)
-        await update.message.reply_text(text, reply_markup=CALL_BUTTON)
+        await update.message.reply_text(text)
     except Exception as e:
         await update.message.reply_text(f"❌ خطا: {e}")
 
@@ -292,7 +293,7 @@ async def cmd_parsian(update, context: ContextTypes.DEFAULT_TYPE) -> None:
     try:
         prices = await asyncio.to_thread(fetch_prices)
         text   = build_parsian_message(prices)
-        await update.message.reply_text(text, reply_markup=CALL_BUTTON)
+        await update.message.reply_text(text)
     except Exception as e:
         await update.message.reply_text(f"❌ خطا: {e}")
 
