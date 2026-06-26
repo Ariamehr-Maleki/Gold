@@ -139,7 +139,6 @@ def build_hourly(prices):
         f"ساعت: {time_s}",
         f"تاریخ: {date_s}",
         "🟢 آریسوگلد، خرید امن سکه و طلای آب‌شده",
-        f"📞 تماس با ما: {PHONE_NUMBER}",
     ])
 
 def build_parsian(prices):
@@ -167,15 +166,19 @@ def build_parsian(prices):
             lines.append(f"   └{rv_txt}{bbl_txt}")
         lines.append("")
     lines += [f"ساعت: {time_s}", f"تاریخ: {date_s}",
-              "🟢 آریسوگلد، خرید امن سکه و طلای آب‌شده",
-              f"📞 تماس با ما: {PHONE_NUMBER}"]
+              "🟢 آریسوگلد، خرید امن سکه و طلای آب‌شده"]
     return "\n".join(lines)
 
 # ─── Send ──────────────────────────────────────────────────────────────────
 PHONE_NUMBER = "+989123338643"
+CALL_BUTTON  = {"inline_keyboard": [[{"text": "📞 تماس با ما", "url": f"tel:{PHONE_NUMBER}"}]]}
 
 def send(text):
-    r = requests.post(TG_API, json={"chat_id": TG_CHAT_ID, "text": text}, timeout=15)
+    r = requests.post(TG_API, json={
+        "chat_id": TG_CHAT_ID,
+        "text": text,
+        "reply_markup": CALL_BUTTON,
+    }, timeout=15)
     r.raise_for_status()
     print(f"✅ Sent ({len(text)} chars)")
 
