@@ -170,8 +170,15 @@ def build_parsian(prices):
     return "\n".join(lines)
 
 # ─── Send ──────────────────────────────────────────────────────────────────
+PHONE_NUMBER = "+989123338643"
+CALL_BUTTON  = {"inline_keyboard": [[{"text": "📞 تماس با ما", "url": f"tel:{PHONE_NUMBER}"}]]}
+
 def send(text):
-    r = requests.post(TG_API, json={"chat_id": TG_CHAT_ID, "text": text}, timeout=15)
+    r = requests.post(TG_API, json={
+        "chat_id": TG_CHAT_ID,
+        "text": text,
+        "reply_markup": CALL_BUTTON,
+    }, timeout=15)
     r.raise_for_status()
     print(f"✅ Sent ({len(text)} chars)")
 
