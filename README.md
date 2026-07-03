@@ -1,6 +1,6 @@
 # Iranian Gold & Coin Price Dashboard — داشبورد قیمت طلا و سکه
 
-A real-time, RTL Persian dashboard for Iranian gold and coin prices with bubble-calculation analytics.
+A real-time, RTL Persian dashboard for Iranian gold and coin prices with bubble-calculation analytics. 
   
 ## Features   
   
