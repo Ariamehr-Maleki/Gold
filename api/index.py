@@ -14,7 +14,7 @@ app.add_middleware(
 )
 
 # ─── API credentials ────────────────────────────────────────────────────────
-TOKEN = "JP5zKH45Y9eRnNMrgEwG4KI3LRqax1KciYgdvejyJ3c="
+TOKEN = "6cGxNnNXcfMKbM8jPiTQ4NylUSwXL0GVqakPQaKwS0"
 GOLD_HEADERS = {"Authorization": f"Bearer {TOKEN}"}
 GOLD_URL = "https://api.nerkh.io/v1/prices/json/gold"
 

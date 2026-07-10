@@ -1,17 +1,25 @@
 """
 آریسوگلد — ارسال قیمت به تلگرام (اجرا از GitHub Actions)
 """
-import os, re, time
+import os
+import sys
 import requests
 import pytz
 import jdatetime
 from datetime import datetime
 
 # ─── Config (از GitHub Secrets) ───────────────────────────────────────────
-NERKH_TOKEN  = os.environ["NERKH_TOKEN"]
-NAVASAN_KEY  = os.environ["NAVASAN_KEY"]
-TG_TOKEN     = os.environ["TELEGRAM_TOKEN"]
-TG_CHAT_ID   = os.environ["TELEGRAM_CHAT_ID"]
+def _req(name: str) -> str:
+    val = os.environ.get(name, "").strip()
+    if not val:
+        print(f"❌ Secret/env '{name}' is missing or empty.")
+        print("   Add it in GitHub → Settings → Secrets (Repository or Environment 'production').")
+        sys.exit(1)
+    return val
+
+NERKH_TOKEN  = _req("NERKH_TOKEN")
+TG_TOKEN     = _req("TELEGRAM_TOKEN")
+TG_CHAT_ID   = _req("TELEGRAM_CHAT_ID")
 
 NERKH_HEADERS = {"Authorization": f"Bearer {NERKH_TOKEN}"}
 GOLD_URL      = "https://api.nerkh.io/v1/prices/json/gold"
@@ -59,13 +67,12 @@ def jalali_now():
 
 # ─── Data fetching ─────────────────────────────────────────────────────────
 def _fetch_gold():
-    try:
-        r = requests.get(GOLD_URL, headers=NERKH_HEADERS, timeout=10)
-        r.raise_for_status()
-        return r.json().get("data", {}).get("prices", {})
-    except Exception as e:
-        print(f"خطای دریافت طلا: {e}")
-        return {}
+    r = requests.get(GOLD_URL, headers=NERKH_HEADERS, timeout=10)
+    if r.status_code == 401:
+        print("❌ nerkh.io: 401 Unauthorized — NERKH_TOKEN is wrong, expired, or not passed to the workflow.")
+        sys.exit(1)
+    r.raise_for_status()
+    return r.json().get("data", {}).get("prices", {})
 
 def _nerkh_usd():
     r = requests.get(NERKH_USD_URL, headers=NERKH_HEADERS, timeout=10)
@@ -170,16 +177,19 @@ def build_parsian(prices):
     return "\n".join(lines)
 
 # ─── Send ──────────────────────────────────────────────────────────────────
-PHONE_NUMBER = "+989123338643"
-CALL_BUTTON  = {"inline_keyboard": [[{"text": "📞 تماس با ما", "url": f"tel:{PHONE_NUMBER}"}]]}
+# Telegram inline buttons only accept http(s)/tg:// URLs — tel: causes HTTP 400.
+CONTACT_BUTTON = {"inline_keyboard": [[{"text": "📞 تماس / کانال", "url": "https://t.me/ariso_gold"}]]}
 
 def send(text):
-    r = requests.post(TG_API, json={
-        "chat_id": TG_CHAT_ID,
-        "text": text,
-        "reply_markup": CALL_BUTTON,
-    }, timeout=15)
-    r.raise_for_status()
+    payload = {"chat_id": TG_CHAT_ID, "text": text, "reply_markup": CONTACT_BUTTON}
+    r = requests.post(TG_API, json=payload, timeout=15)
+    if not r.ok:
+        try:
+            detail = r.json()
+        except Exception:
+            detail = r.text
+        print(f"❌ Telegram API error {r.status_code}: {detail}")
+        r.raise_for_status()
     print(f"✅ Sent ({len(text)} chars)")
 
 # ─── Main ──────────────────────────────────────────────────────────────────

@@ -31,7 +31,7 @@ logging.basicConfig(
 log = logging.getLogger(__name__)
 
 # ─── API credentials (same as backend) ───────────────────────────────────
-NERKH_TOKEN    = "1S060h9Vp6L58-8IiINiFVNqHDyjLCT-1rW0zBZMsOU="
+NERKH_TOKEN    = "6cGxNnNXcfMKbM8jPiTQ4NylUSwXL0GVqakPQaKwS0"
 NERKH_HEADERS  = {"Authorization": f"Bearer {NERKH_TOKEN}"}
 GOLD_URL       = "https://api.nerkh.io/v1/prices/json/gold"
 NERKH_USD_URL  = "https://api.nerkh.io/v1/prices/json/currency/USD"

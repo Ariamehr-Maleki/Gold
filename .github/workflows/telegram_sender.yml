@@ -25,6 +25,9 @@ on:
 jobs:
   send:
     runs-on: ubuntu-latest
+    # Secrets must live in this GitHub Environment (Settings → Environments → production)
+    # OR in Repository secrets (Settings → Secrets and variables → Actions).
+    environment: production
     steps:
       - uses: actions/checkout@v4
 
@@ -39,7 +42,6 @@ jobs:
       - name: Send price message
         env:
           NERKH_TOKEN:      ${{ secrets.NERKH_TOKEN }}
-          NAVASAN_KEY:      ${{ secrets.NAVASAN_KEY }}
           TELEGRAM_TOKEN:   ${{ secrets.TELEGRAM_TOKEN }}
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: python telegram_sender/send.py

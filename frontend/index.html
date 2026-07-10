@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>داشبورد قیمت طلا و سکه</title>
+<title>سکه و طلای آریسوگلد | ArisoGold</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;900&display=swap" rel="stylesheet"/>
 <style>
@@ -101,6 +101,35 @@ header{
 
 /* ─── Main ───────────────────────────────────────────────────────────── */
 main{max-width:1300px;margin:0 auto;padding:12px 18px 50px}
+
+/* ─── Footer ─────────────────────────────────────────────────────────── */
+footer{
+  max-width:1300px;
+  margin:0 auto 22px;
+  padding:14px 18px 0;
+}
+.fbox{
+  background:var(--card);
+  border:1px solid var(--bdr);
+  border-radius:var(--r);
+  box-shadow:var(--sh);
+  padding:14px 16px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+.f-title{font-size:13px;font-weight:800;color:var(--txt)}
+.f-line{font-size:12px;color:var(--txt2);line-height:1.7}
+.f-phone{font-size:12px;color:var(--txt);font-weight:600}
+.f-note{
+  font-size:11.5px;
+  color:var(--gold);
+  font-weight:700;
+  background:var(--gold-bg);
+  border:1px solid var(--bdr);
+  border-radius:8px;
+  padding:8px 10px;
+}
 
 /* ─── Summary bar — 5 items forced to one row ────────────────────────── */
 .sumbar{
@@ -240,6 +269,7 @@ main{max-width:1300px;margin:0 auto;padding:12px 18px 50px}
 /* ─── Mobile ─────────────────────────────────────────────────────────── */
 @media(max-width:480px){
   header,main{padding-inline:12px}
+  footer{padding-inline:12px}
   .logo-txt{font-size:13px}
   .hstat-lbl,.hstat-val,.cd-num{font-size:10px}
   .hbtn{padding:4px 8px;font-size:10.5px}
@@ -259,7 +289,7 @@ main{max-width:1300px;margin:0 auto;padding:12px 18px 50px}
 
     <div class="logo">
       <div class="logo-ico">🪙</div>
-      <span class="logo-txt">طلا و سکه</span>
+      <span class="logo-txt">سکه و طلای آریسوگلد</span>
     </div>
 
     <span class="hsep"></span>
@@ -308,12 +338,25 @@ main{max-width:1300px;margin:0 auto;padding:12px 18px 50px}
   <div id="dash"></div>
 </main>
 
+<footer>
+  <div class="fbox">
+    <div class="f-title">خرید و فروش امن سکه و طلای آبشده</div>
+    <div class="f-line">آدرس: تهران، نیاوران، جماران، مجتمع تجاری جم سنتر، طبقه منفی ۱، واحد ۵</div>
+    <div class="f-phone">۰۲۱۲۶۱۳۳۰۴۹</div>
+    <div class="f-phone">۰۹۱۲۳۳۳۸۶۴۳ علیرضا ملکی</div>
+    <div class="f-phone">۰۹۱۲۹۰۹۲۶۹۴ آریامهر ملکی</div>
+    <div class="f-line">Telegram: @ariso_gold</div>
+    <div class="f-line">Bale: @arisogold</div>
+    <div class="f-note">به دلیل نوسانات برای اطلاع از قیمت لحظه ای خرید و فروش تماس بگیرید.</div>
+  </div>
+</footer>
+
 <script>
 /* ── Config ────────────────────────────────────────────────────────────── */
 const REFRESH_SEC = 60;
 
 /* ── API credentials (called directly from browser) ─────────────────────── */
-const GOLD_TOKEN   = '1S060h9Vp6L58-8IiINiFVNqHDyjLCT-1rW0zBZMsOU=';
+const GOLD_TOKEN   = '6cGxNnNXcfMKbM8jPiTQ4NylUSwXL0GVqakPQaKwS0';
 const GOLD_URL     = 'https://api.nerkh.io/v1/prices/json/gold';
 const NERKH_USD_URL = 'https://api.nerkh.io/v1/prices/json/currency/USD';
 
