@@ -25,9 +25,8 @@ on:
 jobs:
   send:
     runs-on: ubuntu-latest
-    # Secrets must live in this GitHub Environment (Settings → Environments → production)
-    # OR in Repository secrets (Settings → Secrets and variables → Actions).
-    environment: production
+    # Secrets: GitHub Environment "Production" or Repository secrets
+    environment: Production
     steps:
       - uses: actions/checkout@v4
 

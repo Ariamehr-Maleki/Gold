@@ -13,13 +13,15 @@ def _req(name: str) -> str:
     val = os.environ.get(name, "").strip()
     if not val:
         print(f"❌ Secret/env '{name}' is missing or empty.")
-        print("   Add it in GitHub → Settings → Secrets (Repository or Environment 'production').")
+        print("   Add it in GitHub → Settings → Secrets (Repository or Environment 'Production').")
         sys.exit(1)
     return val
 
 NERKH_TOKEN  = _req("NERKH_TOKEN")
 TG_TOKEN     = _req("TELEGRAM_TOKEN")
-TG_CHAT_ID   = _req("TELEGRAM_CHAT_ID")
+_raw_chat    = _req("TELEGRAM_CHAT_ID")
+# Public channel: @username  |  Group/channel: -1001234567890  |  Private chat: 123456789
+TG_CHAT_ID   = _raw_chat if _raw_chat.startswith("@") else int(_raw_chat)
 
 NERKH_HEADERS = {"Authorization": f"Bearer {NERKH_TOKEN}"}
 GOLD_URL      = "https://api.nerkh.io/v1/prices/json/gold"
@@ -189,6 +191,14 @@ def send(text):
         except Exception:
             detail = r.text
         print(f"❌ Telegram API error {r.status_code}: {detail}")
+        desc = detail.get("description", "") if isinstance(detail, dict) else ""
+        if "chat not found" in desc.lower():
+            print()
+            print("راهنما: TELEGRAM_CHAT_ID اشتباه است یا ربات به کانال/گروه دسترسی ندارد.")
+            print("  • کانال عمومی @ariso_gold → مقدار secret را بگذارید: @ariso_gold")
+            print("  • کانال/گروه خصوصی → عدد -100... از @userinfobot یا getUpdates")
+            print("  • ربات را Admin کانال کنید (Post Messages)")
+            print("  • اگر Chat ID بله (مثل 5315053603) گذاشته‌اید، برای تلگرام جداگانه بگیرید")
         r.raise_for_status()
     print(f"✅ Sent ({len(text)} chars)")
 

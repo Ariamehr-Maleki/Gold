@@ -105,30 +105,45 @@ main{max-width:1300px;margin:0 auto;padding:12px 18px 50px}
 /* ─── Footer ─────────────────────────────────────────────────────────── */
 footer{
   max-width:1300px;
-  margin:0 auto 22px;
-  padding:14px 18px 0;
+  margin:28px auto 0;
+  padding:0 18px 22px;
 }
 .fbox{
   background:var(--card);
   border:1px solid var(--bdr);
   border-radius:var(--r);
   box-shadow:var(--sh);
-  padding:14px 16px;
-  display:flex;
-  flex-direction:column;
-  gap:8px;
+  overflow:hidden;
 }
-.f-title{font-size:13px;font-weight:800;color:var(--txt)}
-.f-line{font-size:12px;color:var(--txt2);line-height:1.7}
-.f-phone{font-size:12px;color:var(--txt);font-weight:600}
+.fgrid{
+  display:grid;
+  grid-template-columns:1.4fr 1.2fr 1fr 0.9fr;
+  gap:0;
+  padding:18px 20px 14px;
+}
+.fcol{
+  padding:0 14px;
+  border-inline-start:1px solid var(--bdr2);
+}
+.fcol:first-child{border-inline-start:none;padding-inline-start:0}
+.fcol:last-child{padding-inline-end:0}
+.f-brand{font-size:14px;font-weight:900;color:var(--txt);margin-bottom:6px}
+.f-tagline{font-size:11.5px;color:var(--txt2);line-height:1.65}
+.f-head{font-size:11px;font-weight:700;color:var(--gold);margin-bottom:8px;letter-spacing:.2px}
+.f-line{font-size:11.5px;color:var(--txt2);line-height:1.75}
+.f-link{
+  display:block;font-size:11.5px;color:var(--txt);font-weight:600;
+  text-decoration:none;margin-bottom:6px;transition:color .15s;
+}
+.f-link:hover{color:var(--gold)}
 .f-note{
-  font-size:11.5px;
-  color:var(--gold);
-  font-weight:700;
-  background:var(--gold-bg);
-  border:1px solid var(--bdr);
-  border-radius:8px;
-  padding:8px 10px;
+  font-size:11px;color:var(--gold);font-weight:600;text-align:center;
+  background:var(--gold-bg);border-top:1px solid var(--bdr);
+  padding:9px 16px;line-height:1.6;
+}
+.fcopy{
+  font-size:10px;color:var(--txt3);text-align:center;
+  padding:8px 16px 10px;border-top:1px solid var(--bdr2);
 }
 
 /* ─── Summary bar — 5 items forced to one row ────────────────────────── */
@@ -267,9 +282,17 @@ footer{
 .spin{animation:spin .85s linear infinite}
 
 /* ─── Mobile ─────────────────────────────────────────────────────────── */
+@media(max-width:900px){
+  .fgrid{grid-template-columns:1fr 1fr;gap:14px 0;padding:16px}
+  .fcol{border-inline-start:none;padding:0 8px}
+  .fcol:nth-child(odd){border-inline-end:1px solid var(--bdr2)}
+}
 @media(max-width:480px){
   header,main{padding-inline:12px}
   footer{padding-inline:12px}
+  .fgrid{grid-template-columns:1fr;gap:12px}
+  .fcol{border:none!important;padding:0}
+  .fcol+.fcol{padding-top:12px;border-top:1px solid var(--bdr2)!important}
   .logo-txt{font-size:13px}
   .hstat-lbl,.hstat-val,.cd-num{font-size:10px}
   .hbtn{padding:4px 8px;font-size:10.5px}
@@ -340,14 +363,29 @@ footer{
 
 <footer>
   <div class="fbox">
-    <div class="f-title">خرید و فروش امن سکه و طلای آبشده</div>
-    <div class="f-line">آدرس: تهران، نیاوران، جماران، مجتمع تجاری جم سنتر، طبقه منفی ۱، واحد ۵</div>
-    <div class="f-phone">۰۲۱۲۶۱۳۳۰۴۹</div>
-    <div class="f-phone">۰۹۱۲۳۳۳۸۶۴۳ علیرضا ملکی</div>
-    <div class="f-phone">۰۹۱۲۹۰۹۲۶۹۴ آریامهر ملکی</div>
-    <div class="f-line">Telegram: @ariso_gold</div>
-    <div class="f-line">Bale: @arisogold</div>
-    <div class="f-note">به دلیل نوسانات برای اطلاع از قیمت لحظه ای خرید و فروش تماس بگیرید.</div>
+    <div class="fgrid">
+      <div class="fcol">
+        <div class="f-brand">سکه و طلای آریسوگلد</div>
+        <div class="f-tagline">خرید و فروش امن سکه و طلای آبشده</div>
+      </div>
+      <div class="fcol">
+        <div class="f-head">آدرس</div>
+        <div class="f-line">تهران، نیاوران، جماران<br/>مجتمع تجاری جم سنتر<br/>طبقه منفی ۱، واحد ۵</div>
+      </div>
+      <div class="fcol">
+        <div class="f-head">تماس</div>
+        <a class="f-link" href="tel:02126133049">۰۲۱۲۶۱۳۳۰۴۹</a>
+        <a class="f-link" href="tel:09123338643">۰۹۱۲۳۳۳۸۶۴۳ — علیرضا ملکی</a>
+        <a class="f-link" href="tel:09129092694">۰۹۱۲۹۰۹۲۶۹۴ — آریامهر ملکی</a>
+      </div>
+      <div class="fcol">
+        <div class="f-head">شبکه‌های اجتماعی</div>
+        <a class="f-link" href="https://t.me/ariso_gold" target="_blank" rel="noopener">تلگرام @ariso_gold</a>
+        <a class="f-link" href="https://ble.ir/arisogold" target="_blank" rel="noopener">بله @arisogold</a>
+      </div>
+    </div>
+    <div class="f-note">به دلیل نوسانات برای اطلاع از قیمت لحظه‌ای خرید و فروش تماس بگیرید.</div>
+    <div class="fcopy">© آریسوگلد — ArisoGold</div>
   </div>
 </footer>
 
