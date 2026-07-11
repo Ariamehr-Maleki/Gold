@@ -396,7 +396,8 @@ const REFRESH_SEC = 60;
 /* ── API credentials (called directly from browser) ─────────────────────── */
 const GOLD_TOKEN   = '6cGxNnNXcfMKbM8jPiTQ4NylUSwXL0GVqakPQaKwS0';
 const GOLD_URL     = 'https://api.nerkh.io/v1/prices/json/gold';
-const NERKH_USD_URL = 'https://api.nerkh.io/v1/prices/json/currency/USD';
+const CURRENCY_URL = 'https://api.nerkh.io/v1/prices/json/currency';
+const CRYPTO_URL   = 'https://api.nerkh.io/v1/prices/json/crypto';
 
 /* ── Coin metadata ───────────────────────────────────────────────────────── */
 const METADATA = {
@@ -419,14 +420,20 @@ const PERSIAN_NAMES = {
   SEKE_PRS100:'پارسیان ۱۰۰ سوتی', SEKE_PRS200:'پارسیان ۲۰۰ سوتی',
   SEKE_PRS400:'پارسیان ۴۰۰ سوتی', SEKE_PRS500:'پارسیان ۵۰۰ سوتی',
   SEKE_PRS700:'پارسیان ۷۰۰ سوتی',
+  EUR:'یورو', AED:'درهم امارات', GBP:'پوند انگلیس', TRY:'لیر ترکیه',
+  BTC:'بیت‌کوین', ETH:'اتریوم', USDT:'تتر', XRP:'ریپل'
 };
-const BASE_ITEMS = new Set(['OUNCE','MAZANEH','GOLD24K','USD']);
+const BASE_ITEMS = new Set([
+  'OUNCE', 'MAZANEH', 'GOLD24K', 'USD', 'EUR', 'AED', 'GBP', 'TRY',
+  'BTC', 'ETH', 'USDT', 'XRP'
+]);
 const GROUPS_CONFIG = [
   {id:'global',   title:'بازار جهانی',  subtitle:'قیمت‌های بین‌المللی',        items:['OUNCE','MAZANEH','GOLD24K']},
-  {id:'currency', title:'ارز',          subtitle:'نرخ ارز روز',                items:['USD']},
+  {id:'currency', title:'ارز',          subtitle:'نرخ ارز روز',                items:['USD','EUR','AED','GBP','TRY']},
   {id:'gold18',   title:'طلای ۱۸ عیار', subtitle:'قیمت هر گرم — با محاسبه حباب', items:['GOLD18K']},
   {id:'main_coins',title:'سکه‌های اصلی', subtitle:'سکه‌های بانک مرکزی',        items:['SEKE_EMAMI','SEKE_BAHAR','SEKE_NIM','SEKE_ROB']},
   {id:'parsian',  title:'پارسیان و گرمی',subtitle:'سکه‌های گرمی و پارسیان',   items:['SEKE_PRS100','SEKE_PRS200','SEKE_PRS400','SEKE_PRS500','SEKE_PRS700','SEKE_1G']},
+  {id:'crypto',   title:'رمزارزها',      subtitle:'قیمت لحظه‌ای رمزارزها',       items:['BTC','ETH','USDT','XRP']},
 ];
 
 /* ── Data fetchers ───────────────────────────────────────────────────────── */
@@ -437,13 +444,18 @@ async function fetchGoldData() {
   return json?.data?.prices || {};
 }
 
-async function fetchUsdData() {
-  const res = await fetch(NERKH_USD_URL, {headers:{Authorization:`Bearer ${GOLD_TOKEN}`}});
-  if (!res.ok) throw new Error(`nerkh USD: HTTP ${res.status}`);
+async function fetchCurrencyData() {
+  const res = await fetch(CURRENCY_URL, {headers:{Authorization:`Bearer ${GOLD_TOKEN}`}});
+  if (!res.ok) throw new Error(`nerkh currency: HTTP ${res.status}`);
   const json = await res.json();
-  const current = json?.data?.prices?.USD?.current;
-  if (!current) return 0;
-  return parseFloat(String(current).replace(/,/g,'')) - 1200;
+  return json?.data?.prices || {};
+}
+
+async function fetchCryptoData() {
+  const res = await fetch(CRYPTO_URL, {headers:{Authorization:`Bearer ${GOLD_TOKEN}`}});
+  if (!res.ok) throw new Error(`nerkh crypto: HTTP ${res.status}`);
+  const json = await res.json();
+  return json?.data?.prices || {};
 }
 
 /* ── Bubble calculation ──────────────────────────────────────────────────── */
@@ -468,16 +480,43 @@ function calcItem(code, marketPrice, ounce, usd, gold18k) {
 
 /* ── Build data object (mirrors backend response shape) ─────────────────── */
 async function loadPrices() {
-  const [goldRaw, usdPrice] = await Promise.all([fetchGoldData(), fetchUsdData()]);
+  const [goldRaw, currencyRaw, cryptoRaw] = await Promise.all([
+    fetchGoldData(),
+    fetchCurrencyData(),
+    fetchCryptoData()
+  ]);
 
   const live = {};
+  
+  // Parse Gold
   for (const [key, info] of Object.entries(goldRaw)) {
     if (info && info.current != null) {
       const v = parseFloat(String(info.current).replace(/,/g,''));
       if (!isNaN(v)) live[key] = v;
     }
   }
-  live['USD'] = usdPrice;
+
+  // Parse Currency
+  for (const [key, info] of Object.entries(currencyRaw)) {
+    if (info && info.current != null) {
+      const v = parseFloat(String(info.current).replace(/,/g,''));
+      if (!isNaN(v)) {
+        if (key === 'USD') {
+          live[key] = v - 1200; // Apply USD discount as before
+        } else {
+          live[key] = v;
+        }
+      }
+    }
+  }
+
+  // Parse Crypto
+  for (const [key, info] of Object.entries(cryptoRaw)) {
+    if (info && info.current != null) {
+      const v = parseFloat(String(info.current).replace(/,/g,''));
+      if (!isNaN(v)) live[key] = v;
+    }
+  }
 
   const ounce  = live['OUNCE']  || 0;
   const usd    = live['USD']    || 0;
@@ -527,18 +566,24 @@ const ICONS = {
   OUNCE:'🌐', MAZANEH:'⚖️', GOLD24K:'🟡', USD:'🇺🇸', GOLD18K:'✨',
   SEKE_EMAMI:'🪙', SEKE_BAHAR:'🪙', SEKE_NIM:'🔶', SEKE_ROB:'🔸', SEKE_1G:'🔹',
   SEKE_PRS100:'🟠', SEKE_PRS200:'🟠', SEKE_PRS400:'🟠', SEKE_PRS500:'🟠', SEKE_PRS700:'🟠',
+  EUR:'🇪🇺', AED:'🇦🇪', GBP:'🇬🇧', TRY:'🇹🇷',
+  BTC:'🪙', ETH:'🪙', USDT:'💵', XRP:'💧'
 };
 const ICON_BG_L = {
   OUNCE:'#ddeeff', MAZANEH:'#f0f0f0', GOLD24K:'#fff8e1', USD:'#e6f4ea', GOLD18K:'#fff8e1',
   SEKE_EMAMI:'#fff3e0', SEKE_BAHAR:'#fff3e0', SEKE_NIM:'#fff3e0', SEKE_ROB:'#fff3e0', SEKE_1G:'#e8eeff',
   SEKE_PRS100:'#fff3e0', SEKE_PRS200:'#fff3e0', SEKE_PRS400:'#fff3e0', SEKE_PRS500:'#fff3e0', SEKE_PRS700:'#fff3e0',
+  EUR:'#f1f3f9', AED:'#f1f3f9', GBP:'#f1f3f9', TRY:'#f1f3f9',
+  BTC:'#fff3e0', ETH:'#f1f3f9', USDT:'#e6f4ea', XRP:'#ddeeff'
 };
 const ICON_BG_D = {
   OUNCE:'#0d1e2e', MAZANEH:'#1a1a1a', GOLD24K:'#1e1800', USD:'#071a0d', GOLD18K:'#1e1800',
   SEKE_EMAMI:'#1a1200', SEKE_BAHAR:'#1a1200', SEKE_NIM:'#1a1200', SEKE_ROB:'#1a1200', SEKE_1G:'#0d0d22',
   SEKE_PRS100:'#1a1200', SEKE_PRS200:'#1a1200', SEKE_PRS400:'#1a1200', SEKE_PRS500:'#1a1200', SEKE_PRS700:'#1a1200',
+  EUR:'#1a2035', AED:'#1a2035', GBP:'#1a2035', TRY:'#1a2035',
+  BTC:'#1e1800', ETH:'#1a2035', USDT:'#071a0d', XRP:'#0d1e2e'
 };
-const GRP_ICONS = {main_coins:'🪙', parsian:'⚜️'};
+const GRP_ICONS = {main_coins:'🪙', parsian:'⚜️', currency:'💵', crypto:'⚡'};
 
 function iconBg(code){ return darkMode ? (ICON_BG_D[code]||'#1a2035') : (ICON_BG_L[code]||'#f5f5f5'); }
 
@@ -659,6 +704,21 @@ function makeCard(item){
   const vcls=pct==null?'':(pct<=5?'dv-g':pct<=15?'dv-a':'dv-r');
   const absSign=item.bubble_absolute==null?null:(item.bubble_absolute>=0?'+':'−');
 
+  // Hide details and separator if neither real_value nor bubble_absolute is present
+  const showDetails = item.real_value != null || item.bubble_absolute != null;
+  const detailsHtml = showDetails ? `
+  <div class="card-sep"></div>
+  <div class="drows">
+    <div class="drow">
+      <span class="dlbl">ارزش ذاتی</span>
+      <span class="dval">${fmtN(item.real_value)} ت</span>
+    </div>
+    <div class="drow">
+      <span class="dlbl">مبلغ حباب</span>
+      <span class="${vcls}">${absSign}${fmtN(Math.abs(item.bubble_absolute))} ت</span>
+    </div>
+  </div>` : '';
+
   return `<div class="card ${flash}" id="c-${item.code}">
   <div class="card-top">
     <div class="ico" style="background:${iconBg(item.code)}">${ICONS[item.code]||'◆'}</div>
@@ -670,21 +730,7 @@ function makeCard(item){
   ${chipHtml(pct)}
   <div class="card-price">${fmtN(item.market_price)}</div>
   <div class="card-unit">تومان</div>
-  <div class="card-sep"></div>
-  <div class="drows">
-    <div class="drow">
-      <span class="dlbl">ارزش ذاتی</span>
-      ${item.real_value!=null
-        ?`<span class="dval">${fmtN(item.real_value)} ت</span>`
-        :`<span class="dv-dash">—</span>`}
-    </div>
-    <div class="drow">
-      <span class="dlbl">مبلغ حباب</span>
-      ${item.bubble_absolute!=null
-        ?`<span class="${vcls}">${absSign}${fmtN(Math.abs(item.bubble_absolute))} ت</span>`
-        :`<span class="dv-dash">—</span>`}
-    </div>
-  </div>
+  ${detailsHtml}
 </div>`;
 }
 
@@ -697,9 +743,10 @@ function makeSection(grp){
   let items=[...coins];
   if(sorting) items=[...items].sort((a,b)=>(a.bubble_percent??Infinity)-(b.bubble_percent??Infinity));
 
-  const sortBtn=`<button class="sec-sort ${sorting?'on':''}" onclick="toggleSort()">
+  const showSort = grp.id === 'main_coins' || grp.id === 'parsian';
+  const sortBtn = showSort ? `<button class="sec-sort ${sorting?'on':''}" onclick="toggleSort()">
     ${sorting?'↑ مرتب شده':'مرتب بر حباب'}
-  </button>`;
+  </button>` : '';
 
   return `<div class="section" id="s-${grp.id}">
   <div class="sec-head">

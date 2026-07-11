@@ -5,6 +5,7 @@
 """
 import asyncio
 import logging
+import os
 import time as _time
 from datetime import datetime, time as dtime
 
@@ -15,9 +16,18 @@ from telegram import Bot, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, ApplicationBuilder, CommandHandler, ContextTypes
 
 # ─── تنظیمات ─────────────────────────────────────────────────────────────
-BOT_TOKEN  = "1229708366:QHZEJ5dYWGpl2X5lQt-awSXWOsAhUIgkqG8"
-CHAT_ID    = 5315053603         # ← پس از اضافه کردن ربات به گروه، دستور /chatid را اجرا کن
-PHONE_NUMBER = "+989123338643"
+BOT_TOKEN  = os.environ.get("BOT_TOKEN", "1229708366:QHZEJ5dYWGpl2X5lQt-awSXWOsAhUIgkqG8")
+
+_raw_chat_id = os.environ.get("CHAT_ID")
+if _raw_chat_id:
+    try:
+        CHAT_ID = int(_raw_chat_id)
+    except ValueError:
+        CHAT_ID = _raw_chat_id
+else:
+    CHAT_ID = 5315053603         # ← پس از اضافه کردن ربات به گروه، دستور /chatid را اجرا کن
+
+PHONE_NUMBER = os.environ.get("PHONE_NUMBER", "+989123338643")
 CALL_BUTTON  = InlineKeyboardMarkup([[InlineKeyboardButton("📞 تماس با ما", url=f"tel:{PHONE_NUMBER}")]])
 BALE_BASE  = "https://tapi.bale.ai/bot"
 BALE_FILE  = "https://tapi.bale.ai/file/bot"
@@ -31,8 +41,15 @@ logging.basicConfig(
 log = logging.getLogger(__name__)
 
 # ─── API credentials (same as backend) ───────────────────────────────────
-NERKH_TOKEN    = "6cGxNnNXcfMKbM8jPiTQ4NylUSwXL0GVqakPQaKwS0"
-NERKH_HEADERS  = {"Authorization": f"Bearer {NERKH_TOKEN}"}
+NERKH_TOKEN    = os.environ.get("NERKH_TOKEN", "6cGxNnNXcfMKbM8jPiTQ4NylUSwXL0GVqakPQaKwS0")
+NERKH_HEADERS  = {
+    "Authorization": f"Bearer {NERKH_TOKEN}",
+    "User-Agent": (
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) "
+        "Chrome/120.0.0.0 Safari/537.36"
+    )
+}
 GOLD_URL       = "https://api.nerkh.io/v1/prices/json/gold"
 NERKH_USD_URL  = "https://api.nerkh.io/v1/prices/json/currency/USD"
 
@@ -93,6 +110,8 @@ def jalali_now() -> tuple[str, str]:
 def _fetch_gold() -> dict:
     try:
         r = requests.get(GOLD_URL, headers=NERKH_HEADERS, timeout=10)
+        if r.status_code != 200:
+            log.error("خطای دریافت طلا: کد وضعیت %s - پاسخ: %s", r.status_code, r.text[:200])
         r.raise_for_status()
         return r.json().get("data", {}).get("prices", {})
     except Exception as e:
@@ -107,6 +126,8 @@ def _fetch_usd() -> float:
 
     try:
         r = requests.get(NERKH_USD_URL, headers=NERKH_HEADERS, timeout=10)
+        if r.status_code != 200:
+            log.error("خطای دریافت دلار: کد وضعیت %s - پاسخ: %s", r.status_code, r.text[:200])
         r.raise_for_status()
         current = r.json().get("data", {}).get("prices", {}).get("USD", {}).get("current")
         if not current:

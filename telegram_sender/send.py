@@ -23,7 +23,14 @@ _raw_chat    = _req("TELEGRAM_CHAT_ID")
 # Public channel: @username  |  Group/channel: -1001234567890  |  Private chat: 123456789
 TG_CHAT_ID   = _raw_chat if _raw_chat.startswith("@") else int(_raw_chat)
 
-NERKH_HEADERS = {"Authorization": f"Bearer {NERKH_TOKEN}"}
+NERKH_HEADERS = {
+    "Authorization": f"Bearer {NERKH_TOKEN}",
+    "User-Agent": (
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) "
+        "Chrome/120.0.0.0 Safari/537.36"
+    )
+}
 GOLD_URL      = "https://api.nerkh.io/v1/prices/json/gold"
 NERKH_USD_URL = "https://api.nerkh.io/v1/prices/json/currency/USD"
 TG_API        = f"https://api.telegram.org/bot{TG_TOKEN}/sendMessage"
@@ -180,7 +187,8 @@ def build_parsian(prices):
 
 # ─── Send ──────────────────────────────────────────────────────────────────
 # Telegram inline buttons only accept http(s)/tg:// URLs — tel: causes HTTP 400.
-CONTACT_BUTTON = {"inline_keyboard": [[{"text": "📞 تماس / کانال", "url": "https://t.me/ariso_gold"}]]}
+# We use https://t.me/+989123338643 to open a direct Telegram chat with the contact number.
+CONTACT_BUTTON = {"inline_keyboard": [[{"text": "📞 تماس با ما", "url": "https://t.me/+989123338643"}]]}
 
 def send(text):
     payload = {"chat_id": TG_CHAT_ID, "text": text, "reply_markup": CONTACT_BUTTON}
