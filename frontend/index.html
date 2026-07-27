@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>سکه و طلای آریسوگلد | ArisoGold</title>
+<title>سپر و آریسوگلد | Separ</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;900&display=swap" rel="stylesheet"/>
 <style>
@@ -101,6 +101,21 @@ header{
 
 /* ─── Main ───────────────────────────────────────────────────────────── */
 main{max-width:1300px;margin:0 auto;padding:12px 18px 50px}
+.ai-cta{
+  display:flex;align-items:center;justify-content:space-between;gap:16px;
+  margin-bottom:14px;padding:14px 16px;border-radius:var(--r);
+  background:linear-gradient(135deg,#17120a,#342507);
+  color:#fff;text-decoration:none;box-shadow:var(--sh);
+  border:1px solid rgba(201,146,10,.45);transition:transform .18s,box-shadow .18s;
+}
+.ai-cta:hover{transform:translateY(-1px);box-shadow:var(--sh-h)}
+.ai-cta-copy{display:flex;flex-direction:column;gap:3px}
+.ai-cta-title{font-size:14px;font-weight:900}
+.ai-cta-sub{font-size:11.5px;color:rgba(255,255,255,.72)}
+.ai-cta-btn{
+  flex-shrink:0;padding:8px 13px;border-radius:9px;background:var(--gold);
+  color:#fff;font-size:11.5px;font-weight:800;white-space:nowrap;
+}
 
 /* ─── Footer ─────────────────────────────────────────────────────────── */
 footer{
@@ -296,6 +311,9 @@ footer{
   .logo-txt{font-size:13px}
   .hstat-lbl,.hstat-val,.cd-num{font-size:10px}
   .hbtn{padding:4px 8px;font-size:10.5px}
+  .ai-cta{padding:12px;align-items:flex-start}
+  .ai-cta-sub{font-size:10.5px}
+  .ai-cta-btn{padding:7px 9px;font-size:10.5px}
   .sumbar{grid-template-columns:repeat(5,1fr);overflow-x:auto}
   .sum-price{font-size:12px}
   .sum-name{font-size:9px}
@@ -312,7 +330,7 @@ footer{
 
     <div class="logo">
       <div class="logo-ico">🪙</div>
-      <span class="logo-txt">سکه و طلای آریسوگلد</span>
+      <span class="logo-txt">سپر | آریسوگلد</span>
     </div>
 
     <span class="hsep"></span>
@@ -352,6 +370,13 @@ footer{
 
 <!-- ══ Content ════════════════════════════════════════════════════════════ -->
 <main>
+  <a class="ai-cta" href="/separ-ai" aria-label="گفت‌وگو با Separ AI">
+    <span class="ai-cta-copy">
+      <span class="ai-cta-title">Chat با Separ AI</span>
+      <span class="ai-cta-sub">دستیار هوشمند مدیریت ریسک سپر</span>
+    </span>
+    <span class="ai-cta-btn">شروع گفت‌وگو ←</span>
+  </a>
   <div id="err-box">
     <div class="err-emoji">⚠️</div>
     <div class="err-title">خطا در دریافت اطلاعات</div>
@@ -365,7 +390,7 @@ footer{
   <div class="fbox">
     <div class="fgrid">
       <div class="fcol">
-        <div class="f-brand">سکه و طلای آریسوگلد</div>
+        <div class="f-brand">سپر | آریسوگلد</div>
         <div class="f-tagline">خرید و فروش امن سکه و طلای آبشده</div>
       </div>
       <div class="fcol">
@@ -385,7 +410,7 @@ footer{
       </div>
     </div>
     <div class="f-note">به دلیل نوسانات برای اطلاع از قیمت لحظه‌ای خرید و فروش تماس بگیرید.</div>
-    <div class="fcopy">© آریسوگلد — ArisoGold</div>
+    <div class="fcopy">© سپر و آریسوگلد — Separ &amp; ArisoGold</div>
   </div>
 </footer>
 
@@ -394,10 +419,10 @@ footer{
 const REFRESH_SEC = 60;
 
 /* ── API credentials (called directly from browser) ─────────────────────── */
-const GOLD_TOKEN   = '6cGxNnNXcfMKbM8jPiTQ4NylUSwXL0GVqakPQaKwS0';
-const GOLD_URL     = 'https://api.nerkh.io/v1/prices/json/gold';
-const CURRENCY_URL = 'https://api.nerkh.io/v1/prices/json/currency';
-const CRYPTO_URL   = 'https://api.nerkh.io/v1/prices/json/crypto';
+const GOLD_TOKEN   = '';
+const GOLD_URL     = '';
+const CURRENCY_URL = '';
+const CRYPTO_URL   = '';
 
 /* ── Coin metadata ───────────────────────────────────────────────────────── */
 const METADATA = {
@@ -480,6 +505,10 @@ function calcItem(code, marketPrice, ounce, usd, gold18k) {
 
 /* ── Build data object (mirrors backend response shape) ─────────────────── */
 async function loadPrices() {
+  const response = await fetch('/api/prices', {headers:{Accept:'application/json'}});
+  if (!response.ok) throw new Error(`market API: HTTP ${response.status}`);
+  return response.json();
+  /*
   const [goldRaw, currencyRaw, cryptoRaw] = await Promise.all([
     fetchGoldData(),
     fetchCurrencyData(),
@@ -541,7 +570,7 @@ async function loadPrices() {
     })
   }));
 
-  return {timestamp_display: timeStr, groups};
+  return {timestamp_display: timeStr, groups}; */
 }
 
 /* items shown in summary bar (in display order) */

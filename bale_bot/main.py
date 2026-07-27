@@ -1,5 +1,5 @@
 """
-آریسوگلد — ربات تلگرام (Bale)
+سپر — ربات تلگرام (Bale)
 ارسال قیمت‌های زنده طلا و سکه هر ساعت یکبار
 ارسال جدول پارسیان هر روز ساعت ۱۲ ظهر
 """
@@ -16,7 +16,7 @@ from telegram import Bot, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, ApplicationBuilder, CommandHandler, ContextTypes
 
 # ─── تنظیمات ─────────────────────────────────────────────────────────────
-BOT_TOKEN  = os.environ.get("BOT_TOKEN", "1229708366:QHZEJ5dYWGpl2X5lQt-awSXWOsAhUIgkqG8")
+BOT_TOKEN  = os.environ.get("BOT_TOKEN", "").strip()
 
 _raw_chat_id = os.environ.get("CHAT_ID")
 if _raw_chat_id:
@@ -41,7 +41,7 @@ logging.basicConfig(
 log = logging.getLogger(__name__)
 
 # ─── API credentials (same as backend) ───────────────────────────────────
-NERKH_TOKEN    = os.environ.get("NERKH_TOKEN", "6cGxNnNXcfMKbM8jPiTQ4NylUSwXL0GVqakPQaKwS0")
+NERKH_TOKEN    = os.environ.get("NERKH_TOKEN", "").strip()
 NERKH_HEADERS  = {
     "Authorization": f"Bearer {NERKH_TOKEN}",
     "User-Agent": (
@@ -212,7 +212,7 @@ def build_hourly_message(prices: dict) -> str:
     lines.append("")
     lines.append(f"ساعت: {time_s}")
     lines.append(f"تاریخ: {date_s}")
-    lines.append("🟢 آریسوگلد، خرید امن سکه و طلای آب‌شده")
+    lines.append("🟢 سپر، داده بازار طلا و سکه")
     return "\n".join(lines)
 
 
@@ -248,7 +248,7 @@ def build_parsian_message(prices: dict) -> str:
 
     lines.append(f"ساعت: {time_s}")
     lines.append(f"تاریخ: {date_s}")
-    lines.append("🟢 آریسوگلد، خرید امن سکه و طلای آب‌شده")
+    lines.append("🟢 سپر، داده بازار طلا و سکه")
     return "\n".join(lines)
 
 # ─── Job callbacks ────────────────────────────────────────────────────────
@@ -283,7 +283,7 @@ async def job_parsian(context: ContextTypes.DEFAULT_TYPE) -> None:
 async def cmd_start(update, context: ContextTypes.DEFAULT_TYPE) -> None:
     chat  = update.effective_chat
     lines = [
-        "🍀 <b>آریسوگلد</b> — ربات قیمت طلا و سکه",
+        "🍀 <b>سپر</b> — ربات قیمت طلا و سکه",
         "",
         f"🆔 شناسه این چت: <code>{chat.id}</code>",
         "",
@@ -353,7 +353,7 @@ def make_app():
 
 def main() -> None:
     app = make_app()
-    log.info("ربات آریسوگلد در حال اجرا است...")
+    log.info("ربات سپر در حال اجرا است...")
     app.run_polling(drop_pending_updates=True)
 
 

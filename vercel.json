@@ -1,6 +1,7 @@
 {
   "outputDirectory": "frontend",
   "rewrites": [
-    { "source": "/api/(.*)", "destination": "/api/index" }
+    { "source": "/api/(.*)", "destination": "/api/index" },
+    { "source": "/separ-ai", "destination": "/separ-ai/index.html" }
   ]
 }

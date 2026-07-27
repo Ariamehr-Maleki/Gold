@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>Separ AI | سپر</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#f2eee7;--panel:#fff;--panel2:#faf8f4;--text:#171712;--muted:#726f66;--line:#e7e0d4;--gold:#b88216;--gold2:#e9b943;--green:#208a5b;--red:#bf4949;--shadow:0 18px 55px rgba(56,43,20,.1)}
+    .dark{--bg:#0d1014;--panel:#151a20;--panel2:#1a2027;--text:#f2eee5;--muted:#9b9b93;--line:#29313a;--gold:#e1ad43;--gold2:#f0ce78;--green:#61c491;--red:#ee7d7d;--shadow:0 18px 55px rgba(0,0,0,.28)}
+    *{box-sizing:border-box}body{margin:0;background:radial-gradient(circle at 80% 0,rgba(224,174,64,.1),transparent 30%),var(--bg);color:var(--text);font-family:Vazirmatn,Tahoma,sans-serif;min-height:100vh;transition:.25s}
+    button,textarea{font:inherit}button{cursor:pointer}.shell{width:min(1180px,calc(100% - 28px));margin:0 auto;padding:24px 0}
+    .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}.brand{display:flex;align-items:center;gap:11px}.brand-mark{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(145deg,var(--gold2),var(--gold));color:#fff;box-shadow:0 8px 24px rgba(184,130,22,.25)}
+    .brand strong{display:block;font-size:16px}.brand small{color:var(--muted)}.top-actions{display:flex;gap:8px}.icon-btn,.clear-btn{border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:10px;padding:9px 12px}
+    .intro{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:end;margin-bottom:18px}.intro h1{font-size:clamp(27px,4vw,44px);line-height:1.2;margin:0 0 8px;letter-spacing:-1.2px}.intro h1 span{color:var(--gold)}.intro p{margin:0;color:var(--muted);max-width:690px;line-height:1.9}
+    .status{display:flex;align-items:center;gap:8px;background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px 13px;white-space:nowrap;font-size:12px;color:var(--muted)}.dot{width:8px;height:8px;border-radius:50%;background:var(--gold)}.dot.ok{background:var(--green);box-shadow:0 0 0 5px rgba(32,138,91,.1)}.dot.bad{background:var(--red)}
+    .suggestions{display:flex;gap:8px;overflow:auto;padding:1px 1px 12px;scrollbar-width:none}.suggestion{border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:999px;padding:9px 13px;white-space:nowrap;font-size:12px;transition:.18s}.suggestion:hover{border-color:var(--gold);color:var(--gold);transform:translateY(-1px)}
+    .chat{height:min(650px,calc(100vh - 245px));min-height:480px;background:var(--panel);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);display:flex;flex-direction:column;overflow:hidden}.chat-head{padding:13px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;background:var(--panel2)}.snap{font-size:11px;color:var(--muted)}
+    .messages{flex:1;overflow:auto;padding:20px;scroll-behavior:smooth}.message{display:flex;gap:10px;margin-bottom:18px;align-items:flex-start}.message.user{flex-direction:row-reverse}.avatar{width:30px;height:30px;border-radius:10px;display:grid;place-items:center;flex:none;background:linear-gradient(145deg,var(--gold2),var(--gold));color:#fff;font-size:13px}.user .avatar{background:var(--panel2);color:var(--muted);border:1px solid var(--line)}
+    .bubble{max-width:min(760px,88%);padding:12px 15px;border-radius:5px 16px 16px 16px;background:var(--panel2);border:1px solid var(--line);line-height:1.9;font-size:14px;white-space:pre-wrap}.user .bubble{background:var(--gold);border-color:var(--gold);color:#fff;border-radius:16px 5px 16px 16px}.meta{font-size:10px;color:var(--muted);margin-top:5px}
+    .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px;margin-top:10px}.asset{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:11px}.asset-top{display:flex;justify-content:space-between;gap:8px;font-size:12px;font-weight:700}.asset-code{font-size:9px;color:var(--muted);direction:ltr}.price{font-size:16px;font-weight:800;margin-top:8px}.asset-row{display:flex;justify-content:space-between;color:var(--muted);font-size:10px;margin-top:5px}.asset-row strong{color:var(--text)}
+    .risk,.sources{margin-top:9px;padding-top:9px;border-top:1px dashed var(--line);font-size:11px;color:var(--muted)}.risk span{color:var(--red)}.sources{display:flex;align-items:center;flex-wrap:wrap;gap:6px}.source{display:inline-flex;margin:0;border:1px solid var(--line);border-radius:999px;padding:3px 8px}
+    .typing{display:flex;gap:4px;padding:7px 0}.typing i{width:7px;height:7px;border-radius:50%;background:var(--gold);animation:b 1.1s infinite}.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}@keyframes b{0%,60%,100%{transform:translateY(0);opacity:.35}30%{transform:translateY(-5px);opacity:1}}
+    .composer{border-top:1px solid var(--line);padding:12px;background:var(--panel)}.compose-box{display:flex;align-items:flex-end;gap:9px;background:var(--panel2);border:1px solid var(--line);border-radius:15px;padding:8px;transition:.18s}.compose-box:focus-within{border-color:var(--gold);box-shadow:0 0 0 3px rgba(184,130,22,.1)}textarea{flex:1;border:0;outline:0;resize:none;min-height:30px;max-height:110px;background:transparent;color:var(--text);padding:6px 8px;line-height:1.7}.send{width:42px;height:42px;border:0;border-radius:12px;background:linear-gradient(145deg,var(--gold2),var(--gold));color:#fff;display:grid;place-items:center;flex:none}.send:disabled{opacity:.45;cursor:not-allowed}.hint{font-size:10px;color:var(--muted);padding:7px 3px 0}
+    .retry{margin-top:8px;border:1px solid var(--red);background:transparent;color:var(--red);border-radius:8px;padding:5px 10px}
+    @media(max-width:720px){.shell{width:min(100% - 18px,1180px);padding:12px 0}.intro{grid-template-columns:1fr;gap:12px}.status{width:max-content}.brand small{display:none}.clear-btn span{display:none}.chat{height:calc(100vh - 225px);min-height:510px;border-radius:17px}.messages{padding:14px}.bubble{max-width:92%;font-size:13px}.cards{grid-template-columns:1fr}.top{margin-bottom:15px}}
+    @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;animation-duration:.01ms!important}}
+  </style>
+</head>
+<body>
+<main class="shell">
+  <header class="top">
+    <div class="brand"><div class="brand-mark">س</div><div><strong>سپر</strong><small>Separ · داده واقعی، تحلیل مسئولانه</small></div></div>
+    <div class="top-actions"><button class="clear-btn" id="clear" type="button">↻ <span>گفت‌وگوی تازه</span></button><button class="icon-btn" id="theme" type="button" aria-label="تغییر پوسته">◐</button></div>
+  </header>
+
+  <section class="intro">
+    <div><h1>دستیار هوشمند <span>Separ AI</span></h1><p>برای مقایسه قیمت و حباب طلا، سکه و ارز بر پایه آخرین Snapshot سپر سؤال بپرسید. Separ AI تحلیل سناریویی ارائه می‌دهد، نه وعده سود.</p></div>
+    <div class="status"><i class="dot" id="status-dot"></i><span id="status-text">در حال بررسی اتصال بازار…</span></div>
+  </section>
+
+  <div class="suggestions" aria-label="سؤال‌های پیشنهادی">
+    <button class="suggestion">حباب کدام سکه کمتر است؟</button>
+    <button class="suggestion">سکه امامی و طلای ۱۸ عیار را مقایسه کن.</button>
+    <button class="suggestion">آخرین وضعیت دلار، طلا و سکه چیست؟</button>
+    <button class="suggestion">کدام دارایی‌ها حباب منفی یا پایین‌تری دارند؟</button>
+    <button class="suggestion">برای حفظ ارزش در سه ماه چه معیارهایی را بررسی کنم؟</button>
+  </div>
+
+  <section class="chat" aria-label="گفت‌وگو با سپر">
+    <div class="chat-head"><strong>گفت‌وگو</strong><span class="snap" id="snapshot">Snapshot: هنوز دریافت نشده</span></div>
+    <div class="messages" id="messages" aria-live="polite">
+      <article class="message assistant"><div class="avatar">س</div><div><div class="bubble">سلام، من Separ AI هستم. می‌توانم قیمت‌ها و حباب دارایی‌ها را با داده واقعی سپر مقایسه کنم یا برای تصمیم‌گیری سناریو بسازم. دوست دارید از کجا شروع کنیم؟</div></div></article>
+    </div>
+    <form class="composer" id="form">
+      <div class="compose-box"><textarea id="input" rows="1" maxlength="1200" placeholder="سؤال خود را درباره بازار بنویسید…" aria-label="پیام"></textarea><button class="send" id="send" type="submit" aria-label="ارسال">←</button></div>
+      <div class="hint">Enter برای ارسال · Shift+Enter برای خط جدید · پاسخ‌ها توصیه قطعی سرمایه‌گذاری نیستند.</div>
+    </form>
+  </section>
+</main>
+<script>
+  const $=s=>document.querySelector(s), messages=$("#messages"), input=$("#input"), send=$("#send"), form=$("#form");
+  let history=[], busy=false, lastMessage="";
+  const fa=n=>n==null?"—":new Intl.NumberFormat("fa-IR",{maximumFractionDigits:1}).format(n);
+  const money=n=>n==null?"داده موجود نیست":fa(n)+" تومان";
+  const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
+  const scroll=()=>messages.scrollTop=messages.scrollHeight;
+
+  function setStatus(kind,text){$("#status-dot").className="dot "+kind;$("#status-text").textContent=text}
+  async function health(){try{const r=await fetch("/api/separ-ai/health");if(!r.ok)throw 0;const d=await r.json();setStatus(d.aiConfigured?"ok":"bad",d.aiConfigured?"متصل به داده بازار":"تنظیم سرویس AI لازم است")}catch{setStatus("bad","اتصال به سرویس برقرار نیست")}}
+  function message(role,html,meta=""){const el=document.createElement("article");el.className="message "+role;el.innerHTML=`<div class="avatar">${role==="assistant"?"س":"ش"}</div><div class="bubble-wrap"><div class="bubble">${html}</div>${meta?`<div class="meta">${esc(meta)}</div>`:""}</div>`;messages.append(el);scroll();return el}
+  function loading(){return message("assistant",'<div class="typing" aria-label="در حال پاسخ"><i></i><i></i><i></i></div>')}
+  function assetCards(items){if(!items?.length)return"";return `<div class="cards">${items.map(a=>`<div class="asset"><div class="asset-top"><span>${esc(a.name)}</span><span class="asset-code">${esc(a.code)}</span></div><div class="price">${money(a.market_price)}</div><div class="asset-row"><span>ارزش محاسباتی</span><strong>${money(a.real_value)}</strong></div><div class="asset-row"><span>حباب</span><strong>${a.bubble_percent==null?"—":fa(a.bubble_percent)+"٪"}</strong></div></div>`).join("")}</div>`}
+  function resultHtml(d){const risks=d.riskNotes?.length?`<div class="risk"><span>ملاحظات ریسک:</span> ${d.riskNotes.map(esc).join(" · ")}</div>`:"";const sources=d.sources?.length?`<div class="sources">منابع داده: ${d.sources.map(s=>`<span class="source">${esc(s.label)}</span>`).join("")}</div>`:"";return `<div>${esc(d.answer)}</div>${assetCards(d.mentionedAssets)}${risks}${sources}`}
+  async function ask(text){if(busy||!text.trim())return;busy=true;send.disabled=true;lastMessage=text.trim();message("user",esc(lastMessage));input.value="";resize();const wait=loading();
+    try{const r=await fetch("/api/separ-ai/chat",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({message:lastMessage,history:history.slice(-8)})});const d=await r.json();if(!r.ok)throw new Error(d.detail||"خطای ناشناخته");wait.remove();message("assistant",resultHtml(d),`آخرین Snapshot: ${new Date(d.marketSnapshotTime).toLocaleString("fa-IR")} · وضعیت داده: ${d.dataFreshness}`);$("#snapshot").textContent="Snapshot: "+new Date(d.marketSnapshotTime).toLocaleTimeString("fa-IR");setStatus(d.dataFreshness==="fresh"?"ok":"bad",d.dataFreshness==="fresh"?"متصل به داده بازار":"داده بازار تازه نیست");history.push({role:"user",content:lastMessage},{role:"assistant",content:d.answer});history=history.slice(-8)}
+    catch(e){wait.remove();message("assistant",`${esc(e.message)}<br><button class="retry" type="button">تلاش مجدد</button>`);setStatus("bad","خطا در دریافت پاسخ")}
+    finally{busy=false;send.disabled=false;input.focus()}}
+  function resize(){input.style.height="auto";input.style.height=Math.min(input.scrollHeight,110)+"px"}
+  form.addEventListener("submit",e=>{e.preventDefault();ask(input.value)});
+  input.addEventListener("input",resize);input.addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();form.requestSubmit()}});
+  document.addEventListener("click",e=>{if(e.target.matches(".suggestion"))ask(e.target.textContent);if(e.target.matches(".retry"))ask(lastMessage)});
+  $("#clear").onclick=()=>{history=[];messages.innerHTML="";message("assistant","گفت‌وگوی تازه آماده است. درباره قیمت، حباب یا سناریوی مدنظر خود بپرسید.");input.focus()};
+  const saved=localStorage.getItem("separ-theme"), prefer=matchMedia("(prefers-color-scheme: dark)").matches;if(saved==="dark"||(!saved&&prefer))document.documentElement.classList.add("dark");
+  $("#theme").onclick=()=>{document.documentElement.classList.toggle("dark");localStorage.setItem("separ-theme",document.documentElement.classList.contains("dark")?"dark":"light")};
+  health();input.focus();
+</script>
+</body>
+</html>

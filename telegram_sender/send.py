@@ -1,5 +1,5 @@
 """
-آریسوگلد — ارسال قیمت به تلگرام (اجرا از GitHub Actions)
+سپر — ارسال قیمت به تلگرام (اجرا از GitHub Actions)
 """
 import os
 import sys
@@ -154,7 +154,7 @@ def build_hourly(prices):
         "",
         f"ساعت: {time_s}",
         f"تاریخ: {date_s}",
-        "🟢 آریسوگلد، خرید امن سکه و طلای آب‌شده",
+        "🟢 سپر، داده بازار طلا و سکه",
     ])
 
 def build_parsian(prices):
@@ -182,7 +182,7 @@ def build_parsian(prices):
             lines.append(f"   └{rv_txt}{bbl_txt}")
         lines.append("")
     lines += [f"ساعت: {time_s}", f"تاریخ: {date_s}",
-              "🟢 آریسوگلد، خرید امن سکه و طلای آب‌شده"]
+              "🟢 سپر، داده بازار طلا و سکه"]
     return "\n".join(lines)
 
 # ─── Send ──────────────────────────────────────────────────────────────────
