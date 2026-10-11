@@ -8,7 +8,7 @@
 Nerkh.io + Navasan
         │
         ▼
-market_service.py ── normalize / calculate / cache / freshness       
+market_service.py ── normalize / calculate / cache / freshness                      
         │
         ├── GET /api/prices ───────────────► داشبورد فعلی
         │
