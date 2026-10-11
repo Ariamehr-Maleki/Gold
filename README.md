@@ -4,7 +4,7 @@
 
 ## معماری 
 
-```text
+```text 
 Nerkh.io + Navasan
         │
         ▼
