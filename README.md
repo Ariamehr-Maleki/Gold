@@ -15,7 +15,7 @@ market_service.py ── normalize / calculate / cache / freshness
         └── Market Context Builder
                     │
                     ▼
-         POST /api/separ-ai/chat ──────────► /separ-ai
+         POST /api/separ-ai/chat ──────────► /separ-ai 
                     │
              AI API (server-side)
 ```
